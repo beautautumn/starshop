@@ -1,4 +1,4 @@
-package com.stardata.starshop2.valueadded.productcontext.pl;
+package com.stardata.starshop2.valueadded.productcontext.command.pl;
 
 /**
  * @author Samson Shu

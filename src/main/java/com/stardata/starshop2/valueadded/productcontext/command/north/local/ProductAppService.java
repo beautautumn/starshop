@@ -1,4 +1,4 @@
-package com.stardata.starshop2.valueadded.productcontext.north.local;
+package com.stardata.starshop2.valueadded.productcontext.command.north.local;
 
 /**
  * @author Samson Shu

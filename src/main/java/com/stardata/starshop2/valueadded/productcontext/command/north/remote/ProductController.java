@@ -1,6 +1,6 @@
-package com.stardata.starshop2.valueadded.productcontext.north.remote;
+package com.stardata.starshop2.valueadded.productcontext.command.north.remote;
 
-import com.stardata.starshop2.valueadded.productcontext.pl.ProductResponse;
+import com.stardata.starshop2.valueadded.productcontext.command.pl.ProductResponse;
 
 import java.util.List;
 
