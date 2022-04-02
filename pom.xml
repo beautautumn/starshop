@@ -15,7 +15,22 @@
     <description>starshop2</description>
     <properties>
         <java.version>17</java.version>
-    </properties>
+        <mybatis-plus.version>3.5.0</mybatis-plus.version>
+        <swagger.version>3.0.0</swagger.version>
+        <shiro.version>1.8.0</shiro.version>
+        <log4j.version>1.2.17</log4j.version>
+        <httpclient.version>4.5.13</httpclient.version>
+        <jetbrains.version>22.0.0</jetbrains.version>
+        <commons-collections.version>20040616</commons-collections.version>
+        <weixin-java-miniapp.version>4.2.2.B</weixin-java-miniapp.version>
+        <weixin-java-pay.version>4.2.2.B</weixin-java-pay.version>
+        <tencentcloudapi.version>3.1.90</tencentcloudapi.version>
+        <tencentcloudcos.version>3.0.8</tencentcloudcos.version>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.build.locales>zh_CN</project.build.locales>    </properties>
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -43,6 +58,16 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+            <version>${swagger.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger-ui</artifactId>
+            <version>${swagger.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -50,6 +75,7 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>2.3.6.RELEASE</version>
                 <configuration>
                     <excludes>
                         <exclude>
