@@ -1,6 +1,6 @@
 package com.stardata.starshop2.valueadded.shopcontext.north.remote;
 
-import com.stardata.starshop2.valueadded.sharedcontext.pl.GeoLocation;
+import com.stardata.starshop2.sharedcontext.pl.LocationDTO;
 import com.stardata.starshop2.valueadded.shopcontext.pl.*;
 import lombok.AllArgsConstructor;
 
@@ -40,7 +40,7 @@ public class ShopController {
 
     }
 
-    public ShopResponse current(String userId, GeoLocation location) {
+    public ShopResponse current(String userId, LocationDTO location) {
         return null;
     }
 
@@ -52,7 +52,7 @@ public class ShopController {
         return null;
     }
 
-    public List<ShopResponse> searchBrand(String referShopId, String keyword, GeoLocation location) {
+    public List<ShopResponse> searchBrand(String referShopId, String keyword, LocationDTO location) {
         return null;
     }
 

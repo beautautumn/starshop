@@ -1,4 +1,4 @@
-package com.stardata.starshop2.valueadded.sharedcontext.pl;
+package com.stardata.starshop2.sharedcontext.pl;
 
 /**
  * @author Samson Shu
@@ -6,5 +6,5 @@ package com.stardata.starshop2.valueadded.sharedcontext.pl;
  * @email shush@stardata.top
  * @date 2022/2/28 14:24
  */
-public class GeoLocation {
+public class LocationDTO {
 }

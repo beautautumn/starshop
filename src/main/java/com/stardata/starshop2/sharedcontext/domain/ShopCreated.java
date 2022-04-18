@@ -1,4 +1,4 @@
-package com.stardata.starshop2.valueadded.sharedcontext.domain;
+package com.stardata.starshop2.sharedcontext.domain;
 
 /**
  * @author Samson Shu
