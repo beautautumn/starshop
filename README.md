@@ -23,6 +23,10 @@ In general, these bounded-context include implementations of generic domains and
 All codes of those bounded-contexts in valued-added layer are placed in.
 In general, these bounded-context include implementations of core domains.
 
+### sharedcontext sub-directory
+
+All codes unrelated to business logic, these codes will be re-used in all bounded-contexts.
+
 ### edge sub-directory
 
 In this application, it will include only implementations of BFF controllers for wechat mini-program front-end.
