@@ -16,8 +16,8 @@ import org.springframework.stereotype.Service;
 public class UserTokenService {
     private final UserRepository userRepository;
 
-    public void generateLoginToken(User user) {
-        user.refreshLoginToken();
+    public void generateLoginToken(User user, String sessionKey) {
+        user.refreshLoginToken(sessionKey);
         userRepository.update(user);
     }
 }

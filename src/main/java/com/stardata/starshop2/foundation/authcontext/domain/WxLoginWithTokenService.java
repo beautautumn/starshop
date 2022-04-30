@@ -22,7 +22,7 @@ public class WxLoginWithTokenService {
     public User loginWithToken(String code, WxAuthInfo wxAuthInfo, User loginUser) {
         WxOpenId openid = wxLoginService.wxLogin(code, wxAuthInfo);
         User user = userExistenceService.ensureUser(openid, loginUser);
-        userTokenService.generateLoginToken(user);
+        userTokenService.generateLoginToken(user, wxAuthInfo.getSessionKey());
         return user;
     }
 }

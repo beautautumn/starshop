@@ -9,6 +9,10 @@ package com.stardata.starshop2.sharedcontext.domain;
 public class LongIdentity implements Identity<Long>{
     private Long value;
 
+    LongIdentity(long id) {
+        this.value = id;
+    }
+
     @Override
     public Long value() {
         return value;
@@ -16,5 +20,13 @@ public class LongIdentity implements Identity<Long>{
 
     public void setValue(Long value) {
         this.value = value;
+    }
+
+    public static LongIdentity from(String id) {
+        return new LongIdentity(Long.parseLong(id));
+    }
+
+    public static LongIdentity from(Long id) {
+        return new LongIdentity(id);
     }
 }

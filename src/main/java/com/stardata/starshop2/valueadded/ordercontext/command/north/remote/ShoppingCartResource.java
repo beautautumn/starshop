@@ -1,16 +1,15 @@
 package com.stardata.starshop2.valueadded.ordercontext.command.north.remote;
 
+import com.stardata.starshop2.sharedcontext.annotation.LoginUser;
+import com.stardata.starshop2.sharedcontext.pl.SessionUser;
 import com.stardata.starshop2.valueadded.ordercontext.command.north.local.ShoppingCartAppService;
-import com.stardata.starshop2.valueadded.ordercontext.command.pl.ShoppingCartRequest;
-import com.stardata.starshop2.valueadded.ordercontext.command.pl.ShoppingCartResponse;
+import com.stardata.starshop2.valueadded.ordercontext.pl.ShoppingCartRequest;
+import com.stardata.starshop2.valueadded.ordercontext.pl.ShoppingCartResponse;
 import io.swagger.annotations.Api;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author Samson Shu
@@ -20,14 +19,23 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Api(tags = "购物车资源接口")
 @RestController
-@RequestMapping("/v2/shoppingcart")
+@RequestMapping("/v2/shoppingcarts")
 @AllArgsConstructor
 public class ShoppingCartResource {
     private final ShoppingCartAppService appService;
 
     @PutMapping("/{shopId}")
-    public ResponseEntity<ShoppingCartResponse> saveShoppingCart(ShoppingCartRequest request) {
-        ShoppingCartResponse response = appService.saveShoppingCart(request);
+    public ResponseEntity<ShoppingCartResponse> save(@LoginUser SessionUser loginUser,
+                                                                 @PathVariable String shopId, ShoppingCartRequest request)
+    {
+        ShoppingCartResponse response = appService.save(loginUser, shopId, request);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/{shopId}")
+    public ResponseEntity<ShoppingCartResponse> query(@LoginUser SessionUser loginUser, @PathVariable String shopId)
+    {
+        ShoppingCartResponse response = appService.query(loginUser.getId(), shopId);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

@@ -10,6 +10,7 @@ import com.stardata.starshop2.foundation.authcontext.domain.user.User;
  */
 public class LoginLog {
     public static LoginLog createFor(User user) {
+        //todo 完成根据用户对象创建登录日志的工厂方法
         return null;
     }
 }

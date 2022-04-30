@@ -3,6 +3,7 @@ package com.stardata.starshop2.foundation.authcontext.domain.user;
 import com.stardata.starshop2.sharedcontext.domain.AbstractEntity;
 import com.stardata.starshop2.sharedcontext.domain.AggregateRoot;
 import com.stardata.starshop2.sharedcontext.domain.LongIdentity;
+import com.stardata.starshop2.sharedcontext.domain.MobileNumber;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -71,10 +72,15 @@ public class User extends AbstractEntity<LongIdentity> implements AggregateRoot<
         return this;
     }
 
-    public void refreshLoginToken() {
+    public void refreshLoginToken(String sessionKey) {
+        //todo 完成用户刷新登录令牌方法
     }
 
-    public void refreshVisibleFrom(User loginUser) {
+    public void copyInfoFrom(User loginUser) {
+        //todo 完成复制用户信息方法
+    }
 
+    public void updateMobileNumber(MobileNumber mobileNumber) {
+        //todo 完成更新用户手机号方法
     }
 }

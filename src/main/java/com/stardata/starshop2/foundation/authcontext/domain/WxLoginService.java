@@ -3,7 +3,6 @@ package com.stardata.starshop2.foundation.authcontext.domain;
 import com.stardata.starshop2.foundation.authcontext.domain.user.WxAuthInfo;
 import com.stardata.starshop2.foundation.authcontext.domain.user.WxOpenId;
 import com.stardata.starshop2.foundation.authcontext.south.port.WxSessionCheckingClient;
-import com.stardata.starshop2.foundation.authcontext.pl.south.WxSessionCheckingResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 /**
@@ -18,10 +17,10 @@ public class WxLoginService {
     private final WxSessionCheckingClient authClient;
 
     public WxOpenId wxLogin(String code, WxAuthInfo wxAuthInfo) throws WxLoginErrorException{
-        WxSessionCheckingResponse sessionResponse = authClient.code2session(code);
-        if (!wxAuthInfo.checkIntegrity(sessionResponse.getSessionKey())) {
+        authClient.code2session(code, wxAuthInfo);
+        if (!wxAuthInfo.checkIntegrity(wxAuthInfo.getSessionKey())) {
             throw new WxLoginErrorException("Checking userinfo integrity failed.");
         }
-        return WxOpenId.of(sessionResponse.getOpenId());
+        return WxOpenId.of(wxAuthInfo.getOpenId());
     }
 }

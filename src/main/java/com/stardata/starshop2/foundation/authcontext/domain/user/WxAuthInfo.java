@@ -14,6 +14,9 @@ public class WxAuthInfo {
     private String rawData;
     private String signature;
 
+    private String openId;
+    private String sessionKey;
+
     public WxAuthInfo( String rawData, String signature){
         this.rawData = rawData;
         this.signature = signature;

@@ -20,7 +20,12 @@
         <shiro.version>1.8.0</shiro.version>
         <log4j.version>1.2.17</log4j.version>
         <httpclient.version>4.5.13</httpclient.version>
-        <jetbrains.version>22.0.0</jetbrains.version>
+        <jetbrains.version>23.0.0</jetbrains.version>
+        <commons-collections.version>20040616</commons-collections.version>
+        <weixin-java-miniapp.version>4.3.1.B</weixin-java-miniapp.version>
+        <weixin-java-pay.version>4.3.1.B</weixin-java-pay.version>
+        <tencentcloudapi.version>3.1.90</tencentcloudapi.version>
+        <tencentcloudcos.version>3.0.8</tencentcloudcos.version>
         <commons-collections.version>20040616</commons-collections.version>
         <weixin-java-miniapp.version>4.2.2.B</weixin-java-miniapp.version>
         <weixin-java-pay.version>4.2.2.B</weixin-java-pay.version>
@@ -74,14 +79,20 @@
             <version>3.0.2</version>
         </dependency>
         <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>${jetbrains.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
             <groupId>com.github.binarywang</groupId>
             <artifactId>weixin-java-pay</artifactId>
-            <version>4.2.2.B</version>
+            <version>${weixin-java-pay.version}</version>
         </dependency>
         <dependency>
             <groupId>com.github.binarywang</groupId>
             <artifactId>weixin-java-miniapp</artifactId>
-            <version>4.2.2.B</version>
+            <version>${weixin-java-miniapp.version}</version>
         </dependency>
     </dependencies>
 

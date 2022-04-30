@@ -2,7 +2,7 @@ package com.stardata.starshop2.foundation.authcontext.south.port;
 
 
 import com.stardata.starshop2.foundation.authcontext.domain.WxLoginErrorException;
-import com.stardata.starshop2.foundation.authcontext.pl.south.WxSessionCheckingResponse;
+import com.stardata.starshop2.foundation.authcontext.domain.user.WxAuthInfo;
 
 /**
  * @author Samson Shu
@@ -11,5 +11,5 @@ import com.stardata.starshop2.foundation.authcontext.pl.south.WxSessionCheckingR
  * @date 2022/4/23 23:23
  */
 public interface WxSessionCheckingClient {
-    WxSessionCheckingResponse code2session(String code) throws WxLoginErrorException;
+    void code2session(String code, WxAuthInfo wxAuthInfo) throws WxLoginErrorException;
 }

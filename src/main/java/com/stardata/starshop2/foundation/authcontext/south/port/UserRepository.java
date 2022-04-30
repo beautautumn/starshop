@@ -2,6 +2,7 @@ package com.stardata.starshop2.foundation.authcontext.south.port;
 
 import com.stardata.starshop2.foundation.authcontext.domain.user.User;
 import com.stardata.starshop2.foundation.authcontext.domain.user.WxOpenId;
+import com.stardata.starshop2.sharedcontext.domain.LongIdentity;
 
 /**
  * @author Samson Shu
@@ -15,4 +16,6 @@ public interface UserRepository {
     void add(User user);
 
     void update(User user);
+
+    User instanceOf(LongIdentity userId);
 }

@@ -24,7 +24,7 @@ public class UserExistenceService {
             user = loginUser;
             userRepository.add(user);
         } else {
-            user.refreshVisibleFrom(loginUser);
+            user.copyInfoFrom(loginUser);
             userRepository.update(user);
         }
         return user;
