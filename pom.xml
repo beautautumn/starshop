@@ -23,7 +23,7 @@
         <jetbrains.version>23.0.0</jetbrains.version>
         <commons-collections.version>20040616</commons-collections.version>
         <weixin-java-miniapp.version>4.3.1.B</weixin-java-miniapp.version>
-        <weixin-java-pay.version>4.3.1.B</weixin-java-pay.version>
+        <weixin-java-pay.version>4.3.2.B</weixin-java-pay.version>
         <tencentcloudapi.version>3.1.90</tencentcloudapi.version>
         <tencentcloudcos.version>3.0.8</tencentcloudcos.version>
         <commons-collections.version>20040616</commons-collections.version>
