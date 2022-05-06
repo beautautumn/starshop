@@ -30,18 +30,13 @@ import java.io.IOException;
  */
 @Api(tags = "订单命令类资源接口")
 @RestController
-@RequestMapping("/v2/orders")
+@RequestMapping("/v2/shops/{shopId}/orders")
 @AllArgsConstructor
 public class OrderCommandResource {
 
-    @Autowired
-    private HttpServletRequest request;
-
-    private final WxPayService wxService;
-
     private final OrderAppService appService;
 
-    @PostMapping("/{shopId}")
+    @PostMapping("")
     public ResponseEntity<OrderResponse> create(@LoginUser SessionUser loginUser,
                                                 @PathVariable Long shopId, OrderSubmitRequest request)
     {
@@ -49,67 +44,32 @@ public class OrderCommandResource {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @PostMapping("/{shopId}/{orderId}/prepay")
-    public ResponseEntity<PrepayResponse> prepay(@LoginUser SessionUser loginUser,
-                                                 @PathVariable Long shopId,
-                                                 @PathVariable Long orderId)
-    {
-        PrepayResponse response = appService.prepay(orderId);
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-
-    @GetMapping("/{shopId}/{orderId}")
+    @GetMapping("/{orderId}")
     public ResponseEntity<OrderResponse> getDetail(@LoginUser SessionUser loginUser,
-                                                   @PathVariable Long shopId,
                                                    @PathVariable Long orderId)
     {
         OrderResponse response = appService.getDetail(orderId);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    private String getStringRequest() {
-        String result = null;
-        StringBuilder sb = new StringBuilder();
-        try (BufferedReader reader = request.getReader()) {
-            char[] buff = new char[2048];
-            int len;
-            while ((len = reader.read(buff)) != -1) {
-                sb.append(buff, 0, len);
-            }
-            result = sb.toString();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return result;
+    @PostMapping("/{orderId}/prepayments")
+    public ResponseEntity<PrepayResponse> prepay(@LoginUser SessionUser loginUser,
+                                                 @PathVariable Long orderId)
+    {
+        PrepayResponse response = appService.prepay(orderId);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-
-    @PostMapping("/wxpaynotify")
-    @ApiOperation(value = "微信支付回调通知处理")
-    @IgnoreAuth
-    public String handleWxPayNotify() throws WxPayException {
-        String xmlData = this.getStringRequest();
-        WxPayOrderNotifyResult notifyResult = wxService.parseOrderNotifyResult(xmlData);
-        if (!notifyResult.getReturnCode().equals(WxPayConstants.ResultCode.SUCCESS))
-            return WxPayNotifyResponse.success("错误已处理");
-
-        return appService.handleWxPayNotify(new OrderPayResultRequest(notifyResult));
-    }
-
-
-    @PutMapping("/{shopId}/{orderId}/confirmation")
+    @PostMapping("/{orderId}/confirmation")
     public ResponseEntity<OrderConfirmedResponse> confirmReceived(@LoginUser SessionUser loginUser,
-                                                                  @PathVariable Long shopId,
                                                                   @PathVariable Long orderId)
     {
         OrderConfirmedResponse response = appService.confirmReceived(orderId);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @DeleteMapping("/{shopId}/{orderId}")
+    @PostMapping("/{orderId}/invisible_setting")
     public ResponseEntity<OrderDeletedResponse> delete(@LoginUser SessionUser loginUser,
-                                                         @PathVariable Long shopId,
                                                          @PathVariable Long orderId)
     {
         OrderDeletedResponse response = appService.delete(orderId);

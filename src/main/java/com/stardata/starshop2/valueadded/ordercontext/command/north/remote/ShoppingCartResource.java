@@ -19,12 +19,12 @@ import org.springframework.web.bind.annotation.*;
  */
 @Api(tags = "购物车资源接口")
 @RestController
-@RequestMapping("/v2/shoppingcarts")
+@RequestMapping("/v2/shops/{shopId}/shoppingcarts")
 @AllArgsConstructor
 public class ShoppingCartResource {
     private final ShoppingCartAppService appService;
 
-    @PutMapping("/{shopId}")
+    @PutMapping("")
     public ResponseEntity<ShoppingCartResponse> save(@LoginUser SessionUser loginUser,
                                                                  @PathVariable String shopId, ShoppingCartRequest request)
     {
@@ -32,7 +32,7 @@ public class ShoppingCartResource {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @GetMapping("/{shopId}")
+    @GetMapping("")
     public ResponseEntity<ShoppingCartResponse> query(@LoginUser SessionUser loginUser, @PathVariable String shopId)
     {
         ShoppingCartResponse response = appService.query(loginUser.getId(), shopId);

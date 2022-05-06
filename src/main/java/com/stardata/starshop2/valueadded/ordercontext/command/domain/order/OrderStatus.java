@@ -7,4 +7,5 @@ package com.stardata.starshop2.valueadded.ordercontext.command.domain.order;
  * @date 2022/4/18 15:26
  */
 public class OrderStatus {
+    OrderStatus(){}
 }

@@ -21,22 +21,15 @@ import java.util.List;
  */
 @Api(tags = "订单查询类资源接口")
 @RestController
-@RequestMapping("/v2/myorders")
+@RequestMapping("/v2/my")
 @AllArgsConstructor
 public class OrderQueryResource {
-    @GetMapping("/{shopId}/recent")
+    @GetMapping("/orders")
     public ResponseEntity<List<OrderResponse>> listForUser(@LoginUser SessionUser loginUser,
-                                                           @PathVariable String shopId,
-                                                           int status)
-    {
-        return null;
-    }
-
-    @GetMapping("/{shopId}/history")
-    public ResponseEntity<List<OrderResponse>> listHistoryForUser(@LoginUser SessionUser loginUser,
-                                                           @PathVariable String shopId,
+                                                           boolean history,
                                                            int status, int pageNo)
     {
         return null;
     }
+
 }
