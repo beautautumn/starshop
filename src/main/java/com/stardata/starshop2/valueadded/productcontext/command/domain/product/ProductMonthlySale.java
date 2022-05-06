@@ -1,4 +1,4 @@
-package com.stardata.starshop2.valueadded.productcontext.command.domain;
+package com.stardata.starshop2.valueadded.productcontext.command.domain.product;
 
 /**
  * @author Samson Shu
@@ -7,4 +7,5 @@ package com.stardata.starshop2.valueadded.productcontext.command.domain;
  * @date 2022/4/18 15:32
  */
 public class ProductMonthlySale {
+    ProductMonthlySale(){}
 }

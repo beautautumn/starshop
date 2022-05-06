@@ -1,4 +1,4 @@
-package com.stardata.starshop2.valueadded.productcontext.command.domain;
+package com.stardata.starshop2.valueadded.productcontext.command.domain.productcategory;
 
 /**
  * @author Samson Shu
