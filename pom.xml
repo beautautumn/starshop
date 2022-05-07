@@ -8,11 +8,43 @@
         <version>3.0.0-SNAPSHOT</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.stardata</groupId>
+    <groupId>com.stardata.starshop2</groupId>
     <artifactId>starshop2</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>starshop2</name>
     <description>starshop2</description>
+    <packaging>pom</packaging>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>starshop-core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <modules>
+        <module>core</module>
+
+        <module>foundation/auth</module>
+        <module>foundation/chain</module>
+        <module>foundation/customer</module>
+        <module>foundation/platintegration</module>
+        <module>foundation/staff</module>
+
+        <module>valueadded/merchant</module>
+        <module>valueadded/order</module>
+        <module>valueadded/product</module>
+        <module>valueadded/shop</module>
+
+        <module>cqrs/chain</module>
+        <module>cqrs/order</module>
+        <module>cqrs/product</module>
+        <module>edge</module>
+    </modules>
+
     <properties>
         <java.version>17</java.version>
         <mybatis-plus.version>3.5.0</mybatis-plus.version>
@@ -26,16 +58,20 @@
         <weixin-java-pay.version>4.3.2.B</weixin-java-pay.version>
         <tencentcloudapi.version>3.1.90</tencentcloudapi.version>
         <tencentcloudcos.version>3.0.8</tencentcloudcos.version>
-        <commons-collections.version>20040616</commons-collections.version>
         <weixin-java-miniapp.version>4.2.2.B</weixin-java-miniapp.version>
         <weixin-java-pay.version>4.2.2.B</weixin-java-pay.version>
         <tencentcloudapi.version>3.1.90</tencentcloudapi.version>
         <tencentcloudcos.version>3.0.8</tencentcloudcos.version>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.plugin.version>3.8.1</maven.compiler.plugin.version>
+        <org.mapstruct.version>1.4.2.Final</org.mapstruct.version>
+        <org.projectlombok.version>1.18.24</org.projectlombok.version>
+
         <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.build.locales>zh_CN</project.build.locales>    </properties>
+        <project.build.locales>zh_CN</project.build.locales>
+    </properties>
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -57,6 +93,8 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
+            <version>${org.projectlombok.version}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -94,6 +132,11 @@
             <artifactId>weixin-java-miniapp</artifactId>
             <version>${weixin-java-miniapp.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+            <version>${org.mapstruct.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -109,6 +152,27 @@
                             <artifactId>lombok</artifactId>
                         </exclude>
                     </excludes>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven.compiler.plugin.version}</version>
+                <configuration>
+                    <source>${maven.compiler.source}}</source>
+                    <target>${maven.compiler.target}}</target>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.mapstruct</groupId>
+                            <artifactId>mapstruct-processor</artifactId>
+                            <version>${org.mapstruct.version}</version>
+                        </path>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>${org.projectlombok.version}</version>
+                        </path>
+                    </annotationProcessorPaths>
                 </configuration>
             </plugin>
         </plugins>
