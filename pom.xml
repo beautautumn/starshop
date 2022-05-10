@@ -15,6 +15,7 @@
     <description>starshop2</description>
     <packaging>pom</packaging>
 
+
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -25,29 +26,12 @@
         </dependencies>
     </dependencyManagement>
 
-    <modules>
-        <module>core</module>
-
-        <module>foundation/auth</module>
-        <module>foundation/chain</module>
-        <module>foundation/customer</module>
-        <module>foundation/platintegration</module>
-        <module>foundation/staff</module>
-
-        <module>valueadded/merchant</module>
-        <module>valueadded/order</module>
-        <module>valueadded/product</module>
-        <module>valueadded/shop</module>
-
-        <module>cqrs/chain</module>
-        <module>cqrs/order</module>
-        <module>cqrs/product</module>
-        <module>edge</module>
-    </modules>
-
     <properties>
         <java.version>17</java.version>
-        <mybatis-plus.version>3.5.0</mybatis-plus.version>
+        <spring.version>6.0.0-SNAPSHOT</spring.version>
+        <slf4j.version>1.6.6</slf4j.version>
+        <log4j.version>1.2.12</log4j.version>
+
         <swagger.version>3.0.0</swagger.version>
         <shiro.version>1.8.0</shiro.version>
         <log4j.version>1.2.17</log4j.version>
@@ -72,6 +56,27 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.build.locales>zh_CN</project.build.locales>
     </properties>
+
+    <modules>
+        <module>core</module>
+
+        <module>foundation/auth</module>
+        <module>foundation/chain</module>
+        <module>foundation/customer</module>
+        <module>foundation/platintegration</module>
+        <module>foundation/staff</module>
+
+        <module>valueadded/merchant</module>
+        <module>valueadded/order</module>
+        <module>valueadded/product</module>
+        <module>valueadded/shop</module>
+
+        <module>cqrs/chain</module>
+        <module>cqrs/order</module>
+        <module>cqrs/product</module>
+        <module>edge</module>
+    </modules>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
