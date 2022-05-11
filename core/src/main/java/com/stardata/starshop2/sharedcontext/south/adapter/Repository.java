@@ -1,7 +1,8 @@
-package com.stardata.starshop2.sharedcontext.util;
+package com.stardata.starshop2.sharedcontext.south.adapter;
 
 import com.stardata.starshop2.sharedcontext.domain.AggregateRoot;
 import com.stardata.starshop2.sharedcontext.domain.Identity;
+import com.stardata.starshop2.sharedcontext.exception.InitializedEntityManagerException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -89,7 +90,7 @@ public class Repository<E extends AggregateRoot, ID extends Identity> {
     @SneakyThrows
     private void requireEntityManagerNotNull()  {
         if (this.entityManager == null) {
-            throw new InitializedEntityManagerException();
+            throw new InitializedEntityManagerException("Repository must have entityManager");
         }
 
     }
