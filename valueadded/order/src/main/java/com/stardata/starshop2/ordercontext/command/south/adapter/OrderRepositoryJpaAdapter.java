@@ -3,7 +3,7 @@ package com.stardata.starshop2.ordercontext.command.south.adapter;
 import com.stardata.starshop2.ordercontext.command.domain.order.Order;
 import com.stardata.starshop2.ordercontext.command.south.port.OrderRepository;
 import com.stardata.starshop2.sharedcontext.domain.LongIdentity;
-import com.stardata.starshop2.sharedcontext.util.Repository;
+import com.stardata.starshop2.sharedcontext.south.adapter.Repository;
 import jakarta.persistence.EntityManager;
 import org.springframework.data.jpa.domain.Specification;
 

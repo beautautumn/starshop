@@ -6,6 +6,7 @@ import com.stardata.starshop2.authcontext.pl.WxEncryptedUserInfo;
 import com.stardata.starshop2.authcontext.pl.WxLoginRequest;
 import com.stardata.starshop2.sharedcontext.annotation.IgnoreAuth;
 import com.stardata.starshop2.sharedcontext.annotation.LoginUser;
+import com.stardata.starshop2.sharedcontext.north.Resources;
 import com.stardata.starshop2.sharedcontext.pl.MobileNumberResponse;
 import com.stardata.starshop2.sharedcontext.pl.SessionUser;
 import io.swagger.annotations.Api;
@@ -34,15 +35,22 @@ public class AuthResource {
     @PostMapping("/wxlogin")
     @IgnoreAuth
     public ResponseEntity<UserResponse> loginByWx(WxLoginRequest request) {
-        UserResponse response = appService.loginByWx(request);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return Resources.with("login by wechat user info")
+                .onSuccess(HttpStatus.OK)
+                .onError(HttpStatus.BAD_REQUEST)
+                .onFailed(HttpStatus.FORBIDDEN)
+                .execute(() -> appService.loginByWx(request));
     }
 
     @GetMapping("/wxphone")
     @ApiOperation(value = "获取用户微信绑定的手机号")
     public  ResponseEntity<MobileNumberResponse> decryptWxMobileNumber(@LoginUser SessionUser loginUser,
                                                                        WxEncryptedUserInfo encryptedUserInfo) {
-        MobileNumberResponse response = appService.decryptWxMobileNumber(loginUser, encryptedUserInfo);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return Resources.with("decrypt mobile phone number from wechat encryptedData")
+                .onSuccess(HttpStatus.OK)
+                .onError(HttpStatus.BAD_REQUEST)
+                .onFailed(HttpStatus.FORBIDDEN)
+                .execute(() -> appService.decryptWxMobileNumber(loginUser, encryptedUserInfo));
+
     }
 }

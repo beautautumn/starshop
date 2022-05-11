@@ -17,7 +17,12 @@
             <artifactId>sharedcontext</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
-    </dependencies>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+</dependencies>
 
 
 </project>
