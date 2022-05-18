@@ -24,7 +24,7 @@ public class UserExistenceService {
             user = loginUser;
             userRepository.add(user);
         } else {
-            user.copyInfoFrom(loginUser);
+            user.copyMiniAppInfoFrom(loginUser);
             userRepository.update(user);
         }
         return user;
