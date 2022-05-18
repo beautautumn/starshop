@@ -16,4 +16,17 @@ public class WxOpenId {
     public static WxOpenId of(String openId) {
         return new WxOpenId(openId);
     }
+
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (o instanceof WxOpenId) {
+            return this.value.equals(o.toString());
+        }
+        return false;
+    }
+
+    public String toString() {
+        return value;
+    }
 }

@@ -4,8 +4,10 @@ import com.stardata.starshop2.sharedcontext.domain.AbstractEntity;
 import com.stardata.starshop2.sharedcontext.domain.AggregateRoot;
 import com.stardata.starshop2.sharedcontext.domain.LongIdentity;
 import com.stardata.starshop2.sharedcontext.domain.MobileNumber;
+import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Setter;
 
 /**
  * @author Samson Shu
@@ -16,6 +18,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class User extends AbstractEntity<LongIdentity> implements AggregateRoot<User>{
+    @Setter(value= AccessLevel.PRIVATE)
     private LongIdentity id;
     private String avatarUrl;
     private String country;
@@ -76,8 +79,14 @@ public class User extends AbstractEntity<LongIdentity> implements AggregateRoot<
         //todo 完成用户刷新登录令牌方法
     }
 
-    public void copyInfoFrom(User loginUser) {
-        //todo 完成复制用户信息方法
+    public void copyMiniAppInfoFrom(User fromUser) {
+        this.nickName = fromUser.getNickName();
+        this.gender = fromUser.getGender();
+        this.avatarUrl = fromUser.getAvatarUrl();
+        this.country = fromUser.getCountry();
+        this.province = fromUser.getProvince();
+        this.city = fromUser.getCity();
+        this.language = fromUser.getLanguage();
     }
 
     public void updateMobileNumber(MobileNumber mobileNumber) {
