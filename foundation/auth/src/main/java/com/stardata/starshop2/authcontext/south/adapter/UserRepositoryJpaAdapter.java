@@ -6,6 +6,11 @@ import com.stardata.starshop2.authcontext.south.port.UserRepository;
 import com.stardata.starshop2.sharedcontext.annotation.Adapter;
 import com.stardata.starshop2.sharedcontext.annotation.PortType;
 import com.stardata.starshop2.sharedcontext.domain.LongIdentity;
+import com.stardata.starshop2.sharedcontext.south.adapter.Repository;
+import jakarta.persistence.EntityManager;
+import org.springframework.data.jpa.domain.Specification;
+
+import java.util.List;
 
 /**
  * @author Samson Shu
@@ -15,9 +20,18 @@ import com.stardata.starshop2.sharedcontext.domain.LongIdentity;
  */
 @Adapter(PortType.Repository)
 public class UserRepositoryJpaAdapter implements UserRepository {
+    private final Repository<User, LongIdentity> repository;
+
+    public UserRepositoryJpaAdapter(Repository<User, LongIdentity> repository, EntityManager entityManager) {
+        this.repository = repository;
+    }
+
     @Override
     public User findByOpenId(WxOpenId openID) {
-        return null;
+        Specification<User> specification = (root, criteriaQuery, criteriaBuilder) ->
+                criteriaBuilder.equal(root.get("openid"), openID.toString());
+        List<User> users = repository.findBy(specification);
+        return users.size()>0? users.get(0): null;
     }
 
     @Override
