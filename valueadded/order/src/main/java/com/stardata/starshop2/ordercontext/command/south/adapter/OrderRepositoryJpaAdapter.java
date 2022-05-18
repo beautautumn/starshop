@@ -2,6 +2,8 @@ package com.stardata.starshop2.ordercontext.command.south.adapter;
 
 import com.stardata.starshop2.ordercontext.command.domain.order.Order;
 import com.stardata.starshop2.ordercontext.command.south.port.OrderRepository;
+import com.stardata.starshop2.sharedcontext.annotation.Adapter;
+import com.stardata.starshop2.sharedcontext.annotation.PortType;
 import com.stardata.starshop2.sharedcontext.domain.LongIdentity;
 import com.stardata.starshop2.sharedcontext.south.adapter.Repository;
 import jakarta.persistence.EntityManager;
@@ -15,6 +17,7 @@ import java.util.List;
  * @email shush@stardata.top
  * @date 2022/5/9 21:41
  */
+@Adapter(PortType.Repository)
 public class OrderRepositoryJpaAdapter  implements OrderRepository {
     private final Repository<Order, LongIdentity> repository;
 
