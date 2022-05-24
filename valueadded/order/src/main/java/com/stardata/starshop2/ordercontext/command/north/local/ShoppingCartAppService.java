@@ -20,14 +20,14 @@ import org.springframework.stereotype.Service;
 public class ShoppingCartAppService {
     private final ShoppingCartManagingService shoppingCartManagingService;
 
-    public ShoppingCartResponse save(SessionUser loginUser, String shopId, ShoppingCartRequest request) {
+    public ShoppingCartResponse save(SessionUser loginUser, Long shopId, ShoppingCartRequest request) {
         ShoppingCart shoppingCart = request.toShoppingCart(shopId, loginUser.getId());
         return ShoppingCartResponse.from(shoppingCartManagingService.replaceShoppingCart(shoppingCart));
     }
 
-    public ShoppingCartResponse query(String userIdStr, String shopIdStr) {
-        LongIdentity userId = LongIdentity.from(userIdStr);
-        LongIdentity shopId = LongIdentity.from(shopIdStr);
+    public ShoppingCartResponse query(Long userIdLong, Long shopIdLong) {
+        LongIdentity userId = LongIdentity.from(userIdLong);
+        LongIdentity shopId = LongIdentity.from(shopIdLong);
         return  ShoppingCartResponse.from((shoppingCartManagingService.queryShoppingCart(userId, shopId)));
     }
 }

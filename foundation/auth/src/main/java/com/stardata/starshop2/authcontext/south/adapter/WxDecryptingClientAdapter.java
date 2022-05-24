@@ -5,6 +5,7 @@ import com.stardata.starshop2.authcontext.south.port.WxDecryptingClient;
 import com.stardata.starshop2.sharedcontext.annotation.Adapter;
 import com.stardata.starshop2.sharedcontext.annotation.PortType;
 import com.stardata.starshop2.sharedcontext.domain.MobileNumber;
+import org.springframework.stereotype.Component;
 
 /**
  * @author Samson Shu
@@ -13,6 +14,7 @@ import com.stardata.starshop2.sharedcontext.domain.MobileNumber;
  * @date 2022/5/11 11:19
  */
 @Adapter( PortType.Client)
+@Component
 public class WxDecryptingClientAdapter implements WxDecryptingClient {
     @Override
     public MobileNumber decryptMobileNumber(UserToken UserToken, String encryptedData, String iv) {

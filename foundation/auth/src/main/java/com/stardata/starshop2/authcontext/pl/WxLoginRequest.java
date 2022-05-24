@@ -30,17 +30,17 @@ public class WxLoginRequest {
     private Integer gender;
     private String nickName;
 
+    /**
+     * 客户端信息
+     */
+    private String requestIp;
+
     public WxAuthInfo getWxAuthInfo() {
         return new WxAuthInfo(rawData, signature);
     }
 
 
-    public User toUser() {
-        return User.of(nickName, gender)
-                .avatarUrl(avatarUrl)
-                .country(country)
-                .province(province)
-                .city(city)
-                .language(language);
+    public User getRequestUser() {
+        return WxLoginRequestMapper.INSTANCE.convert(this);
     }
 }

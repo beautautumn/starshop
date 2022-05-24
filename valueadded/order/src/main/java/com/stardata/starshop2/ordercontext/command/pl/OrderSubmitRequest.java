@@ -11,7 +11,7 @@ import lombok.Data;
  */
 @Data
 public class OrderSubmitRequest {
-    public Order toOrder(String userId, Long shopId) {
+    public Order toOrder(Long userId, Long shopId) {
         //todo 完成根据DTO创建订单的工厂方法
         return null;
     }

@@ -26,14 +26,14 @@ public class ShoppingCartResource {
 
     @PutMapping("")
     public ResponseEntity<ShoppingCartResponse> save(@LoginUser SessionUser loginUser,
-                                                                 @PathVariable String shopId, ShoppingCartRequest request)
+                                                                 @PathVariable Long shopId, ShoppingCartRequest request)
     {
         ShoppingCartResponse response = appService.save(loginUser, shopId, request);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("")
-    public ResponseEntity<ShoppingCartResponse> query(@LoginUser SessionUser loginUser, @PathVariable String shopId)
+    public ResponseEntity<ShoppingCartResponse> query(@LoginUser SessionUser loginUser, @PathVariable Long shopId)
     {
         ShoppingCartResponse response = appService.query(loginUser.getId(), shopId);
         return new ResponseEntity<>(response, HttpStatus.OK);

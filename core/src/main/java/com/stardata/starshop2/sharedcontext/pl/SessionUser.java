@@ -1,6 +1,6 @@
 package com.stardata.starshop2.sharedcontext.pl;
 
-import lombok.Data;
+import lombok.Getter;
 
 /**
  * @author Samson Shu
@@ -8,7 +8,7 @@ import lombok.Data;
  * @email shush@stardata.top
  * @date 2022/4/26 18:00
  */
-@Data
+@Getter
 public class SessionUser {
-    private String id;
+    private Long id;
 }

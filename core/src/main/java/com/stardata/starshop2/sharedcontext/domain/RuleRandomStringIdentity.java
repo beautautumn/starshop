@@ -1,6 +1,7 @@
 package com.stardata.starshop2.sharedcontext.domain;
 
 import javax.annotation.concurrent.Immutable;
+import java.io.Serial;
 import java.util.Random;
 
 /**
@@ -10,7 +11,7 @@ import java.util.Random;
  * @date 2022/4/24 18:26
  */
 @Immutable
-public class RuleRandomIdentity implements RandomIdentity<String>{
+public class RuleRandomStringIdentity implements RandomIdentity<String>{
     private String value;
     private final String prefix;
     private final int seed;
@@ -18,21 +19,22 @@ public class RuleRandomIdentity implements RandomIdentity<String>{
 
     private static final int DEFAULT_SEED = 100_000;
     private static final String DEFAULT_JOINER = "_";
+    @Serial
     private static final long serialVersionUID = 1L;
 
-    public RuleRandomIdentity() {
+    public RuleRandomStringIdentity() {
         this("", DEFAULT_SEED, DEFAULT_JOINER);
     }
 
-    public RuleRandomIdentity(int seed) {
+    public RuleRandomStringIdentity(int seed) {
         this("", seed, DEFAULT_JOINER);
     }
 
-    public RuleRandomIdentity(String prefix, int seed) {
+    public RuleRandomStringIdentity(String prefix, int seed) {
         this(prefix, seed, DEFAULT_JOINER);
     }
 
-    public RuleRandomIdentity(String prefix, int seed, String joiner) {
+    public RuleRandomStringIdentity(String prefix, int seed, String joiner) {
         this.prefix = prefix;
         this.seed = seed;
         this.joiner = joiner;

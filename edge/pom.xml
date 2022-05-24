@@ -6,6 +6,7 @@
         <groupId>com.stardata.starshop2</groupId>
         <artifactId>starshop2</artifactId>
         <version>0.0.1-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>starshop-edge</artifactId>
     <version>0.0.1-SNAPSHOT</version>

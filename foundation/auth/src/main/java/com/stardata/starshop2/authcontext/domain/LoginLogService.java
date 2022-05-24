@@ -16,8 +16,9 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class LoginLogService {
     private final LoginLogRepository logRepository;
-    public void recordLogin(User user) {
-        LoginLog log = LoginLog.createFor(user);
+    public LoginLog recordLogin(User user, String loginIp) {
+        LoginLog log = LoginLog.createFor(user, loginIp);
         logRepository.add(log);
+        return log;
     }
 }

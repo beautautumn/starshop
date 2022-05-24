@@ -11,9 +11,12 @@ spring:
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://106.52.170.200:3306/starshop?useSSL=false&serverTimezone=GMT%2B8
+    url: jdbc:mysql://106.52.170.200:3306/starshop_test?useSSL=false&serverTimezone=GMT%2B8
     username: root
     password: Samson213
+  jpa:
+    open_in_view: false
+    show_sql: true
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8

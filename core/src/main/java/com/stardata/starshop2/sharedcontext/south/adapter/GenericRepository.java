@@ -9,8 +9,10 @@ import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
+import jakarta.transaction.TransactionScoped;
 import lombok.SneakyThrows;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
@@ -21,11 +23,13 @@ import java.util.List;
  * @email shush@stardata.top
  * @date 2022/5/9 20:35
  */
-public class Repository<E extends AggregateRoot, ID extends Identity> {
+@Component
+@TransactionScoped
+public class GenericRepository<E extends AggregateRoot, ID extends Identity> {
     private final Class<E> entityClass;
     private final EntityManager entityManager;
 
-    public Repository(Class<E> entityClass, EntityManager entityManager) {
+    public GenericRepository(Class<E> entityClass, EntityManager entityManager) {
         this.entityClass = entityClass;
         this.entityManager = entityManager;
     }
