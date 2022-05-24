@@ -19,7 +19,7 @@ public class ShopAppService {
     private final ShopManagingService managingService;
 
     public void initAlliance(String shopId) {
-
+        //
     }
 
     public ShopResponse getDetail(Long shopIdLong) {

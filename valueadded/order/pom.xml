@@ -6,6 +6,7 @@
         <groupId>com.stardata.starshop2</groupId>
         <artifactId>starshop2</artifactId>
         <version>0.0.1-SNAPSHOT</version>
+        <relativePath>../../pom.xml</relativePath>
     </parent>
 
     <artifactId>ordercontext-command</artifactId>
@@ -16,6 +17,11 @@
             <groupId>${project.parent.groupId}</groupId>
             <artifactId>sharedcontext</artifactId>
             <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <scope>runtime</scope>
         </dependency>
     </dependencies>
 </project>

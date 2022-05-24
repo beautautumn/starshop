@@ -1,6 +1,7 @@
 package com.stardata.starshop2.authcontext.south.port;
 
 import com.stardata.starshop2.authcontext.domain.loginlog.LoginLog;
+import com.stardata.starshop2.sharedcontext.domain.LongIdentity;
 
 /**
  * @author Samson Shu
@@ -11,4 +12,5 @@ import com.stardata.starshop2.authcontext.domain.loginlog.LoginLog;
 public interface LoginLogRepository {
     void add(LoginLog loginLog);
 
+    LoginLog instanceOf(LongIdentity id);
 }

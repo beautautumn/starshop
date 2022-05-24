@@ -13,6 +13,7 @@ import com.stardata.starshop2.sharedcontext.domain.MobileNumber;
 import com.stardata.starshop2.sharedcontext.pl.MobileNumberResponse;
 import com.stardata.starshop2.sharedcontext.pl.SessionUser;
 import lombok.AllArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
 /**
@@ -28,12 +29,12 @@ public class AuthAppService {
     private LoginLogService logService;
     private MobileNumberDecryptingService decryptService;
 
-    public UserResponse loginByWx(WxLoginRequest request) {
+    public UserResponse loginByWx(@NotNull WxLoginRequest request) {
         String code = request.getCode();
         WxAuthInfo wxAuthInfo = request.getWxAuthInfo();
-        User loginUser = request.toUser();
+        User loginUser = request.getRequestUser();
         User user = loginWithTokenService.loginWithToken(code, wxAuthInfo, loginUser);
-        logService.recordLogin(user);
+        logService.recordLogin(user, request.getRequestIp());
         return UserResponse.from(user);
     }
 

@@ -5,9 +5,9 @@ import com.stardata.starshop2.ordercontext.command.south.port.OrderRepository;
 import com.stardata.starshop2.sharedcontext.annotation.Adapter;
 import com.stardata.starshop2.sharedcontext.annotation.PortType;
 import com.stardata.starshop2.sharedcontext.domain.LongIdentity;
-import com.stardata.starshop2.sharedcontext.south.adapter.Repository;
-import jakarta.persistence.EntityManager;
+import com.stardata.starshop2.sharedcontext.south.adapter.GenericRepository;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
@@ -18,10 +18,11 @@ import java.util.List;
  * @date 2022/5/9 21:41
  */
 @Adapter(PortType.Repository)
+@Component
 public class OrderRepositoryJpaAdapter  implements OrderRepository {
-    private final Repository<Order, LongIdentity> repository;
+    private final GenericRepository<Order, LongIdentity> repository;
 
-    public OrderRepositoryJpaAdapter(Repository<Order, LongIdentity> repository, EntityManager entityManager) {
+    public OrderRepositoryJpaAdapter(GenericRepository<Order, LongIdentity> repository) {
         this.repository = repository;
     }
 

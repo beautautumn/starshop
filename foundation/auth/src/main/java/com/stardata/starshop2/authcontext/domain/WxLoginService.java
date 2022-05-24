@@ -11,8 +11,9 @@ import org.springframework.stereotype.Service;
  * @email shush@stardata.top
  * @date 2022/4/23 23:21
  */
-@AllArgsConstructor
+
 @Service
+@AllArgsConstructor
 public class WxLoginService {
     private final WxSessionCheckingClient authClient;
 
@@ -21,6 +22,6 @@ public class WxLoginService {
         if (!wxAuthInfo.checkIntegrity(wxAuthInfo.getSessionKey())) {
             throw new WxLoginErrorException("Checking userinfo integrity failed.");
         }
-        return WxOpenId.of(wxAuthInfo.getOpenId());
+        return WxOpenId.of(wxAuthInfo.getOpenid());
     }
 }

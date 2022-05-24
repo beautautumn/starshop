@@ -17,14 +17,15 @@ import org.springframework.stereotype.Service;
 public class UserExistenceService {
     private final UserRepository userRepository;
 
-    public User ensureUser(WxOpenId openId, User loginUser) {
+
+    public User ensureUser(WxOpenId openId, User userToEnsure) {
         User user = userRepository.findByOpenId(openId);
         if (user == null) {
-            loginUser.setOpenId(openId);
-            user = loginUser;
+            userToEnsure.setOpenid(openId);
+            user = userToEnsure;
             userRepository.add(user);
         } else {
-            user.copyMiniAppInfoFrom(loginUser);
+            user.copyMiniAppInfoFrom(userToEnsure);
             userRepository.update(user);
         }
         return user;

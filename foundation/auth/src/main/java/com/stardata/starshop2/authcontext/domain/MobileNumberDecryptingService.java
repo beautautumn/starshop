@@ -22,7 +22,7 @@ public class MobileNumberDecryptingService {
 
     public MobileNumber decryptWxMobileNumber(LongIdentity userId, String encryptedData, String iv) {
         User user = repository.instanceOf(userId);
-        MobileNumber mobileNumber = decryptingClient.decryptMobileNumber(user.getToken(), encryptedData, iv);
+        MobileNumber mobileNumber = decryptingClient.decryptMobileNumber(user.currentToken(), encryptedData, iv);
         user.updateMobileNumber(mobileNumber);
         repository.update(user);
         return mobileNumber;

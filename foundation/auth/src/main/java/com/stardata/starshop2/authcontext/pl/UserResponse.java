@@ -1,6 +1,7 @@
 package com.stardata.starshop2.authcontext.pl;
 
 import com.stardata.starshop2.authcontext.domain.user.User;
+import lombok.Data;
 
 /**
  * @author Samson Shu
@@ -8,9 +9,12 @@ import com.stardata.starshop2.authcontext.domain.user.User;
  * @email shush@stardata.top
  * @date 2022/2/28 14:21
  */
+@Data
 public class UserResponse {
+    private Long id;
+    private String token;
+
     public static UserResponse from(User user) {
-        //todo 完成将用户对象转DTO
-        return null;
+        return UserResponseMapper.INSTANCE.convert(user);
     }
 }

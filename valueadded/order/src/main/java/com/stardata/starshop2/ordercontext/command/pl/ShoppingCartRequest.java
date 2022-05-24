@@ -11,7 +11,7 @@ import lombok.Data;
  */
 @Data
 public class ShoppingCartRequest {
-    public ShoppingCart toShoppingCart(String shopId, String userId) {
+    public ShoppingCart toShoppingCart(Long shopId, Long userId) {
         //todo 完成根据DTO创建购物车的工厂方法
         return null;
     }
