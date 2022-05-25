@@ -260,7 +260,7 @@ class StarshopAuthApplicationTests {
         userRepository.add(user);
         entityManager.flush();
 
-        UserToken oldToken = user.currentToken();
+        String oldToken = user.currentToken().getToken();
 
         //when: 调用User.refreshLoginToken更新令牌，并持久化用户对象后再重建
         user.refreshLoginToken(sessionKey);
@@ -271,8 +271,8 @@ class StarshopAuthApplicationTests {
         //then: 用户令牌被保存，且内容正确
         assertNotNull(loadedUser);
         assertNotNull(loadedUser.currentToken());
-        assertNotEquals(loadedUser.currentToken().getToken(), oldToken.getToken());
-        logger.info("oldToken: " + oldToken.getToken());
+        assertNotEquals(loadedUser.currentToken().getToken(), oldToken);
+        logger.info("oldToken: " + oldToken);
         logger.info("newToken: " + loadedUser.currentToken().getToken());
     }
 
@@ -412,7 +412,7 @@ class StarshopAuthApplicationTests {
     // 4.2. 微信登录异常,未生成微信登录令牌；（组合任务，领域服务）
     @Test
     @Transactional
-    @Rollback(false)
+    @Rollback(true)
     void should_wx_login_with_token_by_valid_and_unused_code_but_signature_error_given_login_exception() {
 
         // given: 有效的微信前端code、有效的微信认证用户rawData和signature、有效的用户信息
@@ -508,7 +508,7 @@ class StarshopAuthApplicationTests {
     //6.1 正确的微信code，且未过期，该用户为新用户，要求返回72小时内有效的新token
     @Test
     @Transactional
-    @Rollback(false)
+    @Rollback(true)
     void should_login_by_new_user_valid_code_given_new_token_with_valid_period() {
         // given: 准备好输入数据
         String code = "081sloll28T8d94nl8nl2hxKhh3slolv";
@@ -545,6 +545,10 @@ class StarshopAuthApplicationTests {
                         .city("南京")
                         .language("zh_CN");
         assertTrue(isSameMiniAppUserInfo(loadedUser, frontUser));
+
+        UserToken userToken = loadedUser.currentToken();
+        LocalDateTime now = LocalDateTime.now();
+        userToken.getExpireTime().isAfter(now.minusMinutes(1).plusHours(72));
     }
 
 
