@@ -344,6 +344,7 @@ class StarshopAuthApplicationTests {
         }
         catch(WxLoginErrorException e) {
             // then: 抛出"微信登录错误"异常
+            assertTrue(e.getErrCode() == 40029 || e.getErrCode() == 45011 || e.getErrCode() == 40226);
             assertNotNull(e);
         }
     }
@@ -364,6 +365,7 @@ class StarshopAuthApplicationTests {
         }
         catch(WxLoginErrorException e) {
             // then: 抛出"微信登录错误"异常
+            assertTrue(e.getErrCode() == 40029 || e.getErrCode() == 45011 || e.getErrCode() == 40226);
             assertNotNull(e);
         }
     }
@@ -551,5 +553,217 @@ class StarshopAuthApplicationTests {
         userToken.getExpireTime().isAfter(now.minusMinutes(1).plusHours(72));
     }
 
+    //6.2 正确的微信code，且未过期，该用户为老用户，要求返回72小时内有效的新token
+    @Test
+    @Transactional
+    @Rollback(true)
+    void should_login_by_old_user_valid_code_given_new_token_with_valid_period() {
+        // given: 准备好输入数据
+        User user = User.of("testUser", 1)
+                .avatarUrl("testUrl")
+                .country("testCountry")
+                .province("testProvince")
+                .city("testCity")
+                .language("testLanguage");
+        user.setOpenid(WxOpenId.of("oVsAw5cdcnIxaae-x98ShoH93Hu0"));
+        userRepository.add(user);
+        entityManager.flush();
 
+        String code = "081sloll28T8d94nl8nl2hxKhh3slolv";
+        String rawData = "{\"nickName\":\"深清秋\",\"gender\":0,\"language\":\"zh_CN\",\"city\":\"\",\"province\":\"\",\"country\":\"\",\"avatarUrl\":\"https://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTKq2CRmib1mpu4hOFYtcIHgAmS7DicCEfYkUHoPmPQn74BXH5GerjoMOxIqib7iafNNBw2ZAicBj6gZGUQ/132\"}";
+        String signature = "06846a4ba8b003af5d98fadfaf376a652e5d75d7";
+        WxLoginRequest request = new WxLoginRequest();
+        request.setCode(code);
+        request.setRequestIp("testLoginIp");
+        request.setRawData(rawData);
+        request.setSignature(signature);
+        request.setNickName("testUser1");
+        request.setGender(1);
+        request.setAvatarUrl("https://www.somehost.com/someAvatar.png");
+        request.setCountry("中国");
+        request.setProvince("江苏");
+        request.setCity("南京");
+        request.setLanguage("zh_CN");
+
+
+        // when: 执行authAppService.loginByWx方法调用
+        UserResponse response = authAppService.loginByWx(request);
+
+        // then: 检查调用结果是否正确
+        assertNotNull(response);
+        assertNotNull(response.getId());
+        assertNotNull(response.getToken());
+
+        User loadedUser = userRepository.instanceOf(LongIdentity.from(response.getId()));
+        User frontUser = User.of("testUser1", 1)
+                .avatarUrl("https://www.somehost.com/someAvatar.png")
+                .country("中国")
+                .province("江苏")
+                .city("南京")
+                .language("zh_CN");
+        assertTrue(isSameMiniAppUserInfo(loadedUser, frontUser));
+
+        UserToken userToken = loadedUser.currentToken();
+        LocalDateTime now = LocalDateTime.now();
+        userToken.getExpireTime().isAfter(now.minusMinutes(1).plusHours(72));
+    }
+
+    //6.3 正确的微信code，且未过期，但用户信息完整性被破坏，要求返回业务失败
+    @Test
+    @Transactional
+    @Rollback(true)
+    void should_login_by_new_user_valid_code_but_signature_error_given_login_exception() {
+        // given: 准备好输入数据
+        String code = "081sloll28T8d94nl8nl2hxKhh3slolv";
+        String rawData = "{\"nickName\":\"深清秋\",\"gender\":0,\"language\":\"zh_CN\",\"city\":\"\",\"province\":\"\",\"country\":\"\",\"avatarUrl\":\"https://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTKq2CRmib1mpu4hOFYtcIHgAmS7DicCEfYkUHoPmPQn74BXH5GerjoMOxIqib7iafNNBw2ZAicBj6gZGUQ/132\"}";
+        String signature = "06846a4ba8b003af5d98fadfaf376a652e5d75d7";
+
+        WxLoginRequest request = new WxLoginRequest();
+        request.setCode(code);
+        request.setRequestIp("testLoginIp");
+        request.setRawData(rawData);
+        request.setSignature(signature);
+        request.setNickName("testUser1");
+        request.setGender(1);
+        request.setAvatarUrl("https://www.somehost.com/someAvatar.png");
+        request.setCountry("中国");
+        request.setProvince("江苏");
+        request.setCity("南京");
+        request.setLanguage("zh_CN");
+
+        try {
+
+            // when: 执行authAppService.loginByWx方法调用
+            UserResponse response = authAppService.loginByWx(request);
+
+            // 如下这些应该不被执行到
+            assertNotNull(response);
+            assertNotNull(response.getId());
+            assertNotNull(response.getToken());
+
+            User loadedUser = userRepository.instanceOf(LongIdentity.from(response.getId()));
+            User frontUser = User.of("testUser1", 1)
+                    .avatarUrl("https://www.somehost.com/someAvatar.png")
+                    .country("中国")
+                    .province("江苏")
+                    .city("南京")
+                    .language("zh_CN");
+            assertTrue(isSameMiniAppUserInfo(loadedUser, frontUser));
+
+            UserToken userToken = loadedUser.currentToken();
+            LocalDateTime now = LocalDateTime.now();
+            userToken.getExpireTime().isAfter(now.minusMinutes(1).plusHours(72));
+        }
+        catch (WxLoginErrorException e) {
+            // then: 抛出"Checking userinfo integrity failed"异常
+            assertNotNull(e);
+            assertEquals(e.getErrCode(), -99);
+        }
+    }
+
+    //6.4 正确的微信code，但已过期，要求返回业务失败
+    @Test
+    @Transactional
+    @Rollback(true)
+    void should_login_by_valid_and_used_code_given_login_exception() {
+        // given: 准备好输入数据
+        String code = "091FHp0w3KT3yY2VjV1w3aMiIB3FHp0B";
+        String rawData = "{\"nickName\":\"深清秋\",\"gender\":0,\"language\":\"zh_CN\",\"city\":\"\",\"province\":\"\",\"country\":\"\",\"avatarUrl\":\"https://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTKq2CRmib1mpu4hOFYtcIHgAmS7DicCEfYkUHoPmPQn74BXH5GerjoMOxIqib7iafNNBw2ZAicBj6gZGUQ/132\"}";
+        String signature = "af36606701965ce329c2613b91f801d2c07b332d";
+
+        WxLoginRequest request = new WxLoginRequest();
+        request.setCode(code);
+        request.setRequestIp("testLoginIp");
+        request.setRawData(rawData);
+        request.setSignature(signature);
+        request.setNickName("testUser1");
+        request.setGender(1);
+        request.setAvatarUrl("https://www.somehost.com/someAvatar.png");
+        request.setCountry("中国");
+        request.setProvince("江苏");
+        request.setCity("南京");
+        request.setLanguage("zh_CN");
+
+        try {
+
+            // when: 执行authAppService.loginByWx方法调用
+            UserResponse response = authAppService.loginByWx(request);
+
+            // 如下这些应该不被执行到
+            assertNotNull(response);
+            assertNotNull(response.getId());
+            assertNotNull(response.getToken());
+
+            User loadedUser = userRepository.instanceOf(LongIdentity.from(response.getId()));
+            User frontUser = User.of("testUser1", 1)
+                    .avatarUrl("https://www.somehost.com/someAvatar.png")
+                    .country("中国")
+                    .province("江苏")
+                    .city("南京")
+                    .language("zh_CN");
+            assertTrue(isSameMiniAppUserInfo(loadedUser, frontUser));
+
+            UserToken userToken = loadedUser.currentToken();
+            LocalDateTime now = LocalDateTime.now();
+            userToken.getExpireTime().isAfter(now.minusMinutes(1).plusHours(72));
+        }
+        catch (WxLoginErrorException e) {
+            // then: 抛出"Checking userinfo integrity failed"异常
+            assertNotNull(e);
+            assertTrue(e.getErrCode() == 40029 || e.getErrCode() == 45011 || e.getErrCode() == 40226);
+        }
+    }
+
+    //6.5 错误的微信code，要求返回无效请求告警
+    @Test
+    @Transactional
+    @Rollback(true)
+    void should_login_by_invalid_and_used_code_given_login_exception() {
+        // given: 准备好输入数据
+        String code = "testCode";
+        String rawData = "testRawData";
+        String signature = "testSignature";
+
+        WxLoginRequest request = new WxLoginRequest();
+        request.setCode(code);
+        request.setRequestIp("testLoginIp");
+        request.setRawData(rawData);
+        request.setSignature(signature);
+        request.setNickName("testUser1");
+        request.setGender(1);
+        request.setAvatarUrl("https://www.somehost.com/someAvatar.png");
+        request.setCountry("中国");
+        request.setProvince("江苏");
+        request.setCity("南京");
+        request.setLanguage("zh_CN");
+
+        try {
+
+            // when: 执行authAppService.loginByWx方法调用
+            UserResponse response = authAppService.loginByWx(request);
+
+            // 如下这些应该不被执行到
+            assertNotNull(response);
+            assertNotNull(response.getId());
+            assertNotNull(response.getToken());
+
+            User loadedUser = userRepository.instanceOf(LongIdentity.from(response.getId()));
+            User frontUser = User.of("testUser1", 1)
+                    .avatarUrl("https://www.somehost.com/someAvatar.png")
+                    .country("中国")
+                    .province("江苏")
+                    .city("南京")
+                    .language("zh_CN");
+            assertTrue(isSameMiniAppUserInfo(loadedUser, frontUser));
+
+            UserToken userToken = loadedUser.currentToken();
+            LocalDateTime now = LocalDateTime.now();
+            userToken.getExpireTime().isAfter(now.minusMinutes(1).plusHours(72));
+        }
+        catch (WxLoginErrorException e) {
+            // then: 抛出"Checking userinfo integrity failed"异常
+            assertNotNull(e);
+            assertTrue(e.getErrCode() == 40029 || e.getErrCode() == 45011 || e.getErrCode() == 40226);
+        }
+    }
 }
