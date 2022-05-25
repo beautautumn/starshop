@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
  */
 @Getter
 @Entity
-@Table(name="tb_login_log")
+@Table(name= "tb_user_login_log")
 public class LoginLog extends AbstractEntity<LongIdentity> implements AggregateRoot<LoginLog> {
     @EmbeddedId
     private LongIdentity id;
