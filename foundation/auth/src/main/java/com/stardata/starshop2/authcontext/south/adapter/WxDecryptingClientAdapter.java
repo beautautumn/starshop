@@ -1,10 +1,15 @@
 package com.stardata.starshop2.authcontext.south.adapter;
 
+import cn.binarywang.wx.miniapp.api.WxMaService;
+import cn.binarywang.wx.miniapp.bean.WxMaPhoneNumberInfo;
+import com.google.gson.JsonSyntaxException;
 import com.stardata.starshop2.authcontext.domain.user.UserToken;
 import com.stardata.starshop2.authcontext.south.port.WxDecryptingClient;
 import com.stardata.starshop2.sharedcontext.annotation.Adapter;
 import com.stardata.starshop2.sharedcontext.annotation.PortType;
 import com.stardata.starshop2.sharedcontext.domain.MobileNumber;
+import com.stardata.starshop2.sharedcontext.exception.ApplicationValidationException;
+import me.chanjar.weixin.common.error.WxRuntimeException;
 import org.springframework.stereotype.Component;
 
 /**
@@ -16,8 +21,17 @@ import org.springframework.stereotype.Component;
 @Adapter( PortType.Client)
 @Component
 public class WxDecryptingClientAdapter implements WxDecryptingClient {
+
     @Override
     public MobileNumber decryptMobileNumber(UserToken UserToken, String encryptedData, String iv) {
-        return null;
+        final WxMaService wxService = WxConfiguration.getMaService();
+        try{
+            WxMaPhoneNumberInfo phoneNumberInfo = wxService.getUserService()
+                    .getPhoneNoInfo(UserToken.getSessionKey(), encryptedData, iv);
+            return new MobileNumber(phoneNumberInfo.getPhoneNumber());
+        }
+        catch(JsonSyntaxException | WxRuntimeException e) {
+            throw new ApplicationValidationException(ApplicationValidationException.INVALID_REQUEST_DATA, "encryptedData or iv data error", e);
+        }
     }
 }

@@ -95,6 +95,12 @@ public class User extends AbstractEntity<LongIdentity> implements AggregateRoot<
     private WxOpenId openid;
 
     /**
+     * 手机号码
+     */
+    @Embedded
+    private MobileNumber mobileNumber;
+
+    /**
      * 用户登录令牌
      * 由于实际上只有一个令牌生效，因此我们将这个LIST对象隐藏起来，只通过refreshLoginToken、currentToken向外提供服务
      */
@@ -188,7 +194,7 @@ public class User extends AbstractEntity<LongIdentity> implements AggregateRoot<
 
 
     public void updateMobileNumber(MobileNumber mobileNumber) {
-        //todo 完成更新用户手机号方法
+        this.mobileNumber = mobileNumber;
     }
 
     @Override

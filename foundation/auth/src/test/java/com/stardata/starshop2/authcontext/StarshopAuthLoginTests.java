@@ -27,10 +27,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
-class StarshopAuthApplicationTests {
+class StarshopAuthLoginTests {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -47,7 +46,7 @@ class StarshopAuthApplicationTests {
 
     //1.1. 针对微信前端小程序获得用户信息字段，更新已有用户信息（昵称、头像等）；（原子任务，"用户"聚合行为）
     @Test
-    void should_copy_user1_wxinfo_to_user2_given_equal_values_except_id() {
+    void after_copy_user1_wxinfo_to_user2_should_equal_values_except_id() {
         // given: 准备好user1对象并给除ID之外所有属性赋值、以及空的user2对象
         User user1 = User.of("testUser1", 1)
                 .avatarUrl("https://www.somehost.com/someAvatar.png")
@@ -72,7 +71,7 @@ class StarshopAuthApplicationTests {
 
     //1.2. 设置新用户openid；（原子任务，"用户"聚合行为）
     @Test
-    void should_set_openid_given_openid_correctly() {
+    void after_set_openid_should_get_openid_correctly() {
         // given: 准备好openid，并创建user对象
         WxOpenId openId = WxOpenId.of("o9Nvx4gUq9dfO1KQy7LL-gXS_EkI");
         User user = User.of("testUser", 1);
@@ -91,7 +90,7 @@ class StarshopAuthApplicationTests {
     @Test
     @Transactional
     @Rollback(true)
-    void should_load_user_by_openid_exists_given_user_correctly() {
+    void should_load_exists_user_correctly_by_openid() {
         // given: 创建新用户，并设置其openid后保存
         WxOpenId openId = WxOpenId.of("testOpenIdX");
         User user = User.of("testUserX", 1);
@@ -113,7 +112,7 @@ class StarshopAuthApplicationTests {
     @Test
     @Transactional
     @Rollback(true)
-    void should_load_exists_user_by_openid_given_update_wx_user_info() {
+    void should_update_wx_user_info_correctly_for_exists_user_by_openid() {
         // given: 已有微信用户信息、openid、并根据该openid在系统中插入用户记录
         WxOpenId openId = WxOpenId.of("testOpenId");
         User existsUser = User.of("testUserX", 1)
@@ -158,7 +157,7 @@ class StarshopAuthApplicationTests {
     @Test
     @Transactional
     @Rollback(true)
-    void should_load_not_exists_user_by_openid_given_insert_wx_user_info() {
+    void should_create_new_user_for_not_exists_user_by_openid() {
         // given: 已有openid，但db中没有对应的User对象
         WxOpenId openId = WxOpenId.of("testOpenId");
 
@@ -192,7 +191,7 @@ class StarshopAuthApplicationTests {
 
     // 2.1. 创建用户登录令牌；（原子任务，用户聚合行为，用户原来无令牌，创建新令牌）
     @Test
-    void should_create_new_token_for_user_give_token_correctly() {
+    void should_create_new_token_correctly_for_given_user() {
         //given: 一个新用户
         User newUser = User.of("testUser", 1);
         String sessionKey = "testSessionKey";
@@ -208,7 +207,7 @@ class StarshopAuthApplicationTests {
 
     // 2.2. 创建用户登录令牌；（原子任务，用户聚合行为，用户原来有令牌，更新令牌）
     @Test
-    void should_update_token_for_user_give_token_different() {
+    void should_update_token_to_different_if_refresh_twice_for_given_user() {
         //given: 一个新用户
         User newUser = User.of("testUser", 1);
         String sessionKey = "testSessionKey";
@@ -228,7 +227,7 @@ class StarshopAuthApplicationTests {
     @Test
     @Transactional
     @Rollback(true)
-    void should_create_user_token_given_token_updated() {
+    void should_save_token_correctly_for_given_user() {
         //given: 一个新用户
         User newUser = User.of("testUser", 1);
         String sessionKey = "testSessionKey";
@@ -252,7 +251,7 @@ class StarshopAuthApplicationTests {
     @Test
     @Transactional
     @Rollback(true)
-    void should_update_user_token_given_token_updated() {
+    void should_update_user_token_to_different_given_token_updated() {
         //given: 创建一个用户及其登录令牌保存到db
         String sessionKey = "testSessionKey";
         User user = User.of("testUser", 1);
@@ -292,7 +291,7 @@ class StarshopAuthApplicationTests {
 
     //3.1. 微信后台登录并校验；（组合任务，领域服务，微信code有效且未被使用过）
     @Test
-    void should_wx_login_by_valid_and_unused_code_given_login_success() {
+    void should_wx_login_success_given_by_valid_and_unused_code() {
         // given: 有效的微信前端code、有效的微信认证用户rawData和signature
         String code = "081sloll28T8d94nl8nl2hxKhh3slolv";
         String rawData = "{\"nickName\":\"深清秋\",\"gender\":0,\"language\":\"zh_CN\",\"city\":\"\",\"province\":\"\",\"country\":\"\",\"avatarUrl\":\"https://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTKq2CRmib1mpu4hOFYtcIHgAmS7DicCEfYkUHoPmPQn74BXH5GerjoMOxIqib7iafNNBw2ZAicBj6gZGUQ/132\"}";
@@ -309,7 +308,7 @@ class StarshopAuthApplicationTests {
 
     //3.2. 微信后台登录并校验；（组合任务，领域服务，微信code有效且未被使用过，但signature 不正确）
     @Test
-    void should_wx_login_by_valid_and_unused_code_but_signature_error_given_login_exception() {
+    void should_wx_login_exception_given_valid_and_unused_code_but_signature_error() {
         // given: 有效的微信前端code、有效的微信认证用户rawData和signature
         String code = "081sloll28T8d94nl8nl2hxKhh3slolv";
         String rawData = "{\"nickName\":\"深清秋\",\"gender\":0,\"language\":\"zh_CN\",\"city\":\"\",\"province\":\"\",\"country\":\"\",\"avatarUrl\":\"https://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTKq2CRmib1mpu4hOFYtcIHgAmS7DicCEfYkUHoPmPQn74BXH5GerjoMOxIqib7iafNNBw2ZAicBj6gZGUQ/132\"}";
@@ -330,7 +329,7 @@ class StarshopAuthApplicationTests {
 
     //3.3. 微信后台登录并校验；（组合任务，领域服务，微信code有效但已被使用过）
     @Test
-    void should_wx_login_by_valid_and_used_code_given_login_biz_exception() {
+    void should_wx_login_login_biz_exception_given_valid_and_used_code() {
         // given: 有效的微信前端code、有效的微信认证用户rawData和signature
         String code = "091FHp0w3KT3yY2VjV1w3aMiIB3FHp0B";
         String rawData = "{\"nickName\":\"深清秋\",\"gender\":0,\"language\":\"zh_CN\",\"city\":\"\",\"province\":\"\",\"country\":\"\",\"avatarUrl\":\"https://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTKq2CRmib1mpu4hOFYtcIHgAmS7DicCEfYkUHoPmPQn74BXH5GerjoMOxIqib7iafNNBw2ZAicBj6gZGUQ/132\"}";
@@ -385,7 +384,7 @@ class StarshopAuthApplicationTests {
     @Test
     @Transactional
     @Rollback(true)
-    void should_wx_login_with_token_by_valid_and_unused_code_given_login_success() {
+    void should_wx_login_with_token_success_given_login_valid_and_unused_code_() {
 
         // given: 有效的微信前端code、有效的微信认证用户rawData和signature、有效的用户信息
         String code = "081sloll28T8d94nl8nl2hxKhh3slolv";
@@ -415,7 +414,7 @@ class StarshopAuthApplicationTests {
     @Test
     @Transactional
     @Rollback(true)
-    void should_wx_login_with_token_by_valid_and_unused_code_but_signature_error_given_login_exception() {
+    void should_wx_login_with_token_exception_given_valid_and_unused_code_but_signature_error() {
 
         // given: 有效的微信前端code、有效的微信认证用户rawData和signature、有效的用户信息
         String code = "081sloll28T8d94nl8nl2hxKhh3slolv";
@@ -467,7 +466,7 @@ class StarshopAuthApplicationTests {
     @Test
     @Transactional
     @Rollback(true)
-    void should_create_and_save_login_log_given_login_log_correctly() {
+    void should_create_and_save_login_log_correctly_given_login_log() {
         // given:
         WxOpenId openId = WxOpenId.of("testOpenId");
         User user = User.of("testUser", 2)
@@ -511,7 +510,7 @@ class StarshopAuthApplicationTests {
     @Test
     @Transactional
     @Rollback(true)
-    void should_login_by_new_user_valid_code_given_new_token_with_valid_period() {
+    void app_service_should_login_success_given_new_user_valid_code_and_encrypt_info() {
         // given: 准备好输入数据
         String code = "081sloll28T8d94nl8nl2hxKhh3slolv";
         String rawData = "{\"nickName\":\"深清秋\",\"gender\":0,\"language\":\"zh_CN\",\"city\":\"\",\"province\":\"\",\"country\":\"\",\"avatarUrl\":\"https://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTKq2CRmib1mpu4hOFYtcIHgAmS7DicCEfYkUHoPmPQn74BXH5GerjoMOxIqib7iafNNBw2ZAicBj6gZGUQ/132\"}";
@@ -557,7 +556,7 @@ class StarshopAuthApplicationTests {
     @Test
     @Transactional
     @Rollback(true)
-    void should_login_by_old_user_valid_code_given_new_token_with_valid_period() {
+    void app_service_should_login_success_given_old_user_valid_code_and_encrypt_info() {
         // given: 准备好输入数据
         User user = User.of("testUser", 1)
                 .avatarUrl("testUrl")
@@ -612,7 +611,7 @@ class StarshopAuthApplicationTests {
     @Test
     @Transactional
     @Rollback(true)
-    void should_login_by_new_user_valid_code_but_signature_error_given_login_exception() {
+    void app_service_should_login_exception_given_new_user_valid_code_but_signature_error() {
         // given: 准备好输入数据
         String code = "081sloll28T8d94nl8nl2hxKhh3slolv";
         String rawData = "{\"nickName\":\"深清秋\",\"gender\":0,\"language\":\"zh_CN\",\"city\":\"\",\"province\":\"\",\"country\":\"\",\"avatarUrl\":\"https://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTKq2CRmib1mpu4hOFYtcIHgAmS7DicCEfYkUHoPmPQn74BXH5GerjoMOxIqib7iafNNBw2ZAicBj6gZGUQ/132\"}";
@@ -665,7 +664,7 @@ class StarshopAuthApplicationTests {
     @Test
     @Transactional
     @Rollback(true)
-    void should_login_by_valid_and_used_code_given_login_exception() {
+    void app_service_should_login_exception_given_valid_and_used_code() {
         // given: 准备好输入数据
         String code = "091FHp0w3KT3yY2VjV1w3aMiIB3FHp0B";
         String rawData = "{\"nickName\":\"深清秋\",\"gender\":0,\"language\":\"zh_CN\",\"city\":\"\",\"province\":\"\",\"country\":\"\",\"avatarUrl\":\"https://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTKq2CRmib1mpu4hOFYtcIHgAmS7DicCEfYkUHoPmPQn74BXH5GerjoMOxIqib7iafNNBw2ZAicBj6gZGUQ/132\"}";
@@ -718,7 +717,7 @@ class StarshopAuthApplicationTests {
     @Test
     @Transactional
     @Rollback(true)
-    void should_login_by_invalid_and_used_code_given_login_exception() {
+    void app_service_should_login_exception_given_invalid_and_used_code() {
         // given: 准备好输入数据
         String code = "testCode";
         String rawData = "testRawData";

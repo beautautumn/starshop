@@ -38,5 +38,11 @@ public class WxSessionCheckingSimulatorAdapter implements WxSessionCheckingClien
             wxAuthInfo.setUnionid("oeX0e6HcoHXWQsYqM7nUkB6QcaAI");
             wxAuthInfo.setSessionKey("NRTHiwwdbwQEmyWZopiUPQ==");
         }
+
+        if (code.equals("011NXJ000zQ8VN1iJZ000DWjjS2NXJ0e")) {
+            wxAuthInfo.setOpenid("oVsAw5cdcnIxaae-x98ShoH93Hu0");
+            wxAuthInfo.setUnionid("oeX0e6HcoHXWQsYqM7nUkB6QcaAI");
+            wxAuthInfo.setSessionKey("EfUbtTDsTz/S3lSvdkx2jg==");
+        }
     }
 }

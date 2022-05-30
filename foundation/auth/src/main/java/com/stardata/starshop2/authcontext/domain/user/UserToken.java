@@ -4,6 +4,7 @@ import com.stardata.starshop2.sharedcontext.utils.CharUtil;
 import jakarta.persistence.Embeddable;
 import lombok.Getter;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -15,7 +16,7 @@ import java.util.Objects;
  */
 @Getter
 @Embeddable
-public class UserToken  {
+public class UserToken  implements Serializable {
     private final static long EXPIRE_SECONDS = 71*3600L;
 
     private String token;
@@ -56,6 +57,11 @@ public class UserToken  {
     @Override
     public int hashCode() {
         return Objects.hash(this.token + this.sessionKey);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("token: %s, sessionKey: %s", this.token, this.sessionKey);
     }
 
 }

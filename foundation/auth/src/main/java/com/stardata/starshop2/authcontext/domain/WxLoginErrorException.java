@@ -13,19 +13,12 @@ import lombok.Getter;
 public class WxLoginErrorException extends ApplicationInfrastructureException {
     private static final int DEFAULT_ERROR_CODE = -99;
 
-    private final int errCode;
-    private String errMsg;
-
-
     public WxLoginErrorException(String errMsg) {
-        super(errMsg);
-        this.errCode = DEFAULT_ERROR_CODE;
+        super(DEFAULT_ERROR_CODE, errMsg);
     }
 
     public WxLoginErrorException(int errCode, String errMsg) {
-        super("Wechat login failed: " + errMsg);
-        this.errCode = errCode;
-        this.errMsg = errMsg;
+        super(errCode, "Wechat login failed: " + errMsg);
     }
 
 }

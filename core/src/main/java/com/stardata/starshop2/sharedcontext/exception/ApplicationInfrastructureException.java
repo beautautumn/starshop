@@ -6,7 +6,7 @@ package com.stardata.starshop2.sharedcontext.exception;
  */
 public class ApplicationInfrastructureException extends ApplicationException {
     public ApplicationInfrastructureException(String message) {super(message);}
-    public ApplicationInfrastructureException(String message, Exception ex) {
-        super(message, ex);
-    }
+    public ApplicationInfrastructureException(int errCode, String message) {super(errCode, message);}
+    public ApplicationInfrastructureException(String message, Exception ex) {super(message, ex);}
+    public ApplicationInfrastructureException(int errCode, String message, Exception ex) {super(errCode, message, ex);}
 }
