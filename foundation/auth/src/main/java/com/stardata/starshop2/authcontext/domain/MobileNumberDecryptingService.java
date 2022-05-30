@@ -5,6 +5,7 @@ import com.stardata.starshop2.authcontext.south.port.UserRepository;
 import com.stardata.starshop2.authcontext.south.port.WxDecryptingClient;
 import com.stardata.starshop2.sharedcontext.domain.LongIdentity;
 import com.stardata.starshop2.sharedcontext.domain.MobileNumber;
+import com.stardata.starshop2.sharedcontext.exception.ApplicationValidationException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +23,9 @@ public class MobileNumberDecryptingService {
 
     public MobileNumber decryptWxMobileNumber(LongIdentity userId, String encryptedData, String iv) {
         User user = repository.instanceOf(userId);
+        if (user == null) {
+            throw new ApplicationValidationException(ApplicationValidationException.INVALID_REQUEST_ENTITY, "The user is not exists.");
+        }
         MobileNumber mobileNumber = decryptingClient.decryptMobileNumber(user.currentToken(), encryptedData, iv);
         user.updateMobileNumber(mobileNumber);
         repository.update(user);

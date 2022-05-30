@@ -11,9 +11,9 @@ spring:
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://106.52.170.200:3306/starshop_test?useSSL=false&serverTimezone=GMT%2B8
+    url: jdbc:mysql://localhost:3306/starshop_test?useSSL=false&serverTimezone=GMT%2B8
     username: root
-    password: Samson213
+    password: root123
   jpa:
     open_in_view: false
     show_sql: true

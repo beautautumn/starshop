@@ -3,6 +3,8 @@ package com.stardata.starshop2.authcontext.domain.user;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 
+import java.io.Serializable;
+
 /**
  * @author Samson Shu
  * @version 1.0
@@ -10,7 +12,7 @@ import jakarta.persistence.Embeddable;
  * @date 2022/4/18 14:54
  */
 @Embeddable
-public class WxOpenId {
+public class WxOpenId implements Serializable {
     @Column(name = "openid", nullable = false)
     private String value;
 
@@ -24,15 +26,21 @@ public class WxOpenId {
         return new WxOpenId(openId);
     }
 
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
 
-        if (o instanceof WxOpenId) {
-            return this.value.equals(o.toString());
+        if (o instanceof WxOpenId that) {
+            return this.value.equals(that.value);
+        }
+
+        if (o instanceof String str) {
+            return this.value.equals(str);
         }
         return false;
     }
 
+    @Override
     public String toString() {
         return value;
     }
