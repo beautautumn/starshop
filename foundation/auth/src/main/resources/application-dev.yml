@@ -13,7 +13,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/starshop_test?useSSL=false&serverTimezone=GMT%2B8
     username: root
-    password: root1234
+    password: root12345
   jpa:
     open_in_view: false
     show_sql: true
