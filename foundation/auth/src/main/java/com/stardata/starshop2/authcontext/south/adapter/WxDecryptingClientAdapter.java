@@ -23,11 +23,11 @@ import org.springframework.stereotype.Component;
 public class WxDecryptingClientAdapter implements WxDecryptingClient {
 
     @Override
-    public MobileNumber decryptMobileNumber(UserToken UserToken, String encryptedData, String iv) {
+    public MobileNumber decryptMobileNumber(UserToken userToken, String encryptedData, String iv) {
         final WxMaService wxService = WxConfiguration.getMaService();
         try{
             WxMaPhoneNumberInfo phoneNumberInfo = wxService.getUserService()
-                    .getPhoneNoInfo(UserToken.getSessionKey(), encryptedData, iv);
+                    .getPhoneNoInfo(userToken.getSessionKey(), encryptedData, iv);
             return new MobileNumber(phoneNumberInfo.getPhoneNumber());
         }
         catch(JsonSyntaxException | WxRuntimeException e) {

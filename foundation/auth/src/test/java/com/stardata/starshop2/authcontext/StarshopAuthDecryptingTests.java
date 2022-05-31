@@ -4,10 +4,14 @@ import com.stardata.starshop2.authcontext.domain.MobileNumberDecryptingService;
 import com.stardata.starshop2.authcontext.domain.WxLoginWithTokenService;
 import com.stardata.starshop2.authcontext.domain.user.User;
 import com.stardata.starshop2.authcontext.domain.user.WxAuthInfo;
+import com.stardata.starshop2.authcontext.north.local.AuthAppService;
+import com.stardata.starshop2.authcontext.pl.WxEncryptedUserInfo;
 import com.stardata.starshop2.authcontext.south.port.UserRepository;
 import com.stardata.starshop2.sharedcontext.domain.LongIdentity;
 import com.stardata.starshop2.sharedcontext.domain.MobileNumber;
 import com.stardata.starshop2.sharedcontext.exception.ApplicationValidationException;
+import com.stardata.starshop2.sharedcontext.pl.MobileNumberResponse;
+import com.stardata.starshop2.sharedcontext.pl.SessionUser;
 import jakarta.annotation.Resource;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
@@ -58,7 +62,7 @@ public class StarshopAuthDecryptingTests {
     @Test
     @Transactional
     @Rollback(true)
-    void should_get_mobile_phone_correctly_given_exists_userid_and_correct_encrypted_data_iv() {
+    void should_get_mobile_phone_correctly_given_exists_userid_and_correct_encrypted_data_iv_by_domain_service() {
         // given: 正常的已有用户、加密数据encryptedData、iv
         String code = "011NXJ000zQ8VN1iJZ000DWjjS2NXJ0e";
         String rawData = "{\"nickName\":\"深清秋\",\"gender\":0,\"language\":\"zh_CN\",\"city\":\"\",\"province\":\"\",\"country\":\"\",\"avatarUrl\":\"https://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTKq2CRmib1mpu4hOFYtcIHgAmS7DicCEfYkUHoPmPQn74BXH5GerjoMOxIqib7iafNNBw2ZAicBj6gZGUQ/132\"}";
@@ -76,9 +80,10 @@ public class StarshopAuthDecryptingTests {
         entityManager.flush();
         LongIdentity userId = user.getId();
 
-        // when: 解密手机号
         String encryptedData = "NkSHcnyy8jJZwvsTBpb8Kw7jKIdYz1UnVqJ9Gf2NGFAn3DEeObh7W2Vh5hlgvs5zvtfNsV/IW+oHxEtzN4DY1E/tsGWnhiZYN+pYQun/8gNPrUNsjlR8saZIYoTGNcKpchNp+QEPzP/JFtGqIH+Etpk11RVRWepNJdYNzG3aNLUVmYQRqgCom7kYRrbM7g7GDu/jnqzvMn65ps48GawfQA==";
         String iv = "S2r8F/Gr0aUEs7BoerD5ZQ==";
+
+        // when: 解密手机号
         MobileNumber mobileNumber = mobileNumberDecryptingService.decryptWxMobileNumber(userId, encryptedData, iv);
         userRepository.update(user);
         entityManager.flush();
@@ -96,7 +101,7 @@ public class StarshopAuthDecryptingTests {
     @Test
     @Transactional
     @Rollback(true)
-    void should_throw_exception_given_not_exists_user_and_correct_encrypted_data_iv() {
+    void should_throw_exception_given_not_exists_user_and_correct_encrypted_data_iv_by_domain_service() {
         // given: 正确的加密数据encryptedData、iv，不存在的userId
         String code = "011NXJ000zQ8VN1iJZ000DWjjS2NXJ0e";
         String rawData = "{\"nickName\":\"深清秋\",\"gender\":0,\"language\":\"zh_CN\",\"city\":\"\",\"province\":\"\",\"country\":\"\",\"avatarUrl\":\"https://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTKq2CRmib1mpu4hOFYtcIHgAmS7DicCEfYkUHoPmPQn74BXH5GerjoMOxIqib7iafNNBw2ZAicBj6gZGUQ/132\"}";
@@ -114,10 +119,11 @@ public class StarshopAuthDecryptingTests {
         entityManager.flush();
         LongIdentity userId = LongIdentity.snowflakeId();
 
+        String encryptedData = "NkSHcnyy8jJZwvsTBpb8Kw7jKIdYz1UnVqJ9Gf2NGFAn3DEeObh7W2Vh5hlgvs5zvtfNsV/IW+oHxEtzN4DY1E/tsGWnhiZYN+pYQun/8gNPrUNsjlR8saZIYoTGNcKpchNp+QEPzP/JFtGqIH+Etpk11RVRWepNJdYNzG3aNLUVmYQRqgCom7kYRrbM7g7GDu/jnqzvMn65ps48GawfQA==";
+        String iv = "S2r8F/Gr0aUEs7BoerD5ZQ==";
+
         try {
             // when: 解密手机号
-            String encryptedData = "NkSHcnyy8jJZwvsTBpb8Kw7jKIdYz1UnVqJ9Gf2NGFAn3DEeObh7W2Vh5hlgvs5zvtfNsV/IW+oHxEtzN4DY1E/tsGWnhiZYN+pYQun/8gNPrUNsjlR8saZIYoTGNcKpchNp+QEPzP/JFtGqIH+Etpk11RVRWepNJdYNzG3aNLUVmYQRqgCom7kYRrbM7g7GDu/jnqzvMn65ps48GawfQA==";
-            String iv = "S2r8F/Gr0aUEs7BoerD5ZQ==";
             MobileNumber mobileNumber = mobileNumberDecryptingService.decryptWxMobileNumber(userId, encryptedData, iv);
 
             // 下面这些不应该被执行到
@@ -141,7 +147,7 @@ public class StarshopAuthDecryptingTests {
     @Test
     @Transactional
     @Rollback(true)
-    void should_throw_exception_given_exists_user_and_incorrect_encrypted_data_iv() {
+    void should_throw_exception_given_exists_user_and_incorrect_encrypted_data_iv_by_domain_service() {
         // given: 正常的已有用户，不正确的加密数据encryptedData、iv
         String code = "011NXJ000zQ8VN1iJZ000DWjjS2NXJ0e";
         String rawData = "{\"nickName\":\"深清秋\",\"gender\":0,\"language\":\"zh_CN\",\"city\":\"\",\"province\":\"\",\"country\":\"\",\"avatarUrl\":\"https://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTKq2CRmib1mpu4hOFYtcIHgAmS7DicCEfYkUHoPmPQn74BXH5GerjoMOxIqib7iafNNBw2ZAicBj6gZGUQ/132\"}";
@@ -159,10 +165,11 @@ public class StarshopAuthDecryptingTests {
         entityManager.flush();
         LongIdentity userId = user.getId();
 
+        String encryptedData = "NkSHcnyy88jJZwvsTBpb8Kw7jKIdYz1UnVqJ9Gf2NGFAn3DEeObh7W2Vh5hlgvs5zvtfNsV/IW+oHxEtzN4DY1E/tsGWnhiZYN+pYQun/8gNPrUNsjlR8saZIYoTGNcKpchNp+QEPzP/JFtGqIH+Etpk11RVRWepNJdYNzG3aNLUVmYQRqgCom7kYRrbM7g7GDu/jnqzvMn65ps48GawfQA==";
+        String iv = "S2r8F/Gr0aUEs7BoerD5ZQ==";
+
         try {
             // when: 解密手机号
-            String encryptedData = "NkSHcnyy88jJZwvsTBpb8Kw7jKIdYz1UnVqJ9Gf2NGFAn3DEeObh7W2Vh5hlgvs5zvtfNsV/IW+oHxEtzN4DY1E/tsGWnhiZYN+pYQun/8gNPrUNsjlR8saZIYoTGNcKpchNp+QEPzP/JFtGqIH+Etpk11RVRWepNJdYNzG3aNLUVmYQRqgCom7kYRrbM7g7GDu/jnqzvMn65ps48GawfQA==";
-            String iv = "S2r8F/Gr0aUEs7BoerD5ZQ==";
             MobileNumber mobileNumber = mobileNumberDecryptingService.decryptWxMobileNumber(userId, encryptedData, iv);
 
             // 下面这些不应该被执行到
@@ -180,6 +187,52 @@ public class StarshopAuthDecryptingTests {
             assertNotNull(e);
             assertEquals(e.getErrCode(), ApplicationValidationException.INVALID_REQUEST_DATA);
         }
+    }
+
+    /**
+     * 服务级测试：解密微信手机号；（组合任务，应用服务）
+     * 2. 测试解密微信手机号应用服务，包括的测试案例有：
+     * 2.1. 正常的已有用户、加密数据encryptedData、iv，成功解密手机号，并更新用户对象手机号
+     */
+
+    @Autowired
+    AuthAppService authAppService;
+
+    //2.1. 正常的已有用户、加密数据encryptedData、iv，成功解密手机号，并更新用户对象手机号
+    @Test
+    @Transactional
+    @Rollback(true)
+    void should_get_mobile_phone_correctly_given_exists_userid_and_correct_encrypted_data_iv() {
+        // given: 正常的已有用户、加密数据encryptedData、iv
+        User existsUser = User.of("深清秋", 1)
+                .avatarUrl("https://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTKq2CRmib1mpu4hOFYtcIHgAmS7DicCEfYkUHoPmPQn74BXH5GerjoMOxIqib7iafNNBw2ZAicBj6gZGUQ/132")
+                .country("中国")
+                .province("江苏")
+                .city("南京")
+                .language("zh_CN");
+        existsUser.refreshLoginToken("EfUbtTDsTz/S3lSvdkx2jg==");
+        userRepository.add(existsUser);
+        Long userId = existsUser.getId().value();
+
+        SessionUser sessionUser = new SessionUser();
+        sessionUser.setId(userId);
+
+        String encryptedData = "NkSHcnyy8jJZwvsTBpb8Kw7jKIdYz1UnVqJ9Gf2NGFAn3DEeObh7W2Vh5hlgvs5zvtfNsV/IW+oHxEtzN4DY1E/tsGWnhiZYN+pYQun/8gNPrUNsjlR8saZIYoTGNcKpchNp+QEPzP/JFtGqIH+Etpk11RVRWepNJdYNzG3aNLUVmYQRqgCom7kYRrbM7g7GDu/jnqzvMn65ps48GawfQA==";
+        String iv = "S2r8F/Gr0aUEs7BoerD5ZQ==";
+        WxEncryptedUserInfo wxEncryptedUserInfo = new WxEncryptedUserInfo();
+        wxEncryptedUserInfo.setEncryptedData(encryptedData);
+        wxEncryptedUserInfo.setIv(iv);
+
+        // when: 解密手机号
+        MobileNumberResponse response = authAppService.decryptWxMobileNumber(sessionUser, wxEncryptedUserInfo);
+
+        User loadedUser = userRepository.instanceOf(LongIdentity.from(userId));
+
+        // then: 判定解密手机号是否正确
+        assertNotNull(response.getMobileNumber());
+        assertEquals(response.getMobileNumber(), "18652012976");
+        assertEquals(loadedUser.getMobileNumber().value(), "18652012976");
+
     }
 
 }
