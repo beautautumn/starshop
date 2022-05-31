@@ -10,7 +10,7 @@ import com.stardata.starshop2.authcontext.pl.WxEncryptedUserInfo;
 import com.stardata.starshop2.authcontext.pl.WxLoginRequest;
 import com.stardata.starshop2.sharedcontext.domain.LongIdentity;
 import com.stardata.starshop2.sharedcontext.domain.MobileNumber;
-import com.stardata.starshop2.sharedcontext.pl.MobileNumberResponse;
+import com.stardata.starshop2.authcontext.pl.MobileNumberResponse;
 import com.stardata.starshop2.sharedcontext.pl.SessionUser;
 import lombok.AllArgsConstructor;
 import org.jetbrains.annotations.NotNull;

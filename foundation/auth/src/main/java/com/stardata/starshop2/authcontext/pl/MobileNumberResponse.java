@@ -1,4 +1,4 @@
-package com.stardata.starshop2.sharedcontext.pl;
+package com.stardata.starshop2.authcontext.pl;
 
 import com.stardata.starshop2.sharedcontext.domain.MobileNumber;
 import lombok.Data;
