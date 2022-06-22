@@ -12,8 +12,8 @@ import jakarta.persistence.criteria.Root;
 import jakarta.transaction.TransactionScoped;
 import lombok.SneakyThrows;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.stereotype.Component;
 
+import java.util.Collection;
 import java.util.List;
 
 
@@ -23,7 +23,6 @@ import java.util.List;
  * @email shush@stardata.top
  * @date 2022/5/9 20:35
  */
-@Component
 @TransactionScoped
 public class GenericRepository<E extends AggregateRoot, ID extends Identity> {
     private final Class<E> entityClass;
@@ -38,6 +37,22 @@ public class GenericRepository<E extends AggregateRoot, ID extends Identity> {
         requireEntityManagerNotNull();
 
         return  entityManager.find(entityClass, id);
+    }
+
+    public List<E> findByIds(Collection<ID> ids)  {
+        requireEntityManagerNotNull();
+
+
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<E> criteriaQuery = criteriaBuilder.createQuery(entityClass);
+        Root<E> root = criteriaQuery.from(entityClass);
+
+        CriteriaBuilder.In<ID> in = criteriaBuilder.in(root.get("id"));
+        ids.forEach(in::value);
+        criteriaQuery.where(new Predicate[]{in});
+
+        TypedQuery<E> typedQuery = entityManager.createQuery(criteriaQuery);
+        return typedQuery.getResultList();
     }
 
     public List<E> findAll()  {

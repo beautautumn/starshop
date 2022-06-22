@@ -4,7 +4,7 @@ import com.stardata.starshop2.sharedcontext.domain.LongIdentity;
 import com.stardata.starshop2.productcontext.command.domain.ProductManagingService;
 import com.stardata.starshop2.productcontext.command.domain.ProductSettlementService;
 import com.stardata.starshop2.productcontext.command.domain.product.Product;
-import com.stardata.starshop2.productcontext.command.domain.product.ProductSettlement;
+import com.stardata.starshop2.productcontext.command.domain.ProductSettlement;
 import com.stardata.starshop2.productcontext.command.pl.ProductResponse;
 import com.stardata.starshop2.productcontext.command.pl.ProductSettlementRequest;
 import com.stardata.starshop2.productcontext.command.pl.ProductSettlementResponse;
@@ -32,7 +32,7 @@ public class ProductAppService {
 
     public ProductSettlementResponse calcSettlement(ProductSettlementRequest request) {
         List<ProductSettlement> settlements = new ArrayList<>();
-        int totalPriceFen = settlementService.calcSettlement(request.composeToMap(), settlements);
+        long totalPriceFen = settlementService.calcSettlement(request.composeToMap(), settlements);
         return ProductSettlementResponse.from(settlements, totalPriceFen);
     }
 

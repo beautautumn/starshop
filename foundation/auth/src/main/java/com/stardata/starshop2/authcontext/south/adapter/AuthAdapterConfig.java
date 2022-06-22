@@ -18,7 +18,7 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 @ComponentScan
-public class AdapterConfig {
+public class AuthAdapterConfig {
     @Resource
     EntityManager entityManager;
 

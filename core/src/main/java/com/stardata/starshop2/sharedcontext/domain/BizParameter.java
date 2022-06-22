@@ -1,6 +1,9 @@
 package com.stardata.starshop2.sharedcontext.domain;
 
-import lombok.Data;
+import jakarta.persistence.EmbeddedId;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import lombok.Getter;
 
 /**
  * @author Samson Shu
@@ -8,11 +11,25 @@ import lombok.Data;
  * @email shush@stardata.top
  * @date 2022/4/18 15:15
  */
-@Data
-public class BizParameter {
-    private String key;
+@Entity
+@Getter
+@Table(name = "tb_sys_parameter")
+public class BizParameter extends AbstractEntity<StringIdentity> implements AggregateRoot<BizParameter> {
+    @EmbeddedId
+    private StringIdentity code;
     private String value;
+
     public int toInteger() {
-        return Integer.parseInt(value);
+        return Integer.parseInt(this.value);
+    }
+
+    @Override
+    public StringIdentity id() {
+        return this.code;
+    }
+
+    @Override
+    public BizParameter root() {
+        return this;
     }
 }

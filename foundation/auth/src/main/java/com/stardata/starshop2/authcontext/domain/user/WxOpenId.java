@@ -1,6 +1,5 @@
 package com.stardata.starshop2.authcontext.domain.user;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 
 import java.io.Serializable;
@@ -13,7 +12,6 @@ import java.io.Serializable;
  */
 @Embeddable
 public class WxOpenId implements Serializable {
-    @Column(name = "openid", nullable = false)
     private String value;
 
     WxOpenId(String openId){ this.value = openId;}

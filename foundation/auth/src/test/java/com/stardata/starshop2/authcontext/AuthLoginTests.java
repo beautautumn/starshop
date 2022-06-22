@@ -29,7 +29,7 @@ import java.time.LocalDateTime;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-class StarshopAuthLoginTests {
+class AuthLoginTests {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -60,6 +60,7 @@ class StarshopAuthLoginTests {
         user2.copyMiniAppInfoFrom(user1);
 
         // then: 检查user1和user2的相应属性是否相等
+        assertNotEquals(user1.getId(), user2.getId());
         assertEquals(user1.getNickName(), user2.getNickName());
         assertEquals(user1.getGender(), user2.getGender());
         assertEquals(user1.getAvatarUrl(), user2.getAvatarUrl());

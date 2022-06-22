@@ -3,7 +3,6 @@ package com.stardata.starshop2.sharedcontext.domain;
 import cn.hutool.core.lang.Snowflake;
 import cn.hutool.core.net.NetUtil;
 import cn.hutool.core.util.IdUtil;
-import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 
 import java.util.Objects;
@@ -17,15 +16,14 @@ import java.util.Random;
  */
 @Embeddable
 public class LongIdentity implements Identity<Long>{
-    @Column(name = "id")
-    private long value;
+    private long id;
 
-    protected LongIdentity(long value) {
-        this.value = value;
+    protected LongIdentity(long id) {
+        this.id = id;
     }
 
     protected LongIdentity() {
-        this.value = 0;
+        this.id = 0;
     }
 
     private static Snowflake getSnowflake() {
@@ -48,26 +46,35 @@ public class LongIdentity implements Identity<Long>{
         return new LongIdentity(getSnowflake().nextId());
     }
 
+    public static LongIdentity dummyId() {
+        return new LongIdentity(-1L);
+    }
+
     @Override
     public Long value() {
-        return this.value;
+        return this.id;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof LongIdentity that)) return false;
-        return value == that.value;
+        if (o instanceof LongIdentity that) {
+            return that.id == this.id;
+        }
+        if (o instanceof Long that) {
+            return that == this.id;
+        }
+        return false;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(value);
+        return Objects.hash(id);
     }
 
     @Override
     public String toString() {
-        return String.valueOf(this.value);
+        return String.valueOf(this.id);
     }
 
 }

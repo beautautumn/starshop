@@ -1,12 +1,7 @@
 package com.stardata.starshop2.ordercontext.command.north.remote;
 
-import com.github.binarywang.wxpay.bean.notify.WxPayNotifyResponse;
-import com.github.binarywang.wxpay.bean.notify.WxPayOrderNotifyResult;
-import com.github.binarywang.wxpay.constant.WxPayConstants;
 import com.github.binarywang.wxpay.exception.WxPayException;
-import com.github.binarywang.wxpay.service.WxPayService;
 import com.stardata.starshop2.ordercontext.command.north.local.OrderAppService;
-import com.stardata.starshop2.ordercontext.command.pl.OrderPayResultRequest;
 import com.stardata.starshop2.sharedcontext.annotation.IgnoreAuth;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -35,7 +30,7 @@ public class OrderWxNotifyResource {
     @Autowired
     private HttpServletRequest request;
 
-    private final WxPayService wxService;
+//    private final WxPayService wxService;
 
     private final OrderAppService appService;
 
@@ -61,12 +56,13 @@ public class OrderWxNotifyResource {
     @ApiOperation(value = "微信支付回调通知处理")
     @IgnoreAuth
     public String handleWxPayNotify() throws WxPayException {
-        String xmlData = this.getStringRequest();
-        WxPayOrderNotifyResult notifyResult = wxService.parseOrderNotifyResult(xmlData);
-        if (!notifyResult.getReturnCode().equals(WxPayConstants.ResultCode.SUCCESS))
-            return WxPayNotifyResponse.success("错误已处理");
-
-        return appService.handleWxPayNotify(new OrderPayResultRequest(notifyResult));
+//        String xmlData = this.getStringRequest();
+//        WxPayOrderNotifyResult notifyResult = wxService.parseOrderNotifyResult(xmlData);
+//        if (!notifyResult.getReturnCode().equals(WxPayConstants.ResultCode.SUCCESS))
+//            return WxPayNotifyResponse.success("错误已处理");
+//
+//        return appService.handleWxPayNotify(new OrderPayResultRequest(notifyResult));
+        return null;
     }
 
 }

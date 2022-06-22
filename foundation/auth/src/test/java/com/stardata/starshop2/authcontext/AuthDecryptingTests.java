@@ -5,19 +5,17 @@ import com.stardata.starshop2.authcontext.domain.WxLoginWithTokenService;
 import com.stardata.starshop2.authcontext.domain.user.User;
 import com.stardata.starshop2.authcontext.domain.user.WxAuthInfo;
 import com.stardata.starshop2.authcontext.north.local.AuthAppService;
+import com.stardata.starshop2.authcontext.pl.MobileNumberResponse;
 import com.stardata.starshop2.authcontext.pl.WxEncryptedUserInfo;
 import com.stardata.starshop2.authcontext.south.port.UserRepository;
 import com.stardata.starshop2.sharedcontext.domain.LongIdentity;
 import com.stardata.starshop2.sharedcontext.domain.MobileNumber;
 import com.stardata.starshop2.sharedcontext.exception.ApplicationValidationException;
-import com.stardata.starshop2.authcontext.pl.MobileNumberResponse;
 import com.stardata.starshop2.sharedcontext.pl.SessionUser;
 import jakarta.annotation.Resource;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
@@ -32,8 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  * @date 2022/5/25 15:00
  */
 @SpringBootTest
-public class StarshopAuthDecryptingTests {
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+public class AuthDecryptingTests {
 
     /**
      * 任务级测试：解密微信手机号 ——1. 解密微信手机号；（组合任务，领域服务）

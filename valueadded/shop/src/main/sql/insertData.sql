@@ -1,0 +1,6 @@
+insert into tb_shop (id, user_id, name, name_abbr, introduction, contact_person, mobile_number, wx_qrcode_url, can_home_delivery, geo_position, geo_latitude, geo_longitude, detail_address, slogan, opening_start, opening_end, allow_order_break, allow_join, join_commission_rate, join_introduction, join_stock_type, join_price_type, join_cashier_type, status, is_valid, create_time, update_time, min_delivery_time, order_seq, order_seq_date)
+values (0, null, 'systemDefault', 'system', 'systemDefault', 'none', 'none', null, '1', null, null, null, null, null, '08:00:00', '22:00:00', '1', '1', 0.1000, null, '1', '1', '1', '0', '0', now(), now(), 30, null, null);
+
+
+insert into tb_shop (id, user_id, name, name_abbr, introduction, contact_person, mobile_number, wx_qrcode_url, can_home_delivery, geo_position, geo_latitude, geo_longitude, detail_address, slogan, opening_start, opening_end, allow_order_break, allow_join, join_commission_rate, join_introduction, join_stock_type, join_price_type, join_cashier_type, status, is_valid, create_time, update_time, min_delivery_time, order_seq, order_seq_date)
+values (1, 1, 'testShop', 'test', 'testShop', 'test', '13012345678', null, '1', null, null, null, null, null, '08:00:00', '22:00:00', '1', '1', 0.1000, null, '1', '1', '1', '0', '1', now(), now(), 30, null, null);

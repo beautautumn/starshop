@@ -13,11 +13,7 @@ import lombok.Data;
 public class MobileNumberResponse {
     private String mobileNumber;
 
-    MobileNumberResponse(String mobileNumber) {
-        this.mobileNumber = mobileNumber;
-    }
-
     public static MobileNumberResponse from(MobileNumber mobileNumber) {
-        return new MobileNumberResponse(mobileNumber.getValue());
+        return MobileNumberResponseMapper.INSTANCE.convert(mobileNumber);
     }
 }

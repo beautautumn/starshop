@@ -1,7 +1,6 @@
 package com.stardata.starshop2.productcontext.command.pl;
 
-import com.stardata.starshop2.productcontext.command.domain.product.Product;
-import com.stardata.starshop2.productcontext.command.domain.product.ProductSettlement;
+import com.stardata.starshop2.productcontext.command.domain.ProductSettlement;
 import lombok.Data;
 
 import java.util.List;
@@ -14,7 +13,7 @@ import java.util.List;
  */
 @Data
 public class ProductSettlementResponse {
-    public static ProductSettlementResponse from(List<ProductSettlement> settlements, int totalPriceFen) {
+    public static ProductSettlementResponse from(List<ProductSettlement> settlements, long totalPriceFen) {
         //todo 商品价格结算map转DTO
         return null;
     }

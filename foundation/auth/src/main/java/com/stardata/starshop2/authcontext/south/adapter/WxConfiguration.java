@@ -40,7 +40,7 @@ public class WxConfiguration {
     //默认取得第一个微信appid的配置
     public static WxMaService getMaService() {
         if (maServices.isEmpty()) {
-            throw new IllegalArgumentException("未找到微信appid的配置，请核实！");
+            throw new IllegalArgumentException("None appid configuration.");
         }
         return maServices.values().iterator().next();
     }
@@ -48,7 +48,7 @@ public class WxConfiguration {
     public static WxMaService getMaService(String appid) {
         WxMaService wxService = maServices.get(appid);
         if (wxService == null) {
-            throw new IllegalArgumentException(String.format("未找到对应appid=[%s]的配置，请核实！", appid));
+            throw new IllegalArgumentException(String.format("Can not find configuration for corresponding appid=[%s]", appid));
         }
         return wxService;
     }

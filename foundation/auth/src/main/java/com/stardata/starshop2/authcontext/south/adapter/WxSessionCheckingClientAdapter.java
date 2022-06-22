@@ -8,6 +8,7 @@ import com.stardata.starshop2.authcontext.domain.user.WxAuthInfo;
 import com.stardata.starshop2.authcontext.south.port.WxSessionCheckingClient;
 import com.stardata.starshop2.sharedcontext.annotation.Adapter;
 import com.stardata.starshop2.sharedcontext.annotation.PortType;
+import com.stardata.starshop2.sharedcontext.south.adapter.ProductionProfileCondition;
 import me.chanjar.weixin.common.error.WxError;
 import me.chanjar.weixin.common.error.WxErrorException;
 import org.springframework.context.annotation.Conditional;

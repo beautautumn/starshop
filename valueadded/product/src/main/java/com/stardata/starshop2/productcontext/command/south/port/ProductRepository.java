@@ -13,9 +13,11 @@ import java.util.List;
  * @date 2022/5/4 12:01
  */
 public interface ProductRepository {
+    Product instanceOf(LongIdentity productId);
+
     List<Product> instancesOf(Collection<LongIdentity> productIds);
 
     void update(Product product);
 
-    Product instanceOf(LongIdentity productId);
+    void add(Product product);
 }

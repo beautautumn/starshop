@@ -1,4 +1,4 @@
-package com.stardata.starshop2.sharedcontext.utils;
+package com.stardata.starshop2.sharedcontext.helper;
 
 import java.util.Random;
 

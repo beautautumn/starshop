@@ -1,7 +1,6 @@
 package com.stardata.starshop2.sharedcontext.domain;
 
 import com.stardata.starshop2.sharedcontext.exception.ApplicationValidationException;
-import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.Getter;
 
@@ -17,7 +16,6 @@ import java.util.regex.Pattern;
 @Getter
 @Embeddable
 public class MobileNumber implements Serializable {
-    @Column(name = "mobile")
     private String value;
 
 

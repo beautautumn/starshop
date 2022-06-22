@@ -3,8 +3,13 @@ package com.stardata.starshop2.ordercontext.command.domain.order;
 import com.stardata.starshop2.sharedcontext.domain.AbstractEntity;
 import com.stardata.starshop2.sharedcontext.domain.AggregateRoot;
 import com.stardata.starshop2.sharedcontext.domain.LongIdentity;
+import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -18,9 +23,22 @@ import java.time.LocalDateTime;
 @Data
 public class Order extends AbstractEntity<LongIdentity> implements AggregateRoot<Order> {
     private LongIdentity id;
-    private String shopId;
-    private String userId;
-    private LocalDateTime createTime;
+
+    @AttributeOverride(name="id", column = @Column(name="shop_id", nullable = false))
+    @Embedded
+    private LongIdentity shopId;
+
+    @AttributeOverride(name="id", column = @Column(name="user_id", nullable = false))
+    @Embedded
+    private LongIdentity userId;
+
+    @Column(updatable = false)
+    @CreationTimestamp
+    LocalDateTime createTime;
+
+    @UpdateTimestamp
+    LocalDateTime updateTime;
+
     private String customerName;
     private Long totalAmountFen;
 

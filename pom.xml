@@ -30,14 +30,13 @@
         <spring.version>6.0.0-SNAPSHOT</spring.version>
         <slf4j.version>1.7.16</slf4j.version>
         <maven.compiler.version>3.10.1</maven.compiler.version>
-
         <swagger.version>3.0.0</swagger.version>
         <shiro.version>1.8.0</shiro.version>
         <httpclient.version>4.5.13</httpclient.version>
         <jetbrains.version>23.0.0</jetbrains.version>
         <commons-collections.version>20040616</commons-collections.version>
-        <weixin-java-miniapp.version>4.3.1.B</weixin-java-miniapp.version>
-        <weixin-java-pay.version>4.3.2.B</weixin-java-pay.version>
+        <weixin-java-miniapp.version>4.3.5.B</weixin-java-miniapp.version>
+        <weixin-java-pay.version>4.3.5.B</weixin-java-pay.version>
         <tencentcloudapi.version>3.1.90</tencentcloudapi.version>
         <tencentcloudcos.version>3.0.8</tencentcloudcos.version>
         <weixin-java-miniapp.version>4.2.2.B</weixin-java-miniapp.version>
@@ -113,6 +112,12 @@
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger2</artifactId>
             <version>${swagger.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>mapstruct</artifactId>
+                    <groupId>org.mapstruct</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>io.springfox</groupId>
@@ -134,6 +139,12 @@
             <groupId>com.github.binarywang</groupId>
             <artifactId>weixin-java-pay</artifactId>
             <version>${weixin-java-pay.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>commons-io</artifactId>
+                    <groupId>commons-io</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.github.binarywang</groupId>

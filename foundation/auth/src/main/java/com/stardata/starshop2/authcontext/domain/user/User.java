@@ -4,11 +4,17 @@ import com.stardata.starshop2.sharedcontext.domain.AbstractEntity;
 import com.stardata.starshop2.sharedcontext.domain.AggregateRoot;
 import com.stardata.starshop2.sharedcontext.domain.LongIdentity;
 import com.stardata.starshop2.sharedcontext.domain.MobileNumber;
+import com.stardata.starshop2.sharedcontext.helper.Constants;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.Where;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +29,9 @@ import java.util.Objects;
 @Entity
 @Getter
 @Table(name = "tb_user")
-public class User extends AbstractEntity<LongIdentity> implements AggregateRoot<User>{
+@SQLDelete(sql = "update user set is_valid = '"+ Constants.DELETE_FLAG.DELETED+"' where id = ?")
+@Where(clause = "is_valid = '"+ Constants.DELETE_FLAG.NORMAL+"'")
+public class User extends AbstractEntity<LongIdentity> implements AggregateRoot<User> {
     /**
      * 主键ID
      */
@@ -35,7 +43,7 @@ public class User extends AbstractEntity<LongIdentity> implements AggregateRoot<
      */
     @Setter
     @Column(name = "avatarurl")
-    private String avatarUrl;
+    private URL avatarUrl;
 
     /**
      * 所属国家
@@ -85,6 +93,7 @@ public class User extends AbstractEntity<LongIdentity> implements AggregateRoot<
      * 更新时间
      */
     @Column(nullable = false)
+    @UpdateTimestamp
     private LocalDateTime updateTime;
 
     /**
@@ -92,12 +101,14 @@ public class User extends AbstractEntity<LongIdentity> implements AggregateRoot<
      */
     @Setter
     @Embedded
+    @AttributeOverride(name="value", column = @Column(name="openid", length =40, nullable = false))
     private WxOpenId openid;
 
     /**
      * 手机号码
      */
     @Embedded
+    @AttributeOverride(name="value", column = @Column(name="mobile", length =20))
     private MobileNumber mobileNumber;
 
     /**
@@ -146,7 +157,11 @@ public class User extends AbstractEntity<LongIdentity> implements AggregateRoot<
     }
 
     public User avatarUrl(String avatarUrl) {
-        this.avatarUrl = avatarUrl;
+        try {
+            this.avatarUrl = new URL(avatarUrl);
+        } catch (MalformedURLException e) {
+            this.avatarUrl = null;
+        }
         return this;
     }
 

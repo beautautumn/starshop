@@ -1,4 +1,4 @@
-package com.stardata.starshop2.authcontext.south.adapter;
+package com.stardata.starshop2.sharedcontext.south.adapter;
 
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.annotation.Condition;

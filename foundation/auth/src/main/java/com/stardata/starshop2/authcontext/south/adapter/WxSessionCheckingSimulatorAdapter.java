@@ -4,6 +4,7 @@ package com.stardata.starshop2.authcontext.south.adapter;
 import com.stardata.starshop2.authcontext.domain.WxLoginErrorException;
 import com.stardata.starshop2.authcontext.domain.user.WxAuthInfo;
 import com.stardata.starshop2.authcontext.south.port.WxSessionCheckingClient;
+import com.stardata.starshop2.sharedcontext.south.adapter.DevOrTestProfileCondition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Conditional;

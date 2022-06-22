@@ -10,7 +10,7 @@ import com.stardata.starshop2.ordercontext.command.domain.shoppingcart.ShoppingC
  * @date 2022/4/27 18:57
  */
 public interface ShoppingCartRepository {
-    void update(ShoppingCart shoppingCartWithSettlement);
+    void update(ShoppingCart shoppingCart);
 
     ShoppingCart findForUserInShop(LongIdentity userId, LongIdentity shopId);
 }
