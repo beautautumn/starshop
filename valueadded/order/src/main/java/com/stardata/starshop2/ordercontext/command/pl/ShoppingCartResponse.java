@@ -1,7 +1,6 @@
 package com.stardata.starshop2.ordercontext.command.pl;
 
 import com.stardata.starshop2.ordercontext.command.domain.shoppingcart.ShoppingCart;
-import com.stardata.starshop2.ordercontext.command.domain.shoppingcart.ShoppingCartItem;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -24,17 +23,6 @@ public class ShoppingCartResponse {
     private List<Item> items = new ArrayList<>();
 
     public static ShoppingCartResponse from(ShoppingCart shoppingCart) {
-        ShoppingCartResponse response = new ShoppingCartResponse();
-        response.totalAmountFen = shoppingCart.getTotalAmountFen();
-        response.items.clear();
-        for (ShoppingCartItem item : shoppingCart.getItems()) {
-            response.items.add(
-                    new Item(item.getId().value(), item.getCategoryId().value(), item.getProductId().value(), item.getCount(),
-                            item.getSubtotal().isAvailable(), item.getSubtotal().getOrderCount(),
-                            item.getSubtotal().getAmountFen(), item.getSubtotal().getTotalQuantity().value())
-            );
-        }
-
-        return response;
+        return ShoppingCartResponseMapper.INSTANCE.convert(shoppingCart);
     }
 }
