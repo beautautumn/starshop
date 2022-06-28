@@ -16,7 +16,7 @@ import java.util.List;
 @Data
 public class ShoppingCartResponse {
 
-    public record Item(Long id, Long categoryId, Long productId, Integer count,
+    public record Item(Long categoryId, Long productId, Integer count,
                        boolean available, Integer orderCount, Long amountFen, BigDecimal totalQuantity ) { }
 
     private long totalAmountFen;
