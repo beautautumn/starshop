@@ -1,5 +1,6 @@
 package com.stardata.starshop2.ordercontext.command.domain.shoppingcart;
 
+import com.stardata.starshop2.sharedcontext.domain.NonNegativeDecimal;
 import lombok.Data;
 import org.jetbrains.annotations.NotNull;
 
@@ -13,22 +14,28 @@ import org.jetbrains.annotations.NotNull;
 public class ShoppingCartItemSubtotal {
     private boolean available;
     private long amountFen;
-    private long totalQuantity;
+    private int orderCount;
+    private NonNegativeDecimal totalQuantity;
 
     public void copyFrom(@NotNull ShoppingCartItemSubtotal subtotal) {
         this.available = subtotal.available;
         this.amountFen = subtotal.amountFen;
+        this.orderCount = subtotal.orderCount;
         this.totalQuantity = subtotal.totalQuantity;
     }
 
-    ShoppingCartItemSubtotal(long amountFen, long totalQuantity, boolean available) {
+    public ShoppingCartItemSubtotal(int orderCount, long amountFen, NonNegativeDecimal totalQuantity, boolean available) {
+        this.orderCount = orderCount;
         this.available = available;
         this.amountFen = amountFen;
         this.totalQuantity = totalQuantity;
     }
 
-    public static ShoppingCartItemSubtotal from(long amountFen, long subtotal, boolean available){
-        return new ShoppingCartItemSubtotal(amountFen, subtotal, available);
-
+    public ShoppingCartItemSubtotal() {
+        this.orderCount = 0;
+        this.available = false;
+        this.amountFen = 0;
+        this.totalQuantity = new NonNegativeDecimal("0");
     }
+
 }

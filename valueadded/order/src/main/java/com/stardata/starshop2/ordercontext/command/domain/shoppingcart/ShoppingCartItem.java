@@ -28,7 +28,7 @@ public class ShoppingCartItem {
     private int displayOrder;
 
     @Transient
-    private final ShoppingCartItemSubtotal subtotal = new ShoppingCartItemSubtotal(0, 0, false);
+    private final ShoppingCartItemSubtotal subtotal = new ShoppingCartItemSubtotal();
 
 
     public LongIdentity getProductId() {
@@ -49,7 +49,7 @@ public class ShoppingCartItem {
 
     ShoppingCartItem(LongIdentity categoryId, LongIdentity productId, int count) {
         this.id = LongIdentity.snowflakeId();
-        this.categoryId = productId.value();
+        this.categoryId = categoryId.value();
         this.productId = productId.value();
         this.count = count;
         this.displayOrder = 0;

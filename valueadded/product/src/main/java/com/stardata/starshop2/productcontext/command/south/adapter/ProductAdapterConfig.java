@@ -23,12 +23,12 @@ public class ProductAdapterConfig {
     EntityManager entityManager;
 
     @Bean
-    GenericRepository<Product, LongIdentity> createOrderRepository() {
+    GenericRepository<Product, LongIdentity> createProductRepository() {
         return new GenericRepository<>(Product.class, entityManager);
     }
 
     @Bean
-    GenericRepository<ProductCategory, LongIdentity> createShoppingCartRepository() {
+    GenericRepository<ProductCategory, LongIdentity> createProductCategoryRepository() {
         return new GenericRepository<>(ProductCategory.class, entityManager);
     }
 }

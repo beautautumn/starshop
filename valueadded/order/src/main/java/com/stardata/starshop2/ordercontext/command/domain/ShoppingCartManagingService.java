@@ -1,10 +1,11 @@
 package com.stardata.starshop2.ordercontext.command.domain;
 
-import com.stardata.starshop2.sharedcontext.domain.LongIdentity;
 import com.stardata.starshop2.ordercontext.command.domain.shoppingcart.ShoppingCart;
 import com.stardata.starshop2.ordercontext.command.south.port.ShoppingCartItemsSettlementClient;
 import com.stardata.starshop2.ordercontext.command.south.port.ShoppingCartRepository;
+import com.stardata.starshop2.sharedcontext.domain.LongIdentity;
 import lombok.AllArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
 /**
@@ -19,13 +20,13 @@ public class ShoppingCartManagingService {
     private final ShoppingCartItemsSettlementClient settlementClient;
     private final ShoppingCartRepository shoppingCartRepository;
 
-    public ShoppingCart replaceShoppingCart(ShoppingCart shoppingCart) {
+    public ShoppingCart replaceShoppingCart(@NotNull ShoppingCart shoppingCart) {
         settlementClient.settleProducts(shoppingCart);
         shoppingCartRepository.update(shoppingCart);
         return shoppingCart;
     }
 
-    public ShoppingCart queryShoppingCart(LongIdentity userId, LongIdentity shopId) {
+    public ShoppingCart queryShoppingCart(@NotNull LongIdentity userId, @NotNull LongIdentity shopId) {
         ShoppingCart shoppingCart = shoppingCartRepository.findForUserInShop(userId, shopId);
         settlementClient.settleProducts(shoppingCart);
         return shoppingCart;

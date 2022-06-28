@@ -250,6 +250,7 @@ public class ProductTests {
          */
 
         assertEquals(settlement1, new ProductSettlement(
+                product1.getId(),
                 orderCount*originalPriceFen.value(),
                 orderCount,
                 minPurchase.value().multiply(BigDecimal.valueOf(orderCount)),
@@ -264,6 +265,7 @@ public class ProductTests {
          */
 
         assertEquals(settlement2, new ProductSettlement(
+                product2.getId(),
                 purchaseLimit.value()*originalPriceFen.value(),
                 purchaseLimit.value(),
                 minPurchase.value().multiply(BigDecimal.valueOf(purchaseLimit.value())),
@@ -316,12 +318,14 @@ public class ProductTests {
          */
 
         assertEquals(settlement1, new ProductSettlement(
+                product1.getId(),
                 orderCount*originalPriceFen.multiply(discountRate).value(),
                 orderCount,
                 minPurchase.value().multiply(BigDecimal.valueOf(orderCount)),
                 true));
 
         assertEquals(settlement2, new ProductSettlement(
+                product2.getId(),
                 purchaseLimit.value()*originalPriceFen.multiply(discountRate).value(),
                 purchaseLimit.value(),
                 minPurchase.value().multiply(BigDecimal.valueOf(purchaseLimit.value())),
@@ -373,12 +377,14 @@ public class ProductTests {
          */
 
         assertEquals(settlement1, new ProductSettlement(
+                product1.getId(),
                 orderCount*fixedPrice.value(),
                 orderCount,
                 minPurchase.value().multiply(BigDecimal.valueOf(orderCount)),
                 true));
 
         assertEquals(settlement2, new ProductSettlement(
+                product2.getId(),
                 purchaseLimit.value()*fixedPrice.value(),
                 purchaseLimit.value(),
                 minPurchase.value().multiply(BigDecimal.valueOf(purchaseLimit.value())),
@@ -436,12 +442,18 @@ public class ProductTests {
          *  available = false
          */
 
-        ProductSettlement emptySettlement = new ProductSettlement(0, 0,
+        ProductSettlement emptySettlement1 = new ProductSettlement(
+                product1.getId(),0, 0,
                 new BigDecimal("0.0"), false);
-
-        assertEquals(settlement1, emptySettlement);
-        assertEquals(settlement2, emptySettlement);
-        assertEquals(settlement3, emptySettlement);
+        assertEquals(settlement1, emptySettlement1);
+        ProductSettlement emptySettlement2 = new ProductSettlement(
+                product2.getId(),0, 0,
+                new BigDecimal("0.0"), false);
+        assertEquals(settlement2, emptySettlement2);
+        ProductSettlement emptySettlement3 = new ProductSettlement(
+                product3.getId(),0, 0,
+                new BigDecimal("0.0"), false);
+        assertEquals(settlement3, emptySettlement3);
     }
 
     /**
@@ -504,21 +516,21 @@ public class ProductTests {
         entityManager.flush();
 
         //when: 调用 settlementService.calcSettlement 对商品购买列表进行结算
-        List<ProductSettlement> settlements = new ArrayList<>();
         Map<LongIdentity, Integer> productCountsMap = new HashMap<>();
         productCountsMap.put(product1.getId(), 5);
         productCountsMap.put(product2.getId(), 5);
         productCountsMap.put(product3.getId(), 5);
-        long totalPriceFen = settlementService.calcSettlement(productCountsMap, settlements);
+        List<ProductSettlement> settlements = settlementService.calcSettlement(productCountsMap);
 
         //then: 所有商品的结算总价正确、各商品结算数量和价格正确
+        long totalPriceFen = settlements.stream().mapToLong(ProductSettlement::settlePriceFen).sum();
         assertEquals(totalPriceFen, (5000+990+15000));
 
-        ProductSettlement settlement1 = new ProductSettlement(5000L, 5, new BigDecimal("2.5"), true);
+        ProductSettlement settlement1 = new ProductSettlement(product1.getId(), 5000L, 5, new BigDecimal("2.5"), true);
         assertEquals(settlements.get(0), settlement1);
-        ProductSettlement settlement2 = new ProductSettlement(990L, 1, new BigDecimal("1.0"), true);
+        ProductSettlement settlement2 = new ProductSettlement(product2.getId(),990L, 1, new BigDecimal("1.0"), true);
         assertEquals(settlements.get(1), settlement2);
-        ProductSettlement settlement3 = new ProductSettlement(15000L, 5, new BigDecimal("5.0"), true);
+        ProductSettlement settlement3 = new ProductSettlement(product3.getId(),15000L, 5, new BigDecimal("5.0"), true);
         assertEquals(settlements.get(2), settlement3);
     }
 }

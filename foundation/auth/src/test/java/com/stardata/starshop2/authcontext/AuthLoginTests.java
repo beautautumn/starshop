@@ -146,7 +146,8 @@ class AuthLoginTests {
     private boolean isSameMiniAppUserInfo(@NotNull User loadedUser, @NotNull User frontUser) {
         return loadedUser.getNickName().equals(frontUser.getNickName()) &&
                 loadedUser.getGender().equals(frontUser.getGender()) &&
-                loadedUser.getAvatarUrl().equals(frontUser.getAvatarUrl()) &&
+                ((loadedUser.getAvatarUrl() == frontUser.getAvatarUrl())
+                        ||loadedUser.getAvatarUrl().equals(frontUser.getAvatarUrl())) &&
                 loadedUser.getCountry().equals(frontUser.getCountry()) &&
                 loadedUser.getProvince().equals(frontUser.getProvince()) &&
                 loadedUser.getCity().equals(frontUser.getCity()) &&
@@ -434,12 +435,7 @@ class AuthLoginTests {
             User loginUser = wxLoginWithTokenService.loginWithToken(code, wxAuthInfo, frontUser);
 
             // 如下代码应该不被执行
-            UserToken token = loginUser.currentToken();
-            WxOpenId openid = loginUser.getOpenid();
-            assertNotNull(token);
-            assertFalse(StringUtils.isBlank(token.getToken()));
-            assertNotNull(openid);
-            assertFalse(StringUtils.isBlank(openid.toString()));
+            assertEquals(1, 0);
         }
 
         catch(WxLoginErrorException e) {
@@ -637,22 +633,7 @@ class AuthLoginTests {
             UserResponse response = authAppService.loginByWx(request);
 
             // 如下这些应该不被执行到
-            assertNotNull(response);
-            assertNotNull(response.getId());
-            assertNotNull(response.getToken());
-
-            User loadedUser = userRepository.instanceOf(LongIdentity.from(response.getId()));
-            User frontUser = User.of("testUser1", 1)
-                    .avatarUrl("https://www.somehost.com/someAvatar.png")
-                    .country("中国")
-                    .province("江苏")
-                    .city("南京")
-                    .language("zh_CN");
-            assertTrue(isSameMiniAppUserInfo(loadedUser, frontUser));
-
-            UserToken userToken = loadedUser.currentToken();
-            LocalDateTime now = LocalDateTime.now();
-            userToken.getExpireTime().isAfter(now.minusMinutes(1).plusHours(72));
+            assertEquals(1, 0);
         }
         catch (WxLoginErrorException e) {
             // then: 抛出"Checking userinfo integrity failed"异常
@@ -690,22 +671,7 @@ class AuthLoginTests {
             UserResponse response = authAppService.loginByWx(request);
 
             // 如下这些应该不被执行到
-            assertNotNull(response);
-            assertNotNull(response.getId());
-            assertNotNull(response.getToken());
-
-            User loadedUser = userRepository.instanceOf(LongIdentity.from(response.getId()));
-            User frontUser = User.of("testUser1", 1)
-                    .avatarUrl("https://www.somehost.com/someAvatar.png")
-                    .country("中国")
-                    .province("江苏")
-                    .city("南京")
-                    .language("zh_CN");
-            assertTrue(isSameMiniAppUserInfo(loadedUser, frontUser));
-
-            UserToken userToken = loadedUser.currentToken();
-            LocalDateTime now = LocalDateTime.now();
-            userToken.getExpireTime().isAfter(now.minusMinutes(1).plusHours(72));
+            assertEquals(1, 0);
         }
         catch (WxLoginErrorException e) {
             // then: 抛出"Checking userinfo integrity failed"异常
@@ -743,22 +709,7 @@ class AuthLoginTests {
             UserResponse response = authAppService.loginByWx(request);
 
             // 如下这些应该不被执行到
-            assertNotNull(response);
-            assertNotNull(response.getId());
-            assertNotNull(response.getToken());
-
-            User loadedUser = userRepository.instanceOf(LongIdentity.from(response.getId()));
-            User frontUser = User.of("testUser1", 1)
-                    .avatarUrl("https://www.somehost.com/someAvatar.png")
-                    .country("中国")
-                    .province("江苏")
-                    .city("南京")
-                    .language("zh_CN");
-            assertTrue(isSameMiniAppUserInfo(loadedUser, frontUser));
-
-            UserToken userToken = loadedUser.currentToken();
-            LocalDateTime now = LocalDateTime.now();
-            userToken.getExpireTime().isAfter(now.minusMinutes(1).plusHours(72));
+            assertEquals(1, 0);
         }
         catch (WxLoginErrorException e) {
             // then: 抛出"Checking userinfo integrity failed"异常

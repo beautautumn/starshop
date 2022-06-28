@@ -11,4 +11,13 @@ import lombok.Data;
 @Data
 public class SessionUser {
     private Long id;
+
+
+    protected SessionUser(Long id) {
+        this.id = id;
+    }
+
+    public static SessionUser from(Long id) {
+        return new SessionUser(id);
+    }
 }

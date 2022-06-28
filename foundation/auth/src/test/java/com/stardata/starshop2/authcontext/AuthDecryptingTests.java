@@ -124,15 +124,7 @@ public class AuthDecryptingTests {
             MobileNumber mobileNumber = mobileNumberDecryptingService.decryptWxMobileNumber(userId, encryptedData, iv);
 
             // 下面这些不应该被执行到
-            userRepository.update(user);
-            entityManager.flush();
-
-            User loadedUser = userRepository.instanceOf(userId);
-
-            // then: 判定解密手机号是否正确
-            assertNotNull(mobileNumber);
-            assertEquals(mobileNumber.value(), "18652012976");
-            assertEquals(loadedUser.getMobileNumber().value(), "18652012976");
+            assertEquals(1, 0);
         }
         catch (ApplicationValidationException e) {
             assertNotNull(e);
@@ -170,15 +162,7 @@ public class AuthDecryptingTests {
             MobileNumber mobileNumber = mobileNumberDecryptingService.decryptWxMobileNumber(userId, encryptedData, iv);
 
             // 下面这些不应该被执行到
-            userRepository.update(user);
-            entityManager.flush();
-
-            User loadedUser = userRepository.instanceOf(userId);
-
-            // then: 判定解密手机号是否正确
-            assertNotNull(mobileNumber);
-            assertEquals(mobileNumber.value(), "18652012976");
-            assertEquals(loadedUser.getMobileNumber().value(), "18652012976");
+            assertEquals(1, 0);
         }
         catch (ApplicationValidationException e) {
             assertNotNull(e);
@@ -211,8 +195,7 @@ public class AuthDecryptingTests {
         userRepository.add(existsUser);
         Long userId = existsUser.getId().value();
 
-        SessionUser sessionUser = new SessionUser();
-        sessionUser.setId(userId);
+        SessionUser sessionUser = SessionUser.from(userId);
 
         String encryptedData = "NkSHcnyy8jJZwvsTBpb8Kw7jKIdYz1UnVqJ9Gf2NGFAn3DEeObh7W2Vh5hlgvs5zvtfNsV/IW+oHxEtzN4DY1E/tsGWnhiZYN+pYQun/8gNPrUNsjlR8saZIYoTGNcKpchNp+QEPzP/JFtGqIH+Etpk11RVRWepNJdYNzG3aNLUVmYQRqgCom7kYRrbM7g7GDu/jnqzvMn65ps48GawfQA==";
         String iv = "S2r8F/Gr0aUEs7BoerD5ZQ==";

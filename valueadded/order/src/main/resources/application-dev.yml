@@ -11,12 +11,15 @@ spring:
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/starshop_test?useSSL=false&serverTimezone=GMT%2B8
+    url: jdbc:mysql://localhost:3306/starshop_test?useSSL=false&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true
     username: root
     password: root
   jpa:
     open_in_view: false
     show_sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8

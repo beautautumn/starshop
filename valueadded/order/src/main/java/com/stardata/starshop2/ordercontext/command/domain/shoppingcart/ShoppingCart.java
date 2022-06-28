@@ -5,13 +5,14 @@ import com.stardata.starshop2.sharedcontext.domain.AggregateRoot;
 import com.stardata.starshop2.sharedcontext.domain.LongIdentity;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -29,10 +30,12 @@ public class ShoppingCart extends AbstractEntity<LongIdentity>  implements Aggre
 
     @AttributeOverride(name="id", column = @Column(name="shop_id", nullable = false))
     @Embedded
+    @Setter
     private LongIdentity shopId;
 
     @AttributeOverride(name="id", column = @Column(name="user_id", nullable = false))
     @Embedded
+    @Setter
     private LongIdentity userId;
 
     @Column(updatable = false)
@@ -59,7 +62,7 @@ public class ShoppingCart extends AbstractEntity<LongIdentity>  implements Aggre
         this.id = LongIdentity.snowflakeId();
     }
 
-    protected ShoppingCart() {}
+    public ShoppingCart() {}
 
     @Override
     public LongIdentity id() {
@@ -90,17 +93,23 @@ public class ShoppingCart extends AbstractEntity<LongIdentity>  implements Aggre
         );
     }
 
+    public void refreshItemsSubTotal(Map<LongIdentity, ShoppingCartItemSubtotal> itemsSubtotal) {
+        List<LongIdentity> itemIds = this.items.stream().map(ShoppingCartItem::getProductId).collect(Collectors.toList());
+        itemsSubtotal.forEach(
+                (productId, subtotal) -> {
+                    int idx = itemIds.indexOf(productId);
+                    if (idx > -1) {
+                        ShoppingCartItem cartItem = this.items.get(idx);
+                        cartItem.getSubtotal().copyFrom(subtotal);
+                    }
+                }
+        );
 
-    public void refreshItemSubTotal(@NotNull ShoppingCartItem item, @NotNull ShoppingCartItemSubtotal subtotal) {
-        if (!this.items.contains(item)) return;
-
-        item.getSubtotal().copyFrom(subtotal);
         this.totalAmountFen = this.items.stream().mapToLong(cartItem->cartItem.getSubtotal().getAmountFen()).sum();
 
         this.categoryCount.clearAll();
         for (ShoppingCartItem cartItem : this.items) {
             this.categoryCount.addCategoryCount(cartItem.getCategoryId(), cartItem.getCount());
         }
-
     }
 }

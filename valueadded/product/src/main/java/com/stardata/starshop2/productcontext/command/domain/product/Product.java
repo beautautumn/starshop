@@ -208,7 +208,7 @@ public class Product  extends AbstractEntity<LongIdentity> implements AggregateR
             }
         }
 
-        return new ProductSettlement(settlePriceFen.value(),orderCount, settleQuantity, available);
+        return new ProductSettlement(this.id, settlePriceFen.value(),orderCount, settleQuantity, available);
     }
 
     public void increaseCurMonthSale(int count) {

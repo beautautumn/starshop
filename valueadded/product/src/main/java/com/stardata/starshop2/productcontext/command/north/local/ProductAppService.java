@@ -1,17 +1,16 @@
 package com.stardata.starshop2.productcontext.command.north.local;
 
-import com.stardata.starshop2.sharedcontext.domain.LongIdentity;
 import com.stardata.starshop2.productcontext.command.domain.ProductManagingService;
+import com.stardata.starshop2.productcontext.command.domain.ProductSettlement;
 import com.stardata.starshop2.productcontext.command.domain.ProductSettlementService;
 import com.stardata.starshop2.productcontext.command.domain.product.Product;
-import com.stardata.starshop2.productcontext.command.domain.ProductSettlement;
 import com.stardata.starshop2.productcontext.command.pl.ProductResponse;
 import com.stardata.starshop2.productcontext.command.pl.ProductSettlementRequest;
 import com.stardata.starshop2.productcontext.command.pl.ProductSettlementResponse;
+import com.stardata.starshop2.sharedcontext.domain.LongIdentity;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -31,9 +30,8 @@ public class ProductAppService {
     }
 
     public ProductSettlementResponse calcSettlement(ProductSettlementRequest request) {
-        List<ProductSettlement> settlements = new ArrayList<>();
-        long totalPriceFen = settlementService.calcSettlement(request.composeToMap(), settlements);
-        return ProductSettlementResponse.from(settlements, totalPriceFen);
+        List<ProductSettlement> settlements = settlementService.calcSettlement(request.composeToMap());
+        return ProductSettlementResponse.from(settlements);
     }
 
     public void increaseCurMonthSale(ProductSettlementRequest request) {

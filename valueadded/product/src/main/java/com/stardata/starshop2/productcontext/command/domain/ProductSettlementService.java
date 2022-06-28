@@ -1,12 +1,13 @@
 package com.stardata.starshop2.productcontext.command.domain;
 
-import com.stardata.starshop2.sharedcontext.domain.LongIdentity;
 import com.stardata.starshop2.productcontext.command.domain.product.Product;
 import com.stardata.starshop2.productcontext.command.south.port.ProductRepository;
+import com.stardata.starshop2.sharedcontext.domain.LongIdentity;
 import lombok.AllArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -21,19 +22,16 @@ import java.util.Map;
 public class ProductSettlementService {
     private  final ProductRepository repository;
 
-    public long calcSettlement(@NotNull Map<LongIdentity, Integer> productCountsMap,
-                              @NotNull List<ProductSettlement> settlements) {
+    public List<ProductSettlement> calcSettlement(@NotNull Map<LongIdentity, Integer> productCountsMap) {
         List<Product> products = repository.instancesOf(productCountsMap.keySet());
 
-        long totalPriceFen = 0;
-        settlements.clear();
+        List<ProductSettlement> result = new ArrayList<>();
         for (Product product : products) {
             int count = productCountsMap.get(product.getId());
             ProductSettlement settlement = product.settlePrice(count);
-            totalPriceFen += settlement.settlePriceFen();
-            settlements.add(settlement);
+            result.add(settlement);
         }
-        return totalPriceFen;
+        return result;
     }
 
     public void increaseCurMonthSale(@NotNull Map<LongIdentity, Integer> productCountsMap) {

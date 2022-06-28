@@ -18,6 +18,7 @@ create index idx_shopping_cart_shop
 create index idx_shopping_cart_user
     on tb_shopping_cart (user_id);
 
+-- auto-generated definition
 create table tb_shopping_cart_item
 (
     ID            bigint             not null
@@ -27,8 +28,12 @@ create table tb_shopping_cart_item
     category_id   bigint             not null,
     count         smallint           not null,
     display_order smallint default 0 not null,
-    constraint fk_shopping_cart_item_cart
-        foreign key (cart_id) references tb_shopping_cart (ID)
+    constraint FK_shopping_cart_item_cart
+        foreign key (cart_id) references tb_shopping_cart (ID),
+    constraint FK_shopping_cart_item_product
+        foreign key (product_id) references tb_product2 (ID),
+    constraint FK_shopping_cart_item_category
+        foreign key (category_id) references tb_prod_category (ID)
 );
 
 create index idx_cart_item_cart
@@ -36,4 +41,5 @@ create index idx_cart_item_cart
 
 create index idx_cart_item_product
     on tb_shopping_cart_item (product_id);
+
 

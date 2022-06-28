@@ -13,7 +13,7 @@ import java.util.List;
  */
 @Data
 public class ProductSettlementResponse {
-    public static ProductSettlementResponse from(List<ProductSettlement> settlements, long totalPriceFen) {
+    public static ProductSettlementResponse from(List<ProductSettlement> settlements) {
         //todo 商品价格结算map转DTO
         return null;
     }
