@@ -1,6 +1,7 @@
 package com.stardata.starshop2.ordercontext.command.south.port;
 
 import com.stardata.starshop2.ordercontext.command.domain.order.Order;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Samson Shu
@@ -9,5 +10,5 @@ import com.stardata.starshop2.ordercontext.command.domain.order.Order;
  * @date 2022/4/26 18:12
  */
 public interface OrderItemsSettlementClient {
-    void settleItems(Order order) ;
+    void settleProducts(@NotNull Order order) ;
 }

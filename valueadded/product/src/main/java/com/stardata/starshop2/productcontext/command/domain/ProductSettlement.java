@@ -11,7 +11,7 @@ import java.math.BigDecimal;
  * @date 2022/5/4 11:58
  */
 public record ProductSettlement(LongIdentity productId, long settlePriceFen, int orderCount, BigDecimal settleQuantity,
-                                boolean available) {
+                                boolean available, String productSnapshot) {
 
     @Override
     public boolean equals(Object o) {
@@ -25,6 +25,7 @@ public record ProductSettlement(LongIdentity productId, long settlePriceFen, int
                 (other.available == this.available) &&
                 (other.settlePriceFen == this.settlePriceFen) &&
                 (other.orderCount == this.orderCount) &&
-                (other.settleQuantity.multiply(thousand).longValue() == this.settleQuantity.multiply(thousand).longValue());
+                (other.settleQuantity.multiply(thousand).longValue() ==
+                        this.settleQuantity.multiply(thousand).longValue());
     }
 }

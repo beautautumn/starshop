@@ -6,5 +6,5 @@ package com.stardata.starshop2.ordercontext.command.domain.order;
  * @email shush@stardata.top
  * @date 2022/4/18 15:30
  */
-public class BrandOrder extends Order{
+public class BrandOrder{
 }

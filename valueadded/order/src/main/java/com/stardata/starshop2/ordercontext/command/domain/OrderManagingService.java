@@ -1,12 +1,9 @@
 package com.stardata.starshop2.ordercontext.command.domain;
 
+import com.stardata.starshop2.ordercontext.command.domain.order.*;
 import com.stardata.starshop2.sharedcontext.domain.BizParameter;
 import com.stardata.starshop2.sharedcontext.domain.LongIdentity;
 import com.stardata.starshop2.sharedcontext.south.port.BizParameterRepository;
-import com.stardata.starshop2.ordercontext.command.domain.order.Order;
-import com.stardata.starshop2.ordercontext.command.domain.order.OrderOperType;
-import com.stardata.starshop2.ordercontext.command.domain.order.WxPayResult;
-import com.stardata.starshop2.ordercontext.command.domain.order.WxPrepayOrder;
 import com.stardata.starshop2.ordercontext.command.south.port.OrderItemsSettlementClient;
 import com.stardata.starshop2.ordercontext.command.south.port.OrderRepository;
 import com.stardata.starshop2.ordercontext.command.south.port.WxPrepayingClient;
@@ -30,7 +27,7 @@ public class OrderManagingService {
     private final BizParameterRepository parameterRepository;
 
     public void submitOrder(LongIdentity userId, Order order) {
-        settlementClient.settleItems(order);
+        settlementClient.settleProducts(order);
         order.createPayment();
         order.recordOperLog(userId, OrderOperType.CREATE);
         orderRepository.add(order);

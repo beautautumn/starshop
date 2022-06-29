@@ -14,8 +14,6 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceException;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
@@ -33,7 +31,6 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 @SpringBootTest
 public class ShoppingCartTests {
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     /**
      * 任务级测试：订单上下文——1. 保存购物车；（组合任务，领域服务）; 2. 查询购物车；（组合任务，领域服务）
@@ -153,8 +150,8 @@ public class ShoppingCartTests {
         assertEquals(3L, cartItem.getProductId().value());
         assertEquals(2, cartItem.getCount());
         assertFalse(cartItem.getSubtotal().isAvailable());
-        assertTrue(cartItem.getSubtotal().getTotalQuantity().value().compareTo(BigDecimal.ZERO) == 0);
-        assertTrue(cartItem.getSubtotal().getAmountFen() == 0L);
+        assertEquals(0, cartItem.getSubtotal().getTotalQuantity().value().compareTo(BigDecimal.ZERO));
+        assertEquals(0L, cartItem.getSubtotal().getAmountFen());
     }
 
     //1.3. 购物车商品ID列表中有不存在的商品ID，购物车保存异常；

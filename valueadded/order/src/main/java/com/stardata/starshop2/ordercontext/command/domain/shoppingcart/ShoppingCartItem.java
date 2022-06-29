@@ -1,10 +1,8 @@
 package com.stardata.starshop2.ordercontext.command.domain.shoppingcart;
 
+import com.stardata.starshop2.sharedcontext.domain.AbstractEntity;
 import com.stardata.starshop2.sharedcontext.domain.LongIdentity;
-import jakarta.persistence.EmbeddedId;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,12 +15,18 @@ import lombok.Setter;
 @Entity
 @Table(name="tb_shopping_cart_item")
 @Getter
-public class ShoppingCartItem {
+public class ShoppingCartItem  extends AbstractEntity<LongIdentity> {
     @EmbeddedId
     private LongIdentity id;
 
-    private long categoryId;
-    private long productId;
+    @AttributeOverride(name="id", column = @Column(name="category_id", nullable = false))
+    @Embedded
+    private LongIdentity categoryId;
+
+    @AttributeOverride(name="id", column = @Column(name="product_id", nullable = false))
+    @Embedded
+    private LongIdentity productId;
+
     private int count;
     @Setter
     private int displayOrder;
@@ -32,28 +36,33 @@ public class ShoppingCartItem {
 
 
     public LongIdentity getProductId() {
-        return LongIdentity.from(this.productId);
+        return this.productId;
     }
 
     public void setProductId(LongIdentity productId) {
-        this.productId = productId.value();
+        this.productId = productId;
     }
 
     public LongIdentity getCategoryId() {
-        return LongIdentity.from(this.categoryId);
+        return this.categoryId;
     }
 
     public void setCategoryIdId(LongIdentity categoryId) {
-        this.categoryId = categoryId.value();
+        this.categoryId = categoryId;
     }
 
     ShoppingCartItem(LongIdentity categoryId, LongIdentity productId, int count) {
         this.id = LongIdentity.snowflakeId();
-        this.categoryId = categoryId.value();
-        this.productId = productId.value();
+        this.categoryId = categoryId;
+        this.productId = productId;
         this.count = count;
         this.displayOrder = 0;
     }
 
     protected ShoppingCartItem() {}
+
+    @Override
+    public LongIdentity id() {
+        return this.id;
+    }
 }

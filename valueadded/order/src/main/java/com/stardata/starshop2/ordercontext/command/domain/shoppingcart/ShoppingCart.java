@@ -24,16 +24,19 @@ import java.util.stream.Collectors;
 @Getter
 @Entity
 @Table(name="tb_shopping_cart")
+@AttributeOverrides({
+        @AttributeOverride(name = "shopId.id", column = @Column(name = "shop_id", nullable = false)),
+        @AttributeOverride(name = "userId.id", column = @Column(name = "user_id", nullable = false)),
+})
+
 public class ShoppingCart extends AbstractEntity<LongIdentity>  implements AggregateRoot<ShoppingCart> {
     @EmbeddedId
     private LongIdentity id;
 
-    @AttributeOverride(name="id", column = @Column(name="shop_id", nullable = false))
     @Embedded
     @Setter
     private LongIdentity shopId;
 
-    @AttributeOverride(name="id", column = @Column(name="user_id", nullable = false))
     @Embedded
     @Setter
     private LongIdentity userId;

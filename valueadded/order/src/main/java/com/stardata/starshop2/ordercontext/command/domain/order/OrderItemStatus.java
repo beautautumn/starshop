@@ -8,17 +8,21 @@ import com.stardata.starshop2.sharedcontext.usertype.PersistentCharEnum;
  * @email shush@stardata.top
  * @date 2022/4/18 15:26
  */
-public enum PaymentStatus implements PersistentCharEnum {
-    TO_PAY('1'),
-    SUCCESS('2'),
-    FAILED('3');
+public enum OrderItemStatus implements PersistentCharEnum {
+    TO_PICK('1'),
+    TO_DISPATCH('2'),
+    DISPATCHED('3');
+
     private final char value;
 
-    PaymentStatus(char value) {
+    OrderItemStatus(char value) {
         this.value = value;
     }
 
     @Override
-    public char getValue() { return this.value; }
+    public char getValue() {
+        return this.value;
+    }
+
 
 }

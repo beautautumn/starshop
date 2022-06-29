@@ -11,6 +11,7 @@ import com.stardata.starshop2.sharedcontext.helper.JSONUtil;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -52,7 +53,10 @@ public class Product  extends AbstractEntity<LongIdentity> implements AggregateR
     @JoinColumn(name = "category_id", referencedColumnName = "id")
     private ProductCategory category;
 
-    private String name;
+    @Embedded
+    @Setter
+    private ProductName name;
+
     @Embedded
     private ProductDescription introduction;
 
@@ -103,7 +107,7 @@ public class Product  extends AbstractEntity<LongIdentity> implements AggregateR
         this.id = LongIdentity.snowflakeId();
         this.shopId = shopId;
         this.category = category;
-        this.name = name;
+        this.name = ProductName.of(name);
         this.unit = unit.toString();
         this.minPurchase = new NonNegativeDecimal("1.0");
     }
@@ -208,8 +212,10 @@ public class Product  extends AbstractEntity<LongIdentity> implements AggregateR
             }
         }
 
-        return new ProductSettlement(this.id, settlePriceFen.value(),orderCount, settleQuantity, available);
+        return new ProductSettlement(this.id, settlePriceFen.value(),orderCount, settleQuantity, available,
+                JSONUtil.toJSONString(this));
     }
+
 
     public void increaseCurMonthSale(int count) {
         synchronized(this) {
