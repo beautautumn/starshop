@@ -18,7 +18,6 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name="tb_order_payment")
 @AttributeOverrides({
-        @AttributeOverride(name = "orderId.id", column = @Column(name = "order_id", nullable = false)),
         @AttributeOverride(name = "userId.id", column = @Column(name = "user_id", nullable = false)),
 })
 
@@ -27,8 +26,9 @@ public class OrderPayment {
     @EmbeddedId
     private LongIdentity id;
 
-    @Embedded
-    private LongIdentity orderId;
+    @OneToOne
+    @JoinColumn(name = "order_id", referencedColumnName = "id")
+    Order order;
 
     @Embedded
     private LongIdentity userId;
@@ -50,12 +50,11 @@ public class OrderPayment {
 
     protected OrderPayment(){}
 
-    OrderPayment(LongIdentity orderId, LongIdentity userId, PaymentType payType) {
-        this.orderId = orderId;
+    OrderPayment(Order order, LongIdentity userId, PaymentType payType) {
+        this.id = LongIdentity.snowflakeId();
+        this.order = order;
         this.userId = userId;
         this.payType = payType;
         this.status = PaymentStatus.TO_PAY;
-        this.payTime = LocalDateTime.now();
-        this.id = LongIdentity.snowflakeId();
     }
 }

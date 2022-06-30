@@ -15,15 +15,22 @@ import lombok.Setter;
 @Entity
 @Table(name="tb_shopping_cart_item")
 @Getter
+@AttributeOverrides({
+        @AttributeOverride(name = "categoryId.id", column = @Column(name = "category_id", nullable = false)),
+        @AttributeOverride(name = "productId.id", column = @Column(name = "product_id", nullable = false))
+})
 public class ShoppingCartItem  extends AbstractEntity<LongIdentity> {
     @EmbeddedId
     private LongIdentity id;
 
-    @AttributeOverride(name="id", column = @Column(name="category_id", nullable = false))
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "cart_id", referencedColumnName = "id")
+    @OrderColumn( name = "displayOrder" )
+    private ShoppingCart shoppingCart;
+
     @Embedded
     private LongIdentity categoryId;
 
-    @AttributeOverride(name="id", column = @Column(name="product_id", nullable = false))
     @Embedded
     private LongIdentity productId;
 
@@ -51,8 +58,9 @@ public class ShoppingCartItem  extends AbstractEntity<LongIdentity> {
         this.categoryId = categoryId;
     }
 
-    ShoppingCartItem(LongIdentity categoryId, LongIdentity productId, int count) {
+    ShoppingCartItem(ShoppingCart shoppingCart, LongIdentity categoryId, LongIdentity productId, int count) {
         this.id = LongIdentity.snowflakeId();
+        this.shoppingCart = shoppingCart;
         this.categoryId = categoryId;
         this.productId = productId;
         this.count = count;

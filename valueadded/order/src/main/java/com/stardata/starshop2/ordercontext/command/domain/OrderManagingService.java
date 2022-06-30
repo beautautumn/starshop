@@ -29,7 +29,7 @@ public class OrderManagingService {
     public void submitOrder(LongIdentity userId, Order order) {
         settlementClient.settleProducts(order);
         order.createPayment();
-        order.recordOperLog(userId, OrderOperType.CREATE);
+        order.recordOperLog(userId, OrderOperType.CREATE, null);
         orderRepository.add(order);
     }
 

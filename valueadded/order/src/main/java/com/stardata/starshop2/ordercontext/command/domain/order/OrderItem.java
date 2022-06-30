@@ -6,6 +6,7 @@ import com.stardata.starshop2.sharedcontext.domain.LongIdentity;
 import com.stardata.starshop2.sharedcontext.exception.InvalidFieldValueException;
 import com.stardata.starshop2.sharedcontext.helper.Constants;
 import com.stardata.starshop2.sharedcontext.helper.JSONUtil;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import jakarta.persistence.*;
@@ -26,15 +27,17 @@ import java.time.LocalDateTime;
 @Table(name="tb_order_item")
 @SQLDelete(sql = "update tb_order set is_valid = '"+ Constants.DELETE_FLAG.DELETED+"' where id = ?")
 @Where(clause = "is_valid = '"+ Constants.DELETE_FLAG.NORMAL+"'")
+@AttributeOverrides({
+        @AttributeOverride(name = "productId.id", column = @Column(name = "actual_product_id", nullable = false))
+})
 public class OrderItem  extends AbstractEntity<LongIdentity> {
     @EmbeddedId
     private LongIdentity id;
 
-    @AttributeOverride(name="id", column = @Column(name="order_id", nullable = false))
-    @Embedded
-    private LongIdentity orderId;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "order_id", referencedColumnName = "id")
+    private Order order;
 
-    @AttributeOverride(name="id", column = @Column(name="actual_product_id", nullable = false))
     @Embedded
     private LongIdentity productId;
 
@@ -59,11 +62,12 @@ public class OrderItem  extends AbstractEntity<LongIdentity> {
 
     protected OrderItem(){}
 
-    OrderItem(LongIdentity orderId, LongIdentity productId, int purchaseCount) {
-        this.orderId = orderId;
+    OrderItem(Order order, LongIdentity productId, int purchaseCount) {
+        this.id = LongIdentity.snowflakeId();
+        this.order = order;
         this.productId = productId;
         this.purchaseCount = purchaseCount;
-        this.id = LongIdentity.snowflakeId();
+        this.status = OrderItemStatus.TO_PICK;
     }
 
     @Override

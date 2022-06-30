@@ -6,18 +6,20 @@ import com.stardata.starshop2.sharedcontext.usertype.PersistentCharEnum;
  * @author Samson Shu
  * @version 1.0
  * @email shush@stardata.top
- * @date 2022/6/28 14:23
+ * @date 2022/4/18 15:29
  */
-public enum OrderType implements PersistentCharEnum {
-    SHOP('1'),
-    SHOP_SUB('2');
+public enum DeliveryType implements PersistentCharEnum {
+    SELF_PICK_UP('1'),
+    HOME_DELIVERY('2');
 
-    private final char value;
+    private char value;
 
-    OrderType(char value) {
+    DeliveryType(char value){
         this.value = value;
     }
 
     @Override
-    public char getValue() { return this.value; }
+    public char getValue() {
+        return 0;
+    }
 }

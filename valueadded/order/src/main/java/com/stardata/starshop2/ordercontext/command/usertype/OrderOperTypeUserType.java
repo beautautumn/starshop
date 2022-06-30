@@ -1,6 +1,6 @@
 package com.stardata.starshop2.ordercontext.command.usertype;
 
-import com.stardata.starshop2.ordercontext.command.domain.order.OrderType;
+import com.stardata.starshop2.ordercontext.command.domain.order.OrderOperType;
 import com.stardata.starshop2.sharedcontext.usertype.PersistentEnumUserType;
 
 /**
@@ -9,10 +9,10 @@ import com.stardata.starshop2.sharedcontext.usertype.PersistentEnumUserType;
  * @email shush@stardata.top
  * @date 2022/6/28 14:04
  */
-public class OrderTypeUserType extends PersistentEnumUserType<OrderType> {
+public class OrderOperTypeUserType extends PersistentEnumUserType<OrderOperType> {
 
     @Override
-    public Class<OrderType> returnedClass() {
-        return OrderType.class;
+    public Class<OrderOperType> returnedClass() {
+        return OrderOperType.class;
     }
 }

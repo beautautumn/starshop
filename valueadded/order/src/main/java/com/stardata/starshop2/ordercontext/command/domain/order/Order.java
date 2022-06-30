@@ -11,9 +11,12 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import org.hibernate.annotations.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 /**
@@ -28,8 +31,7 @@ import java.util.stream.Collectors;
 @Where(clause = "is_valid = '"+ Constants.DELETE_FLAG.NORMAL+"'")
 @AttributeOverrides({
         @AttributeOverride(name = "shopId.id", column = @Column(name = "shop_id", nullable = false)),
-        @AttributeOverride(name = "userId.id", column = @Column(name = "user_id", nullable = false)),
-        @AttributeOverride(name = "customerId.id", column = @Column(name = "cust_id", nullable = false)),
+        @AttributeOverride(name = "userId.id", column = @Column(name = "user_id", nullable = false))
 })
 
 @Getter
@@ -52,6 +54,10 @@ public class Order extends AbstractEntity<LongIdentity> implements AggregateRoot
 
     private String orderNumber;
 
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "order_id", referencedColumnName = "id")
+    List<OrderOperLog> operLogs = new ArrayList<>();
+
     @Type(type="com.stardata.starshop2.ordercontext.command.usertype.OrderStatusUserType")
     private OrderStatus status;
 
@@ -63,7 +69,7 @@ public class Order extends AbstractEntity<LongIdentity> implements AggregateRoot
     LocalDateTime updateTime;
 
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "id", referencedColumnName = "order_id")
     private OrderPayment payment;
 
@@ -73,11 +79,12 @@ public class Order extends AbstractEntity<LongIdentity> implements AggregateRoot
 
 
     public void createPayment() {
-        this.payment = new OrderPayment(this.id, this.userId, PaymentType.ORDER);
+        this.payment = new OrderPayment(this, this.userId, PaymentType.ORDER);
     }
 
-    public void recordOperLog(LongIdentity userId, OrderOperType create) {
-        //todo 完成订单记录操作日志方法
+    public void recordOperLog(LongIdentity userId, OrderOperType operType, String operDesc) {
+        OrderOperLog operLog = new OrderOperLog(this, userId, operType, operDesc);
+        this.operLogs.add(operLog);
     }
 
     @Override
@@ -92,14 +99,27 @@ public class Order extends AbstractEntity<LongIdentity> implements AggregateRoot
 
     protected Order() {}
 
-    protected Order(LongIdentity shopId, LongIdentity userId) {
+    protected Order(LongIdentity shopId, LongIdentity userId, OrderType type, OrderStatus status) {
+        this.id = LongIdentity.snowflakeId();
         this.shopId = shopId;
         this.userId = userId;
-        this.id = LongIdentity.snowflakeId();
+        this.orderNumber = generateOderNumber(shopId, userId);
+        this.type = type;
+        this.status = status;
+    }
+
+    private String generateOderNumber(LongIdentity shopId, LongIdentity userId) {
+        Random random = new Random(shopId.value());
+        long orderSeq = random.nextLong(1000, 9999);
+        String todayStr = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+        String shopIdStr = shopId.toString();
+        String shopNumber = (shopIdStr.length() > 18)?
+                shopIdStr.substring(shopIdStr.length()-18): String.format("%018d", shopId.value());
+        return String.format("P%s%s%d", todayStr, shopNumber, orderSeq);
     }
 
     public static Order createFor(LongIdentity shopId, LongIdentity userId) {
-        return new Order(shopId, userId);
+        return new Order(shopId, userId, OrderType.SHOP, OrderStatus.TO_PAY);
     }
 
     public void settleItem(LongIdentity productId, int purchaseCount, long subtotalFen, String productSnapshot) {
@@ -116,7 +136,7 @@ public class Order extends AbstractEntity<LongIdentity> implements AggregateRoot
     }
 
     public OrderItem addItem(LongIdentity productId, int purchaseCount) {
-        OrderItem item = new OrderItem(this.id, productId, purchaseCount);
+        OrderItem item = new OrderItem(this, productId, purchaseCount);
         this.items.add(item);
         return item;
     }

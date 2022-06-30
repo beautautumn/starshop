@@ -58,10 +58,10 @@ public abstract class PersistentEnumUserType<T extends PersistentCharEnum> imple
             return null;
         }
 
-        char id = str.charAt(0);
-        for(PersistentCharEnum e : returnedClass().getEnumConstants()) {
-            if(id == e.getValue()) {
-                return e;
+        char c = str.charAt(0);
+        for(PersistentCharEnum elem : returnedClass().getEnumConstants()) {
+            if(c == elem.getValue()) {
+                return elem;
             }
         }
         throw new IllegalStateException("Unknown " + returnedClass().getSimpleName() + " enum value.");

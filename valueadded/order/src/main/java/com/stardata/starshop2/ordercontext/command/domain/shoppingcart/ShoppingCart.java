@@ -83,7 +83,7 @@ public class ShoppingCart extends AbstractEntity<LongIdentity>  implements Aggre
 
 
     public void addItem(LongIdentity categoryId, LongIdentity productId, int count) {
-        ShoppingCartItem item = new ShoppingCartItem(categoryId, productId, count);
+        ShoppingCartItem item = new ShoppingCartItem(this, categoryId, productId, count);
         int maxDisplayOrder = this.items.stream().mapToInt(ShoppingCartItem::getDisplayOrder).max().orElse(0) + 1;
         item.setDisplayOrder(maxDisplayOrder);
         this.items.add(item);
