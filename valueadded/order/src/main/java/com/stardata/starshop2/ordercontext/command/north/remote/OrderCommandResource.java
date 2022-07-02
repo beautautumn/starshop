@@ -3,7 +3,7 @@ package com.stardata.starshop2.ordercontext.command.north.remote;
 import com.stardata.starshop2.ordercontext.command.north.local.OrderAppService;
 import com.stardata.starshop2.ordercontext.command.pl.*;
 import com.stardata.starshop2.sharedcontext.annotation.LoginUser;
-import com.stardata.starshop2.sharedcontext.pl.SessionUser;
+import com.stardata.starshop2.sharedcontext.domain.SessionUser;
 import io.swagger.annotations.Api;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -41,10 +41,10 @@ public class OrderCommandResource {
     }
 
     @PostMapping("/{orderId}/prepayments")
-    public ResponseEntity<PrepayResponse> prepay(@LoginUser SessionUser loginUser,
-                                                 @PathVariable Long orderId)
+    public ResponseEntity<PrepayOrderResponse> prepay(@LoginUser SessionUser loginUser,
+                                                      @PathVariable Long orderId)
     {
-        PrepayResponse response = appService.prepay(orderId);
+        PrepayOrderResponse response = appService.prepay(orderId);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

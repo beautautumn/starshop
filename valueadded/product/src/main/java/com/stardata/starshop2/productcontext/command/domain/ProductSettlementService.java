@@ -1,6 +1,7 @@
 package com.stardata.starshop2.productcontext.command.domain;
 
 import com.stardata.starshop2.productcontext.command.domain.product.Product;
+import com.stardata.starshop2.productcontext.command.domain.productcategory.ProductSettlement;
 import com.stardata.starshop2.productcontext.command.south.port.ProductRepository;
 import com.stardata.starshop2.sharedcontext.domain.LongIdentity;
 import lombok.AllArgsConstructor;

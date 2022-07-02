@@ -2,7 +2,7 @@ package com.stardata.starshop2.shopcontext.north.remote;
 
 import com.stardata.starshop2.sharedcontext.annotation.LoginUser;
 import com.stardata.starshop2.sharedcontext.domain.Location;
-import com.stardata.starshop2.sharedcontext.pl.SessionUser;
+import com.stardata.starshop2.sharedcontext.domain.SessionUser;
 import com.stardata.starshop2.shopcontext.north.local.ShopAppService;
 import com.stardata.starshop2.shopcontext.pl.*;
 import io.swagger.annotations.Api;

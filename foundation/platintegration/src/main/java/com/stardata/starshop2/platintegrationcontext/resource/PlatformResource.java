@@ -1,11 +1,7 @@
 package com.stardata.starshop2.platintegrationcontext.resource;
 
-import com.stardata.starshop2.sharedcontext.annotation.LoginUser;
-import com.stardata.starshop2.sharedcontext.pl.SessionUser;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 

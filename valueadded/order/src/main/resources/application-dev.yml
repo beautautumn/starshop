@@ -28,13 +28,13 @@ spring:
       FAIL_ON_UNKNOWN_PROPERTIES: false
       USE_BIG_DECIMAL_FOR_FLOATS: true
 wx:
-  miniapp:
-    configs:
-      - appid: wxaa0eca4be4ff2b3c
-        secret: 630bc05d83d22cded090fcc0dfa0acc1
-        token: #微信小程序消息服务器配置的token
-        aesKey: #微信小程序消息服务器配置的EncodingAESKey
-        msgDataFormat: JSON
+  pay:
+    appId: wxaa0eca4be4ff2b3c
+    mchId: 1600639346
+    mchKey: lx8rBPIrBO3WeqhQyE216ZeaIlBtaF1H
+    #subAppId: #服务商模式下的子商户公众账号ID
+    #subMchId: #服务商模式下的子商户号
+    keyPath: classpath:apiclient_cert.p12
 logging:
   level:
     root: warn

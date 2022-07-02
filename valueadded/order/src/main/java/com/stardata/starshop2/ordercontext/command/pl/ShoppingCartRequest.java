@@ -30,13 +30,11 @@ public class ShoppingCartRequest {
 
     private List<Item> items = new ArrayList<>();
 
-    public ShoppingCart toShoppingCart(Long shopId, Long userId) {
-        ShoppingCart shoppingCart = ShoppingCart.of(LongIdentity.from(shopId), LongIdentity.from(userId));
-        shoppingCart.getItems().clear();
+    public ShoppingCart toShoppingCart(LongIdentity shopId, LongIdentity userId) {
+        ShoppingCart shoppingCart = ShoppingCart.of(shopId, userId);
         for (ShoppingCartRequest.Item item : items) {
             shoppingCart.addItem(LongIdentity.from(item.getCategoryId()), LongIdentity.from(item.getProductId()), item.getCount());
         }
-
         return shoppingCart;
     }
 

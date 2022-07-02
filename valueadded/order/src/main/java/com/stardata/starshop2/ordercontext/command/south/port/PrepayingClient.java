@@ -1,8 +1,7 @@
 package com.stardata.starshop2.ordercontext.command.south.port;
 
-import com.stardata.starshop2.ordercontext.command.domain.order.Order;
 import com.stardata.starshop2.ordercontext.command.domain.order.OrderPayment;
-import com.stardata.starshop2.ordercontext.command.domain.order.WxPrepayOrder;
+import com.stardata.starshop2.ordercontext.command.domain.order.PrepayOrder;
 
 /**
  * @author Samson Shu
@@ -10,6 +9,6 @@ import com.stardata.starshop2.ordercontext.command.domain.order.WxPrepayOrder;
  * @email shush@stardata.top
  * @date 2022/4/29 16:14
  */
-public interface WxPrepayingClient {
-    WxPrepayOrder prepay(OrderPayment payment);
+public interface PrepayingClient {
+    PrepayOrder prepay(OrderPayment payment);
 }

@@ -41,6 +41,10 @@ public class OrderItem  extends AbstractEntity<LongIdentity> {
     @Embedded
     private LongIdentity productId;
 
+    @Transient
+    @Setter
+    private String productName;
+
     @Setter
     private int purchaseCount;
 

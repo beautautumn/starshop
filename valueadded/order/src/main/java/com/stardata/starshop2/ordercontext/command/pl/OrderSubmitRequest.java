@@ -1,7 +1,11 @@
 package com.stardata.starshop2.ordercontext.command.pl;
 
 import com.stardata.starshop2.ordercontext.command.domain.order.Order;
+import com.stardata.starshop2.sharedcontext.domain.LongIdentity;
 import lombok.Data;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Samson Shu
@@ -11,8 +15,29 @@ import lombok.Data;
  */
 @Data
 public class OrderSubmitRequest {
-    public Order toOrder(Long userId, Long shopId) {
-        //todo 完成根据DTO创建订单的工厂方法
-        return null;
+    @Data
+    public static class Item {
+        private long productId;
+        private int count;
+
+        Item(long productId, int count) {
+            this.productId = productId;
+            this.count = count;
+        }
+    }
+
+    private List<Item> items = new ArrayList<>();
+
+    public Order toOrder(LongIdentity shopId, LongIdentity userId) {
+        Order order = Order.createFor(shopId, userId);
+        for (Item item : items) {
+            order.addItem(LongIdentity.from(item.getProductId()), item.getCount());
+        }
+        return order;
+    }
+
+    public OrderSubmitRequest item(long productId, int count) {
+        this.items.add(new Item(productId, count));
+        return this;
     }
 }

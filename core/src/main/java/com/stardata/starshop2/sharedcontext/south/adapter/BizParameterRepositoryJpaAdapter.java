@@ -22,6 +22,7 @@ public class BizParameterRepositoryJpaAdapter implements BizParameterRepository 
 
     @Override
     public BizParameter instanceOf(String key) {
-        return paramRepository.findById(StringIdentity.from(key));
+        BizParameter result = paramRepository.findById(StringIdentity.from(key));
+        return (result == null) ? BizParameter.EMPTY: result;
     }
 }

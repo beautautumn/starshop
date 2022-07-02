@@ -4,6 +4,8 @@ import com.stardata.starshop2.sharedcontext.exception.InvalidFieldValueException
 import jakarta.persistence.Embeddable;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.Objects;
+
 /**
  * @author Samson Shu
  * @version 1.0
@@ -29,10 +31,20 @@ public class ProductName {
     }
 
     protected ProductName() {
-        this.name="UNKNOWN";
+        this.name ="UNKNOWN";
     }
 
     public static ProductName of(String name) {
         return new ProductName(name);
+    }
+
+    @Override
+    public String toString() {
+        return this.name;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name);
     }
 }

@@ -1,13 +1,18 @@
 package com.stardata.starshop2.ordercontext.command.domain;
 
-import com.stardata.starshop2.ordercontext.command.domain.order.*;
-import com.stardata.starshop2.sharedcontext.domain.BizParameter;
-import com.stardata.starshop2.sharedcontext.domain.LongIdentity;
-import com.stardata.starshop2.sharedcontext.south.port.BizParameterRepository;
+import com.stardata.starshop2.ordercontext.command.domain.order.Order;
+import com.stardata.starshop2.ordercontext.command.domain.order.OrderOperType;
+import com.stardata.starshop2.ordercontext.command.domain.order.PayResult;
+import com.stardata.starshop2.ordercontext.command.domain.order.PrepayOrder;
 import com.stardata.starshop2.ordercontext.command.south.port.OrderItemsSettlementClient;
 import com.stardata.starshop2.ordercontext.command.south.port.OrderRepository;
-import com.stardata.starshop2.ordercontext.command.south.port.WxPrepayingClient;
+import com.stardata.starshop2.ordercontext.command.south.port.PrepayingClient;
+import com.stardata.starshop2.sharedcontext.domain.BizParameter;
+import com.stardata.starshop2.sharedcontext.domain.LongIdentity;
+import com.stardata.starshop2.sharedcontext.domain.SessionUser;
+import com.stardata.starshop2.sharedcontext.south.port.BizParameterRepository;
 import lombok.AllArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,28 +27,33 @@ import java.util.List;
 @AllArgsConstructor
 public class OrderManagingService {
     private final OrderItemsSettlementClient settlementClient;
-    private final WxPrepayingClient prepayingClient;
+    private final PrepayingClient prepayingClient;
     private final OrderRepository orderRepository;
     private final BizParameterRepository parameterRepository;
 
-    public void submitOrder(LongIdentity userId, Order order) {
+    private PrepayRequestGenerationService prepayRequestGenerationService;
+
+    public void submitOrder(@NotNull SessionUser user, @NotNull Order order) {
         settlementClient.settleProducts(order);
-        order.createPayment();
-        order.recordOperLog(userId, OrderOperType.CREATE, null);
+        String requestMessage = prepayRequestGenerationService.generatePrepay(user, order);
+        order.createPayment(requestMessage);
+        order.recordOperLog(user.getId(), OrderOperType.CREATE, null);
         orderRepository.add(order);
     }
 
-    public WxPrepayOrder prepayOrder(LongIdentity orderId) {
+    public PrepayOrder prepayOrder(LongIdentity orderId) {
         Order order = orderRepository.instanceOf(orderId);
-        return prepayingClient.prepay(order.getPayment());
+        PrepayOrder result = prepayingClient.prepay(order.getPayment());
+        orderRepository.update(order);
+        return result;
     }
 
     public Order detail(LongIdentity orderId) {
         return orderRepository.instanceOf(orderId);
     }
 
-    public Order makeOrderEffectively(WxPayResult wxPayResult) {
-        Order order = orderRepository.findByOutTradeNo(wxPayResult.getOutTradeNo());
+    public Order makeOrderEffectively(PayResult payResult) {
+        Order order = orderRepository.findByOutTradeNo(payResult.getOutTradeNo());
         order.makeEffectively();
         orderRepository.update(order);
         return order;
@@ -63,7 +73,8 @@ public class OrderManagingService {
 
     public List<Order> getConfirmExpired() {
         BizParameter parameter = parameterRepository.instanceOf("max_minutes_remain_toconfirm");
-        int maxMinutes = parameter.toInteger();
+        //如果数据库未配置参数，则默认48小时确认订单
+        int maxMinutes = parameter.toInteger(48*60);
         return orderRepository.findConfirmExpired(maxMinutes);
     }
 
@@ -76,7 +87,8 @@ public class OrderManagingService {
 
     public List<Order> getPayExpired() {
         BizParameter parameter = parameterRepository.instanceOf("max_minutes_remain_topay");
-        int maxMinutes = parameter.toInteger();
+        //如果数据库未配置参数，则默认30分钟支付订单
+        int maxMinutes = parameter.toInteger(30);
         return orderRepository.findPayExpired(maxMinutes);
     }
 

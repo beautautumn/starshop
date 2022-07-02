@@ -1,7 +1,7 @@
 package com.stardata.starshop2.ordercontext.command.north.local;
 
 import com.stardata.starshop2.sharedcontext.domain.LongIdentity;
-import com.stardata.starshop2.sharedcontext.pl.SessionUser;
+import com.stardata.starshop2.sharedcontext.domain.SessionUser;
 import com.stardata.starshop2.ordercontext.command.domain.ShoppingCartManagingService;
 import com.stardata.starshop2.ordercontext.command.domain.shoppingcart.ShoppingCart;
 import com.stardata.starshop2.ordercontext.command.pl.ShoppingCartRequest;
@@ -21,7 +21,7 @@ public class ShoppingCartAppService {
     private final ShoppingCartManagingService shoppingCartManagingService;
 
     public ShoppingCartResponse save(SessionUser loginUser, Long shopId, ShoppingCartRequest request) {
-        ShoppingCart shoppingCart = request.toShoppingCart(shopId, loginUser.getId());
+        ShoppingCart shoppingCart = request.toShoppingCart(LongIdentity.from(shopId), loginUser.getId());
         return ShoppingCartResponse.from(shoppingCartManagingService.replaceShoppingCart(shoppingCart));
     }
 

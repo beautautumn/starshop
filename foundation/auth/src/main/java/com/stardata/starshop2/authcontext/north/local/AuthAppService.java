@@ -11,7 +11,7 @@ import com.stardata.starshop2.authcontext.pl.WxLoginRequest;
 import com.stardata.starshop2.sharedcontext.domain.LongIdentity;
 import com.stardata.starshop2.sharedcontext.domain.MobileNumber;
 import com.stardata.starshop2.authcontext.pl.MobileNumberResponse;
-import com.stardata.starshop2.sharedcontext.pl.SessionUser;
+import com.stardata.starshop2.sharedcontext.domain.SessionUser;
 import lombok.AllArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
@@ -39,7 +39,7 @@ public class AuthAppService {
     }
 
     public MobileNumberResponse decryptWxMobileNumber(SessionUser loginUser, WxEncryptedUserInfo encryptedUserInfo) {
-        LongIdentity userId = LongIdentity.from(loginUser.getId());
+        LongIdentity userId = LongIdentity.from(loginUser.getId().value());
         String encryptedData = encryptedUserInfo.getEncryptedData();
         String iv = encryptedUserInfo.getIv();
 

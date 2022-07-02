@@ -9,8 +9,8 @@ import lombok.Data;
  * @date 2022/4/18 15:28
  */
 @Data
-public class WxPayResult {
+public class PayResult {
   private String outTradeNo;
 
-  WxPayResult(){}
+  PayResult(){}
 }

@@ -1,7 +1,7 @@
 package com.stardata.starshop2.ordercontext.command.north.remote;
 
 import com.stardata.starshop2.sharedcontext.annotation.LoginUser;
-import com.stardata.starshop2.sharedcontext.pl.SessionUser;
+import com.stardata.starshop2.sharedcontext.domain.SessionUser;
 import com.stardata.starshop2.ordercontext.command.north.local.ShoppingCartAppService;
 import com.stardata.starshop2.ordercontext.command.pl.ShoppingCartRequest;
 import com.stardata.starshop2.ordercontext.command.pl.ShoppingCartResponse;
@@ -35,7 +35,7 @@ public class ShoppingCartResource {
     @GetMapping("")
     public ResponseEntity<ShoppingCartResponse> query(@LoginUser SessionUser loginUser, @PathVariable Long shopId)
     {
-        ShoppingCartResponse response = appService.query(loginUser.getId(), shopId);
+        ShoppingCartResponse response = appService.query(loginUser.getId().value(), shopId);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

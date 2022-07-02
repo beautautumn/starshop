@@ -78,15 +78,6 @@ public class Order extends AbstractEntity<LongIdentity> implements AggregateRoot
     private final List<OrderItem> items = new ArrayList<>();
 
 
-    public void createPayment() {
-        this.payment = new OrderPayment(this, this.userId, PaymentType.ORDER);
-    }
-
-    public void recordOperLog(LongIdentity userId, OrderOperType operType, String operDesc) {
-        OrderOperLog operLog = new OrderOperLog(this, userId, operType, operDesc);
-        this.operLogs.add(operLog);
-    }
-
     @Override
     public LongIdentity id() {
         return id;
@@ -106,6 +97,7 @@ public class Order extends AbstractEntity<LongIdentity> implements AggregateRoot
         this.orderNumber = generateOderNumber(shopId, userId);
         this.type = type;
         this.status = status;
+        this.createTime = LocalDateTime.now();
     }
 
     private String generateOderNumber(LongIdentity shopId, LongIdentity userId) {
@@ -122,12 +114,13 @@ public class Order extends AbstractEntity<LongIdentity> implements AggregateRoot
         return new Order(shopId, userId, OrderType.SHOP, OrderStatus.TO_PAY);
     }
 
-    public void settleItem(LongIdentity productId, int purchaseCount, long subtotalFen, String productSnapshot) {
+    public void settleItem(LongIdentity productId, String productName, int purchaseCount, long subtotalFen, String productSnapshot) {
         List<LongIdentity> itemIds = this.items.stream().map(OrderItem::getProductId).collect(Collectors.toList());
         int idx = itemIds.indexOf(productId);
         if (idx < 0 ) return ;
 
         OrderItem item = items.get(idx);
+        item.setProductName(productName);
         item.setPurchaseCount(purchaseCount);
         item.setSubtotalFen(subtotalFen);
         item.setProductSnapshot(productSnapshot);
@@ -140,6 +133,17 @@ public class Order extends AbstractEntity<LongIdentity> implements AggregateRoot
         this.items.add(item);
         return item;
     }
+
+    public void createPayment(String platformRequestMessage) {
+        this.payment = new OrderPayment(this, this.userId, PaymentType.ORDER, platformRequestMessage);
+    }
+
+    public void recordOperLog(LongIdentity userId, OrderOperType operType, String operDesc) {
+        OrderOperLog operLog = new OrderOperLog(this, userId, operType, operDesc);
+        this.operLogs.add(operLog);
+    }
+
+
 
     public String getBriefDescription() {
         //todo 完成订单简要描述字段生成

@@ -11,7 +11,7 @@ import com.stardata.starshop2.authcontext.south.port.UserRepository;
 import com.stardata.starshop2.sharedcontext.domain.LongIdentity;
 import com.stardata.starshop2.sharedcontext.domain.MobileNumber;
 import com.stardata.starshop2.sharedcontext.exception.ApplicationValidationException;
-import com.stardata.starshop2.sharedcontext.pl.SessionUser;
+import com.stardata.starshop2.sharedcontext.domain.SessionUser;
 import jakarta.annotation.Resource;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;

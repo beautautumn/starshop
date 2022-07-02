@@ -3,6 +3,7 @@ package com.stardata.starshop2.ordercontext.command.domain.order;
 import com.stardata.starshop2.sharedcontext.domain.LongIdentity;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -39,7 +40,10 @@ public class OrderPayment {
     @Type(type="com.stardata.starshop2.ordercontext.command.usertype.PaymentStatusUserType")
     private PaymentStatus status;
 
-    private LocalDateTime payTime;
+    private String requestMessage;
+
+    @Setter
+    private String prepayId;
 
     @Column(updatable = false)
     @CreationTimestamp
@@ -50,11 +54,12 @@ public class OrderPayment {
 
     protected OrderPayment(){}
 
-    OrderPayment(Order order, LongIdentity userId, PaymentType payType) {
+    OrderPayment(Order order, LongIdentity userId, PaymentType payType, String requestMessage) {
         this.id = LongIdentity.snowflakeId();
         this.order = order;
         this.userId = userId;
         this.payType = payType;
+        this.requestMessage = requestMessage;
         this.status = PaymentStatus.TO_PAY;
     }
 }

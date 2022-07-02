@@ -1,8 +1,6 @@
 package com.stardata.starshop2.sharedcontext.domain;
 
-import jakarta.persistence.EmbeddedId;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 
 /**
@@ -15,12 +13,22 @@ import lombok.Getter;
 @Getter
 @Table(name = "tb_sys_parameter")
 public class BizParameter extends AbstractEntity<StringIdentity> implements AggregateRoot<BizParameter> {
+    @Transient
+    public static final BizParameter EMPTY = new BizParameter();
+
     @EmbeddedId
-    private StringIdentity code;
-    private String value;
+    private StringIdentity code = StringIdentity.from("NONE");
+    private String value= "";
 
     public int toInteger() {
         return Integer.parseInt(this.value);
+    }
+    public int toInteger(int defaultValue) {
+        try {
+            return Integer.parseInt(this.value);
+        }catch (NumberFormatException e) {
+            return defaultValue;
+        }
     }
 
     @Override

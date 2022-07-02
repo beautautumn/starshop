@@ -11,7 +11,7 @@ import org.mapstruct.factory.Mappers;
  * @email shush@stardata.top
  * @date 2022/6/28 09:19
  */
-@Mapper(uses=ShoppingCartResponseItemMapper.class)
+@Mapper(uses= ShoppingCartItemResponseMapper.class)
 public interface ShoppingCartResponseMapper extends MapStructBaseMapper {
     ShoppingCartResponseMapper INSTANCE = Mappers.getMapper(ShoppingCartResponseMapper.class);
 

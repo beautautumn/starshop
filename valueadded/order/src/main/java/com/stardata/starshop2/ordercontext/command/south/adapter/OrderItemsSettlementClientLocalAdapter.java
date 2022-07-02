@@ -2,7 +2,7 @@ package com.stardata.starshop2.ordercontext.command.south.adapter;
 
 import com.stardata.starshop2.ordercontext.command.domain.order.Order;
 import com.stardata.starshop2.ordercontext.command.south.port.OrderItemsSettlementClient;
-import com.stardata.starshop2.productcontext.command.domain.ProductSettlement;
+import com.stardata.starshop2.productcontext.command.domain.productcategory.ProductSettlement;
 import com.stardata.starshop2.productcontext.command.domain.ProductSettlementService;
 import com.stardata.starshop2.sharedcontext.annotation.Adapter;
 import com.stardata.starshop2.sharedcontext.annotation.PortType;
@@ -33,7 +33,7 @@ public class OrderItemsSettlementClientLocalAdapter implements OrderItemsSettlem
         order.getItems().forEach(item -> productCountsMap.put(item.getProductId(), item.getPurchaseCount()));
         List<ProductSettlement> settlements = productSettlementService.calcSettlement(productCountsMap);
         for (ProductSettlement settlement : settlements) {
-            order.settleItem(settlement.productId(), settlement.orderCount(),
+            order.settleItem(settlement.productId(), settlement.productName(), settlement.orderCount(),
                     settlement.settlePriceFen(), settlement.productSnapshot());
         }
 

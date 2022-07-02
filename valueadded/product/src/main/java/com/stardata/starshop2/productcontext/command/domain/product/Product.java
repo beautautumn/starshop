@@ -1,8 +1,8 @@
 package com.stardata.starshop2.productcontext.command.domain.product;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.stardata.starshop2.productcontext.command.domain.ProductSettlement;
 import com.stardata.starshop2.productcontext.command.domain.productcategory.ProductCategory;
+import com.stardata.starshop2.productcontext.command.domain.productcategory.ProductSettlement;
 import com.stardata.starshop2.sharedcontext.domain.*;
 import com.stardata.starshop2.sharedcontext.exception.DomainException;
 import com.stardata.starshop2.sharedcontext.helper.BooleanCharConverter;
@@ -212,8 +212,7 @@ public class Product  extends AbstractEntity<LongIdentity> implements AggregateR
             }
         }
 
-        return new ProductSettlement(this.id, settlePriceFen.value(),orderCount, settleQuantity, available,
-                JSONUtil.toJSONString(this));
+        return new ProductSettlement(this, settlePriceFen.value(),orderCount, settleQuantity, available);
     }
 
 

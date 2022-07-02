@@ -1,7 +1,7 @@
 package com.stardata.starshop2.ordercontext.query.resource;
 
 import com.stardata.starshop2.sharedcontext.annotation.LoginUser;
-import com.stardata.starshop2.sharedcontext.pl.SessionUser;
+import com.stardata.starshop2.sharedcontext.domain.SessionUser;
 import io.swagger.annotations.Api;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;

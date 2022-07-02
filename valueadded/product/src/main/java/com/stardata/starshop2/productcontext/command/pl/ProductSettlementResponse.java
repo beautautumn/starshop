@@ -1,6 +1,6 @@
 package com.stardata.starshop2.productcontext.command.pl;
 
-import com.stardata.starshop2.productcontext.command.domain.ProductSettlement;
+import com.stardata.starshop2.productcontext.command.domain.productcategory.ProductSettlement;
 import lombok.Data;
 
 import java.util.List;

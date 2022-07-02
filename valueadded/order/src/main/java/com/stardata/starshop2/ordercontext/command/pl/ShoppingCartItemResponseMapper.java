@@ -12,7 +12,7 @@ import org.mapstruct.Mapping;
  * @date 2022/6/28 09:23
  */
 @Mapper
-public interface ShoppingCartResponseItemMapper extends MapStructBaseMapper {
+public interface ShoppingCartItemResponseMapper extends MapStructBaseMapper {
     @Mapping(source="subtotal.available", target="available")
     @Mapping(source="subtotal.orderCount", target="orderCount")
     @Mapping(source="subtotal.amountFen", target="amountFen")

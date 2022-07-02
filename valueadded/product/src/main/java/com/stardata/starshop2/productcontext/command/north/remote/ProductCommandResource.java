@@ -1,7 +1,7 @@
 package com.stardata.starshop2.productcontext.command.north.remote;
 
 import com.stardata.starshop2.sharedcontext.annotation.LoginUser;
-import com.stardata.starshop2.sharedcontext.pl.SessionUser;
+import com.stardata.starshop2.sharedcontext.domain.SessionUser;
 import com.stardata.starshop2.productcontext.command.north.local.ProductAppService;
 import com.stardata.starshop2.productcontext.command.pl.ProductResponse;
 import io.swagger.annotations.Api;

@@ -8,7 +8,7 @@ import com.stardata.starshop2.ordercontext.command.pl.ShoppingCartRequest;
 import com.stardata.starshop2.ordercontext.command.pl.ShoppingCartResponse;
 import com.stardata.starshop2.ordercontext.command.south.port.ShoppingCartRepository;
 import com.stardata.starshop2.sharedcontext.domain.LongIdentity;
-import com.stardata.starshop2.sharedcontext.pl.SessionUser;
+import com.stardata.starshop2.sharedcontext.domain.SessionUser;
 import jakarta.annotation.Resource;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceException;
@@ -187,8 +187,7 @@ public class ShoppingCartTests {
 
     /**
      * 服务级测试：订单上下文——1. 保存购物车；（组合任务，应用服务）; 2. 查询购物车；（组合任务，应用服务）
-     * 按照先聚合再端口、先原子再组合、从内向外的原则。
-     * 设计相关任务级测试案例包括：
+     * 2. 测试购物车应用服务保存购物车接口，相关测试案例包括：
      * 2.1. 购物车商品ID列表和数量均正常（商品已上架且未售罄），购物车保存成功，并查询购物车信息正确；
      * 2.2. 购物车商品ID列表中有已售罄的商品ID，购物车保存正常，但区分出可下单、不可下单商品；
      */
@@ -199,7 +198,8 @@ public class ShoppingCartTests {
     @Rollback(true)
     void should_save_shopping_cart_successful_by_normal_shopping_cart_request() {
         //given: 全部给出正常已上架未售罄的商品ID列表和数量作为购物车内容
-        SessionUser loginUser = SessionUser.from(1L);
+        Long userId = 1L;
+        SessionUser loginUser = SessionUser.from(userId);
         Long shopId = 1L;
         ShoppingCartRequest request = new ShoppingCartRequest();
         request.item(1, 1, 1)
@@ -209,7 +209,7 @@ public class ShoppingCartTests {
         //when:  调用 shoppingCartManagingService.replaceShoppingCart方法保存购物车，然后再调用queryShoppingCart查询购物车
         ShoppingCartResponse savedResponse = cartAppService.save(loginUser, shopId, request);
         entityManager.flush();
-        ShoppingCartResponse loadedResponse = cartAppService.query(loginUser.getId(), shopId);
+        ShoppingCartResponse loadedResponse = cartAppService.query(userId, shopId);
 
         //then: 购物车保存成功，且内容正确
         assertNotNull(savedResponse);
@@ -249,7 +249,8 @@ public class ShoppingCartTests {
     @Rollback(true)
     void should_save_shopping_cart_successful_by_normal_and_not_available_shopping_cart_request() {
         //given: 给出正常已上架且未售罄的、加已售罄的商品ID列表和数量作为购物车内容
-        SessionUser loginUser = SessionUser.from(1L);
+        Long userId = 1L;
+        SessionUser loginUser = SessionUser.from(userId);
         Long shopId = 1L;
         ShoppingCartRequest request = new ShoppingCartRequest();
         request.item(1, 1, 1)
@@ -260,7 +261,7 @@ public class ShoppingCartTests {
         //when:  调用 shoppingCartManagingService.replaceShoppingCart方法保存购物车，然后再调用queryShoppingCart查询购物车
         ShoppingCartResponse savedResponse = cartAppService.save(loginUser, shopId, request);
         entityManager.flush();
-        ShoppingCartResponse loadedResponse = cartAppService.query(loginUser.getId(), shopId);
+        ShoppingCartResponse loadedResponse = cartAppService.query(userId, shopId);
 
         //then: 购物车保存成功，且内容正确，区分出来了不可用商品
         assertNotNull(savedResponse);

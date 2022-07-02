@@ -3,12 +3,12 @@ package com.stardata.starshop2.ordercontext.command.north.local;
 import com.github.binarywang.wxpay.bean.notify.WxPayNotifyResponse;
 import com.stardata.starshop2.ordercontext.command.domain.OrderManagingService;
 import com.stardata.starshop2.ordercontext.command.domain.order.Order;
-import com.stardata.starshop2.ordercontext.command.domain.order.WxPayResult;
-import com.stardata.starshop2.ordercontext.command.domain.order.WxPrepayOrder;
+import com.stardata.starshop2.ordercontext.command.domain.order.PayResult;
+import com.stardata.starshop2.ordercontext.command.domain.order.PrepayOrder;
 import com.stardata.starshop2.ordercontext.command.pl.*;
 import com.stardata.starshop2.ordercontext.command.south.port.OrderEventPublisher;
 import com.stardata.starshop2.sharedcontext.domain.LongIdentity;
-import com.stardata.starshop2.sharedcontext.pl.SessionUser;
+import com.stardata.starshop2.sharedcontext.domain.SessionUser;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -27,15 +27,15 @@ public class OrderAppService {
     private final OrderEventPublisher orderEventPublisher;
 
     public OrderResponse create(SessionUser loginUser, Long shopId, OrderSubmitRequest request) {
-        Order order = request.toOrder(loginUser.getId(), shopId);
-        managingService.submitOrder(LongIdentity.from(loginUser.getId()), order);
+        Order order = request.toOrder(LongIdentity.from(shopId), loginUser.getId());
+        managingService.submitOrder(loginUser, order);
         return OrderResponse.from(order);
     }
 
-    public PrepayResponse prepay(Long orderIdLong) {
+    public PrepayOrderResponse prepay(Long orderIdLong) {
         LongIdentity orderId = LongIdentity.from(orderIdLong);
-        WxPrepayOrder prepay = managingService.prepayOrder(orderId);
-        return PrepayResponse.from(prepay);
+        PrepayOrder prepay = managingService.prepayOrder(orderId);
+        return PrepayOrderResponse.from(prepay);
     }
 
     public OrderResponse getDetail(Long orderIdLong) {
@@ -46,8 +46,8 @@ public class OrderAppService {
 
     public String handleWxPayNotify(OrderPayResultRequest request) {
         try {
-            WxPayResult wxPayResult = request.toWxPayResult();
-            Order order = managingService.makeOrderEffectively(wxPayResult);
+            PayResult payResult = request.toWxPayResult();
+            Order order = managingService.makeOrderEffectively(payResult);
 
             OrderPaidEvent orderEvent = new OrderPaidEvent(order);
             orderEventPublisher.publish(orderEvent);

@@ -1,7 +1,7 @@
 package com.stardata.starshop2.ordercontext.command.pl;
 
 import com.github.binarywang.wxpay.bean.notify.WxPayOrderNotifyResult;
-import com.stardata.starshop2.ordercontext.command.domain.order.WxPayResult;
+import com.stardata.starshop2.ordercontext.command.domain.order.PayResult;
 import com.thoughtworks.xstream.XStream;
 import lombok.Data;
 import me.chanjar.weixin.common.util.xml.XStreamInitializer;
@@ -33,7 +33,7 @@ public class OrderPayResultRequest {
 
     }
 
-    public WxPayResult toWxPayResult() {
+    public PayResult toWxPayResult() {
         //todo 完成根据微信支付DTO创建微信支付值对象的工厂方法
         return null;
     }

@@ -8,7 +8,7 @@ import com.stardata.starshop2.sharedcontext.annotation.IgnoreAuth;
 import com.stardata.starshop2.sharedcontext.annotation.LoginUser;
 import com.stardata.starshop2.sharedcontext.north.Resources;
 import com.stardata.starshop2.authcontext.pl.MobileNumberResponse;
-import com.stardata.starshop2.sharedcontext.pl.SessionUser;
+import com.stardata.starshop2.sharedcontext.domain.SessionUser;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
