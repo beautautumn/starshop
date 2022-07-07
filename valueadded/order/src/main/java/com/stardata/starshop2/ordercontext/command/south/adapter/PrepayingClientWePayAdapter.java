@@ -1,7 +1,6 @@
 package com.stardata.starshop2.ordercontext.command.south.adapter;
 
 import cn.hutool.core.net.NetUtil;
-import com.github.binarywang.wxpay.bean.order.WxPayMpOrderResult;
 import com.github.binarywang.wxpay.bean.request.WxPayUnifiedOrderRequest;
 import com.github.binarywang.wxpay.bean.result.WxPayUnifiedOrderResult;
 import com.github.binarywang.wxpay.constant.WxPayConstants;
@@ -16,7 +15,6 @@ import com.stardata.starshop2.sharedcontext.annotation.PortType;
 import com.stardata.starshop2.sharedcontext.exception.ApplicationInfrastructureException;
 import com.stardata.starshop2.sharedcontext.exception.ApplicationValidationException;
 import com.stardata.starshop2.sharedcontext.helper.CharUtil;
-import com.stardata.starshop2.sharedcontext.helper.JSONUtil;
 import com.thoughtworks.xstream.XStream;
 import lombok.AllArgsConstructor;
 import me.chanjar.weixin.common.util.xml.XStreamInitializer;
@@ -24,7 +22,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 
 /**
  * @author Samson Shu
@@ -81,24 +81,24 @@ public class PrepayingClientWePayAdapter implements PrepayingClient {
 
         //5. 将微信支付返回的结果打包成可使用的结构体
         String nonceStr = unifiedOrderResult.getNonceStr();
-        String appid = unifiedOrderResult.getAppid();
+        String appId = unifiedOrderResult.getAppid();
         String signType = prepayRequest.getSignType();
         String timeStamp = String.valueOf(System.currentTimeMillis() / 1000);
-        WxPayMpOrderResult wePayResult = WxPayMpOrderResult.builder()
-                .appId(appid)
-                .timeStamp(timeStamp)
-                .nonceStr(nonceStr)
-                .packageValue("prepay_id=" + prepayId)
-                .signType(WxPayConstants.SignType.MD5)
-                .build();
-        wePayResult.setPaySign(SignUtils.createSign(wePayResult, signType,
-                wxService.getConfig().getMchKey(), null));
+        Map<String, String> appResult = new HashMap<>();
+        appResult.put("appId", appId);
+        appResult.put("timeStamp", timeStamp);
+        appResult.put("nonceStr", nonceStr);
+        appResult.put("package", "prepay_id=" + prepayId);
+        appResult.put("signType", WxPayConstants.SignType.MD5);
+        String paySign = SignUtils.createSign(appResult, signType,
+                wxService.getConfig().getMchKey(), null);
+        appResult.put("paySign", paySign);
 
         return PrepayOrder.builder()
                 .orderId(payment.getOrder().getId())
-                .appId(appid)
+                .appId(appId)
                 .prepayId(prepayId)
-                .appJsonResult(JSONUtil.toJSONString(wePayResult))
+                .appResult(appResult)
                 .build();
     }
 }

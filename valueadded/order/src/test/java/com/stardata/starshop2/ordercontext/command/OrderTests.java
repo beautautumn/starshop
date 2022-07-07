@@ -1,9 +1,15 @@
 package com.stardata.starshop2.ordercontext.command;
 
+import com.github.binarywang.wxpay.bean.notify.WxPayNotifyResponse;
+import com.github.binarywang.wxpay.bean.notify.WxPayOrderNotifyResult;
+import com.github.binarywang.wxpay.bean.request.WxPayUnifiedOrderRequest;
+import com.github.binarywang.wxpay.service.WxPayService;
+import com.github.binarywang.wxpay.util.SignUtils;
 import com.stardata.starshop2.ordercontext.command.domain.OrderManagingService;
 import com.stardata.starshop2.ordercontext.command.domain.PrepayRequestGenerationService;
 import com.stardata.starshop2.ordercontext.command.domain.order.*;
 import com.stardata.starshop2.ordercontext.command.north.local.OrderAppService;
+import com.stardata.starshop2.ordercontext.command.pl.OrderPayResultRequest;
 import com.stardata.starshop2.ordercontext.command.pl.OrderResponse;
 import com.stardata.starshop2.ordercontext.command.pl.OrderSubmitRequest;
 import com.stardata.starshop2.ordercontext.command.pl.PrepayOrderResponse;
@@ -12,14 +18,18 @@ import com.stardata.starshop2.ordercontext.command.south.port.OrderRepository;
 import com.stardata.starshop2.ordercontext.command.south.port.PrepayingClient;
 import com.stardata.starshop2.sharedcontext.domain.LongIdentity;
 import com.stardata.starshop2.sharedcontext.domain.SessionUser;
+import com.thoughtworks.xstream.XStream;
 import jakarta.annotation.Resource;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
+import me.chanjar.weixin.common.util.xml.XStreamInitializer;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -361,7 +371,7 @@ public class OrderTests {
         assertEquals(prepay.getOrderId(), order.getId());
         assertEquals(prepay.getPrepayId(), payment.getPrepayId());
         assertNotNull(prepay.getAppId());
-        assertNotNull(prepay.getAppJsonResult());
+        assertNotNull(prepay.getAppResult());
     }
 
     /**
@@ -402,7 +412,7 @@ public class OrderTests {
         assertEquals(prepay.getOrderId(), order.getId());
         assertEquals(prepay.getPrepayId(), payment.getPrepayId());
         assertNotNull(prepay.getAppId());
-        assertNotNull(prepay.getAppJsonResult());
+        assertNotNull(prepay.getAppResult());
     }
 
     /**
@@ -435,8 +445,257 @@ public class OrderTests {
         //then: 检查预支付是否成功
         assertNotNull(response);
         assertNotNull(response.getPrepayId());
-        assertNotNull(response.getAppJsonResult());
+        assertNotNull(response.getAppResult());
     }
 
+    /**
+     * 任务级测试：生效订单——根据订单外部编号重建订单对象；（原子任务，资源库端口，访问数据库）
+     * 按照先聚合再端口、先原子再组合、从内向外的原则。
+     * 10. 测试根据订单编号从数据库重建订单对象功能
+     * 10.1 调用订单资源库服务，从数据库重建订单对象
+     */
+    @Test
+    @Transactional
+    @Rollback(true)
+    void should_load_order_correctly_by_given_order_number() {
+        //given: 使用领域服务先提交一个订单、并完成订单预支付（准备测试数据）
+        LongIdentity shopId = LongIdentity.from(1L);
+        LongIdentity userId = LongIdentity.from(1L);
+        Order order = Order.createFor(shopId, userId);
+        SessionUser user = SessionUser.from(userId.value(), "oVsAw5cdcnIxaae-x98ShoH93Hu0");
+
+        order.addItem(LongIdentity.from(1L), 3);
+        order.addItem(LongIdentity.from(2L), 2);
+        order.addItem(LongIdentity.from(3L), 12);
+
+        orderManagingService.submitOrder(user, order);
+        orderAppService.prepay(order.getId().value());
+        entityManager.flush();
+
+        //when: 根据订单外部编号, 调用订单资源库进行订单重建
+        String orderNumber = order.getOrderNumber();
+        Order loadedOrder = orderRepository.findByOutTradeNo(orderNumber);
+
+        //then: 检查预支付是否成功
+        assertNotNull(loadedOrder);
+        assertNotNull(loadedOrder.getPayment().getPrepayId());
+        assertEquals(loadedOrder.getUserId(), userId);
+
+        assertEquals(loadedOrder.getTotalAmountFen(), 3*1000+990+10*9*300);
+
+        List<OrderItem> items = loadedOrder.getItems();
+        assertEquals(items.size(), 3);
+
+        OrderItem item1 = items.get(0);
+        assertEquals(item1.getProductId().value(), 1L);
+        assertEquals(item1.getPurchaseCount(), 3);
+        assertEquals(item1.getSubtotalFen(), 3000L);
+
+        OrderItem item2 = items.get(1);
+        assertEquals(item2.getProductId().value(), 2L);
+        assertEquals(item2.getPurchaseCount(), 1);
+        assertEquals(item2.getSubtotalFen(), 990L);
+
+        OrderItem item3 = items.get(2);
+        assertEquals(item3.getProductId().value(), 3L);
+        assertEquals(item3.getPurchaseCount(), 10);
+        assertEquals(item3.getSubtotalFen(), 27000L);
+    }
+
+    /**
+     * 任务级测试：生效订单——生效订单；（组合任务，领域服务）
+     * 按照先聚合再端口、先原子再组合、从内向外的原则。
+     * 10. 测试生效订单领域服务
+     * 10.1 支付成功，调用领域服务，对指定外部编号的订单完成生效操作，标记订单支付成功、支付时间等，并记录相关支付结果信息
+     * 10.2 支付失败，调用领域服务，对指定外部编号的订单完成生效操作，标记订单支付失败
+     */
+
+    // 10.1 支付成功，调用领域服务，对指定外部编号的订单完成生效操作，标记订单支付成功、支付时间等，并记录相关支付结果信息
+    @Test
+    @Transactional
+    @Rollback(true)
+    void should_make_order_effective_by_given_order_number_and_pay_succeed_info() {
+        //given: 使用领域服务先提交一个订单、并完成订单预支付（准备测试数据）,并模拟一个微信支付通知消息
+        LongIdentity shopId = LongIdentity.from(1L);
+        LongIdentity userId = LongIdentity.from(1L);
+        Order order = Order.createFor(shopId, userId);
+        SessionUser user = SessionUser.from(userId.value(), "oVsAw5cdcnIxaae-x98ShoH93Hu0");
+
+        order.addItem(LongIdentity.from(1L), 3);
+        order.addItem(LongIdentity.from(2L), 2);
+        order.addItem(LongIdentity.from(3L), 12);
+
+        orderManagingService.submitOrder(user, order);
+        orderAppService.prepay(order.getId().value());
+        entityManager.flush();
+
+        //when: 根据订单外部编号, 调用订单资源库进行订单重建
+        String orderNumber = order.getOrderNumber();
+        PayResult payResult = PayResult.builder()
+                .outTradeNo(orderNumber)
+                .success(true)
+                .payTime(LocalDateTime.now())
+                .transactionId("testTransactionId")
+                .cashFeeFen(order.getTotalAmountFen())
+                .resultMessage("testResultMessage")
+                .build();
+        Order effectiveOrder = orderManagingService.makeOrderEffectively(payResult);
+
+        //then: 检查订单是否生效成功
+        assertNotNull(effectiveOrder);
+        assertEquals(effectiveOrder.getStatus(), OrderStatus.PAID);
+        assertEquals(effectiveOrder.getUserId(), userId);
+        assertNotNull(effectiveOrder.getPayTime());
+        OrderPayment payment = order.getPayment();
+        assertNotNull(payment.getPrepayId());
+        assertNotNull(payment.getTransactionId());
+        assertEquals(payment.getCashFeeFen(), effectiveOrder.getTotalAmountFen());
+        assertNotNull(payment.getResultMessage());
+        assertNotNull(payment.getPayTime());
+        assertEquals(payment.getStatus(), PaymentStatus.SUCCESS);
+        assertNotNull(payment.getPayTime());
+
+        boolean found = false;
+        for (OrderOperLog operLog : effectiveOrder.getOperLogs()) {
+            if (operLog.getOperType().equals(OrderOperType.PAY)) {
+                found = true;
+                break;
+            }
+        }
+        assertTrue(found);
+    }
+
+    // 10.2 支付失败，调用领域服务，对指定外部编号的订单完成生效操作，标记订单支付失败
+    @Test
+    @Transactional
+    @Rollback(true)
+    void should_make_order_not_effective_by_given_order_number_and_pay_failed_info() {
+        //given: 使用领域服务先提交一个订单、完成订单预支付（准备测试数据）,并模拟一个支付成功结果
+        LongIdentity shopId = LongIdentity.from(1L);
+        LongIdentity userId = LongIdentity.from(1L);
+        Order order = Order.createFor(shopId, userId);
+        SessionUser user = SessionUser.from(userId.value(), "oVsAw5cdcnIxaae-x98ShoH93Hu0");
+
+        order.addItem(LongIdentity.from(1L), 3);
+        order.addItem(LongIdentity.from(2L), 2);
+        order.addItem(LongIdentity.from(3L), 12);
+
+        orderManagingService.submitOrder(user, order);
+        orderAppService.prepay(order.getId().value());
+        entityManager.flush();
+
+        //when: 根据订单外部编号, 调用订单资源库进行订单重建
+        String orderNumber = order.getOrderNumber();
+        PayResult payResult = PayResult.builder()
+                .outTradeNo(orderNumber)
+                .success(false)
+                .build();
+        Order effectiveOrder = orderManagingService.makeOrderEffectively(payResult);
+
+        //then: 检查订单是否生效成功
+        assertNotNull(effectiveOrder);
+        assertEquals(effectiveOrder.getStatus(), OrderStatus.TO_PAY);
+        assertEquals(effectiveOrder.getUserId(), userId);
+        assertNull(effectiveOrder.getPayTime());
+        OrderPayment payment = order.getPayment();
+        assertNotNull(payment.getPrepayId());
+        assertNull(payment.getTransactionId());
+        assertNull(payment.getCashFeeFen());
+        assertNull(payment.getResultMessage());
+        assertNull(payment.getPayTime());
+        assertEquals(payment.getStatus(), PaymentStatus.FAILED);
+        assertNull(payment.getPayTime());
+
+        boolean found = false;
+        for (OrderOperLog operLog : effectiveOrder.getOperLogs()) {
+            if (operLog.getOperType().equals(OrderOperType.PAY)) {
+                found = true;
+                break;
+            }
+        }
+        assertFalse(found);
+    }
+
+    @Autowired
+    private WxPayService wxPayService;
+
+    /**
+     * 服务级测试：生效订单——处理微信支付通知；（组合任务，应用服务）
+     * 11. 测试订单应用服务处理微信支付通知接口，测试案例包括：
+     * 11.1 处理微信支付通知消息成功，订单被标记为支付成功状态
+     */
+    @Test
+    @Transactional
+    @Rollback(true)
+    void should_handle_wepay_notification_success()  {
+        //given: 使用领域服务先提交一个订单、完成订单预支付（准备测试数据）,并模拟一个微信支付通知消息
+        LongIdentity shopId = LongIdentity.from(1L);
+        LongIdentity userId = LongIdentity.from(1L);
+        Order order = Order.createFor(shopId, userId);
+        SessionUser user = SessionUser.from(userId.value(), "oVsAw5cdcnIxaae-x98ShoH93Hu0");
+
+        order.addItem(LongIdentity.from(1L), 3);
+        order.addItem(LongIdentity.from(2L), 2);
+        order.addItem(LongIdentity.from(3L), 12);
+
+        orderManagingService.submitOrder(user, order);
+        orderAppService.prepay(order.getId().value());
+        entityManager.flush();
+
+        OrderPayment payment = order.getPayment();
+
+        XStream xstream = XStreamInitializer.getInstance();
+        xstream.processAnnotations(WxPayUnifiedOrderRequest.class);
+        WxPayUnifiedOrderRequest prepayRequest =
+                (WxPayUnifiedOrderRequest)xstream.fromXML(payment.getRequestMessage());
+        WxPayOrderNotifyResult notifyResult = new WxPayOrderNotifyResult();
+        notifyResult.setResultCode("SUCCESS");
+        notifyResult.setReturnCode("SUCCESS");
+        notifyResult.setAppid(prepayRequest.getAppid());
+        notifyResult.setMchId(prepayRequest.getMchId());
+        notifyResult.setDeviceInfo(prepayRequest.getDeviceInfo());
+        notifyResult.setNonceStr(prepayRequest.getNonceStr());
+        notifyResult.setSignType(prepayRequest.getSignType());
+        notifyResult.setOpenid(prepayRequest.getOpenid());
+        notifyResult.setTradeType(prepayRequest.getTradeType());
+        notifyResult.setBankType("CMB_DEBIT");
+        notifyResult.setTotalFee(prepayRequest.getTotalFee());
+        notifyResult.setSettlementTotalFee(prepayRequest.getTotalFee());
+        notifyResult.setFeeType("CNY");
+        notifyResult.setCashFee(prepayRequest.getTotalFee());
+        notifyResult.setCashFeeType("CNY");
+        notifyResult.setTransactionId("1004400740201409030005092168");
+        notifyResult.setOutTradeNo(payment.getOrder().getOrderNumber());
+        notifyResult.setAttach(prepayRequest.getAttach());
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+        notifyResult.setTimeEnd(formatter.format(now));
+        notifyResult.setVersion(prepayRequest.getVersion());
+        String resultSign = SignUtils.createSign(notifyResult, prepayRequest.getSignType(),
+                wxPayService.getConfig().getMchKey(), null);
+        notifyResult.setSign(resultSign);
+
+
+        //when: 调用OrderAppService
+        String result = orderAppService.handleWxPayNotify(new OrderPayResultRequest(notifyResult));
+
+        //then: 支付处理结果正确
+        xstream = XStreamInitializer.getInstance();
+        xstream.processAnnotations(WxPayNotifyResponse.class);
+        WxPayNotifyResponse response = (WxPayNotifyResponse)xstream.fromXML(result);
+        assertEquals(response.getReturnCode(), "SUCCESS");
+        assertEquals(order.getStatus(), OrderStatus.PAID);
+        assertEquals(order.getPayment().getCashFeeFen(), order.getTotalAmountFen());
+        List<OrderOperLog> operLogs = order.getOperLogs();
+        boolean found = false;
+        for (OrderOperLog operLog : operLogs) {
+            if (operLog.getOperType().equals(OrderOperType.PAY)) {
+                found = true;
+                break;
+            }
+        }
+        assertTrue(found);
+
+    }
 
 }

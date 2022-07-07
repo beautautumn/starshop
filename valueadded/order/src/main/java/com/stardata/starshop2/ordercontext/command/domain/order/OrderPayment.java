@@ -31,19 +31,41 @@ public class OrderPayment {
     @JoinColumn(name = "order_id", referencedColumnName = "id")
     Order order;
 
+    //支付记录归属用户ID
     @Embedded
     private LongIdentity userId;
 
+    //订单支付类型
     @Type(type="com.stardata.starshop2.ordercontext.command.usertype.PaymentTypeUserType")
     private PaymentType payType;
 
+    //支付记录状态
     @Type(type="com.stardata.starshop2.ordercontext.command.usertype.PaymentStatusUserType")
+    @Setter
     private PaymentStatus status;
 
-    private String requestMessage;
-
+    //支付平台支付交易号
     @Setter
     private String prepayId;
+
+    //支付平台支付交易号
+    @Setter
+    private String transactionId;
+
+    //支付现金金额（分）
+    @Setter
+    private Long cashFeeFen;
+
+    //支付平台请求报文
+    private String requestMessage;
+
+    //支付平台支付结果报文
+    @Setter
+    private String resultMessage;
+
+    //支付时间
+    @Setter
+    private LocalDateTime payTime;
 
     @Column(updatable = false)
     @CreationTimestamp

@@ -54,7 +54,7 @@ public class OrderManagingService {
 
     public Order makeOrderEffectively(PayResult payResult) {
         Order order = orderRepository.findByOutTradeNo(payResult.getOutTradeNo());
-        order.makeEffectively();
+        order.makeEffective(payResult);
         orderRepository.update(order);
         return order;
     }

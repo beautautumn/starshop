@@ -40,24 +40,40 @@ public class Order extends AbstractEntity<LongIdentity> implements AggregateRoot
     @EmbeddedId
     private LongIdentity id;
 
+    //归属店铺ID
     @Embedded
     private LongIdentity shopId;
 
+    //归属用户ID
     @Embedded
     private LongIdentity userId;
 
 
+    /**
+     * 订单类型
+     * 1：店铺订单；2：店铺子订单（用于品牌商接收订单）；3：接龙订单；4：接龙子订单（用于品牌商接收订单）；
+     */
     @Type(type="com.stardata.starshop2.ordercontext.command.usertype.OrderTypeUserType")
     private OrderType type;
 
+    //订单总额（分）
     private Long totalAmountFen;
 
+    //订单编号，规则：年月日（YYYYMMDD）+门店编号（4位）+该门店当天下单序号（4位）
     private String orderNumber;
 
+    //订单付款时间
+    private LocalDateTime payTime;
+
+    //订单操作日志列表
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "order_id", referencedColumnName = "id")
     List<OrderOperLog> operLogs = new ArrayList<>();
 
+    /**
+     * 订单状态
+     * 1：待支付；2：已支付；3：已配货；4：已发货；5：已结束；6：已取消；
+     */
     @Type(type="com.stardata.starshop2.ordercontext.command.usertype.OrderStatusUserType")
     private OrderStatus status;
 
@@ -69,14 +85,15 @@ public class Order extends AbstractEntity<LongIdentity> implements AggregateRoot
     LocalDateTime updateTime;
 
 
+    //订单支付记录
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "id", referencedColumnName = "order_id")
     private OrderPayment payment;
 
+    //订单项列表
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "order_id", referencedColumnName = "id")
     private final List<OrderItem> items = new ArrayList<>();
-
 
     @Override
     public LongIdentity id() {
@@ -143,15 +160,21 @@ public class Order extends AbstractEntity<LongIdentity> implements AggregateRoot
         this.operLogs.add(operLog);
     }
 
+    public void makeEffective(PayResult payResult) {
+        this.payment.setResultMessage(payResult.getResultMessage());
+        if (payResult.isSuccess()) {
+            this.status = OrderStatus.PAID;
+            this.payTime = payResult.getPayTime();
+            this.payment.setTransactionId(payResult.getTransactionId());
+            this.payment.setCashFeeFen(payResult.getCashFeeFen());
+            this.payment.setPayTime(payResult.getPayTime());
+            this.payment.setStatus(PaymentStatus.SUCCESS);
 
-
-    public String getBriefDescription() {
-        //todo 完成订单简要描述字段生成
-        return null;
-    }
-
-    public void makeEffectively() {
-        //todo 完成订单生效方法
+            this.recordOperLog(this.userId, OrderOperType.PAY, null);
+        } else {
+            this.status = OrderStatus.TO_PAY;
+            this.payment.setStatus(PaymentStatus.FAILED);
+        }
     }
 
     public void close() {
@@ -164,6 +187,11 @@ public class Order extends AbstractEntity<LongIdentity> implements AggregateRoot
 
     public void cancel() {
         //todo 完成订单取消方法
+    }
+
+    public String getBriefDescription() {
+        //todo 完成订单简要描述字段生成
+        return null;
     }
 
 

@@ -6,6 +6,9 @@ import com.thoughtworks.xstream.XStream;
 import lombok.Data;
 import me.chanjar.weixin.common.util.xml.XStreamInitializer;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 /**
  * @author Samson Shu
  * @version 1.0
@@ -16,16 +19,19 @@ import me.chanjar.weixin.common.util.xml.XStreamInitializer;
 public class OrderPayResultRequest {
     private final String outTradeNo;
     private final String transactionId;
-    private final String payTimeStr;
-    private final int cashFeeFen;
+    private final LocalDateTime payTime;
+    private final long cashFeeFen;
     private final String resultMessage;
+    private final boolean success;
 
     public OrderPayResultRequest(WxPayOrderNotifyResult notifyResult) {
 
         this.outTradeNo = notifyResult.getOutTradeNo();
         this.transactionId = notifyResult.getTransactionId();
-        this.payTimeStr = notifyResult.getTimeEnd();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+        this.payTime = LocalDateTime.parse(notifyResult.getTimeEnd(), formatter);
         this.cashFeeFen = notifyResult.getCashFee()==null?0:notifyResult.getCashFee();
+        this.success = notifyResult.getResultCode().equals("SUCCESS");
 
         XStream xstream = XStreamInitializer.getInstance();
         xstream.processAnnotations(notifyResult.getClass());
@@ -33,8 +39,7 @@ public class OrderPayResultRequest {
 
     }
 
-    public PayResult toWxPayResult() {
-        //todo 完成根据微信支付DTO创建微信支付值对象的工厂方法
-        return null;
+    public PayResult toPayResult() {
+        return OrderPayResultRequestMapper.INSTANCE.convert(this);
     }
 }

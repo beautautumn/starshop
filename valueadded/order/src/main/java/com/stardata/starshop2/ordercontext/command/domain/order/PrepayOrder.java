@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Map;
+
 /**
  * @author Samson Shu
  * @version 1.0
@@ -22,6 +24,6 @@ public class PrepayOrder {
     private String appId;
     private String prepayId;
 
-    //具体平台要求的结果，保存到一个JSON串中
-    private String appJsonResult;
+    //具体平台要求的结果，保存到一个Map列表中
+    private Map<String,String> appResult;
 }

@@ -39,7 +39,7 @@ public class OrderRepositoryJpaAdapter  implements OrderRepository {
     @Override
     public Order findByOutTradeNo(String outTradeNo) {
         Specification<Order> specification = (root, criteriaQuery, criteriaBuilder) ->
-                criteriaBuilder.equal(root.get("order_number"), outTradeNo);
+                criteriaBuilder.equal(root.get("orderNumber"), outTradeNo);
 
         List<Order> orders = repository.findBy(specification);
         return orders.size()>0?orders.get(0): null;

@@ -1,6 +1,6 @@
 package com.stardata.starshop2.ordercontext.command.pl;
 
-import com.stardata.starshop2.ordercontext.command.domain.order.PrepayOrder;
+import com.stardata.starshop2.ordercontext.command.domain.order.PayResult;
 import com.stardata.starshop2.sharedcontext.pl.MapStructBaseMapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
@@ -12,8 +12,8 @@ import org.mapstruct.factory.Mappers;
  * @date 2022/7/2 11:36
  */
 @Mapper
-public interface PrepayOrderResponseMapper extends MapStructBaseMapper {
-    PrepayOrderResponseMapper INSTANCE = Mappers.getMapper(PrepayOrderResponseMapper.class);
+public interface OrderPayResultRequestMapper extends MapStructBaseMapper {
+    OrderPayResultRequestMapper INSTANCE = Mappers.getMapper(OrderPayResultRequestMapper.class);
 
-    PrepayOrderResponse convert(PrepayOrder prepay);
+    PayResult convert(OrderPayResultRequest request);
 }

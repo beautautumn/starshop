@@ -46,7 +46,7 @@ public class OrderAppService {
 
     public String handleWxPayNotify(OrderPayResultRequest request) {
         try {
-            PayResult payResult = request.toWxPayResult();
+            PayResult payResult = request.toPayResult();
             Order order = managingService.makeOrderEffectively(payResult);
 
             OrderPaidEvent orderEvent = new OrderPaidEvent(order);

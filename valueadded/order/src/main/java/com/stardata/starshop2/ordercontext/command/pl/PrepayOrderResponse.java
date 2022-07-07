@@ -3,6 +3,8 @@ package com.stardata.starshop2.ordercontext.command.pl;
 import com.stardata.starshop2.ordercontext.command.domain.order.PrepayOrder;
 import lombok.Data;
 
+import java.util.Map;
+
 /**
  * @author Samson Shu
  * @version 1.0
@@ -12,7 +14,7 @@ import lombok.Data;
 @Data
 public class PrepayOrderResponse {
     private String prepayId;
-    private String appJsonResult;
+    private Map<String,String> appResult;
 
     public static PrepayOrderResponse from(PrepayOrder prepay) {
         return PrepayOrderResponseMapper.INSTANCE.convert(prepay);
