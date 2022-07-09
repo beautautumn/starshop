@@ -29,9 +29,9 @@ spring:
       USE_BIG_DECIMAL_FOR_FLOATS: true
 wx:
   pay:
-    appId: wxaa0eca4be4ff2b3c
-    mchId: 1600639346
-    mchKey: lx8rBPIrBO3WeqhQyE216ZeaIlBtaF1H
+    appId: someappid #换成你自己的appid
+    mchId: 1224234 #换成你自己的微信支付mchId
+    mchKey: somekey #换成你自己的微信支付mchKey
     #subAppId: #服务商模式下的子商户公众账号ID
     #subMchId: #服务商模式下的子商户号
     keyPath: classpath:apiclient_cert.p12
