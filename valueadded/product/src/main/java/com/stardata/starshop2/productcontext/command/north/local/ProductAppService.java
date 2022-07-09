@@ -1,9 +1,9 @@
 package com.stardata.starshop2.productcontext.command.north.local;
 
 import com.stardata.starshop2.productcontext.command.domain.ProductManagingService;
-import com.stardata.starshop2.productcontext.command.domain.productcategory.ProductSettlement;
 import com.stardata.starshop2.productcontext.command.domain.ProductSettlementService;
 import com.stardata.starshop2.productcontext.command.domain.product.Product;
+import com.stardata.starshop2.productcontext.command.domain.productcategory.ProductSettlement;
 import com.stardata.starshop2.productcontext.command.pl.ProductResponse;
 import com.stardata.starshop2.productcontext.command.pl.ProductSettlementRequest;
 import com.stardata.starshop2.productcontext.command.pl.ProductSettlementResponse;
@@ -11,7 +11,7 @@ import com.stardata.starshop2.sharedcontext.domain.LongIdentity;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.Map;
 
 /**
  * @author Samson Shu
@@ -30,7 +30,7 @@ public class ProductAppService {
     }
 
     public ProductSettlementResponse calcSettlement(ProductSettlementRequest request) {
-        List<ProductSettlement> settlements = settlementService.calcSettlement(request.composeToMap());
+        Map<LongIdentity, ProductSettlement> settlements = settlementService.calcSettlement(request.composeToMap());
         return ProductSettlementResponse.from(settlements);
     }
 

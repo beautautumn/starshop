@@ -3,6 +3,7 @@ package com.stardata.starshop2.sharedcontext.domain;
 import cn.hutool.core.lang.Snowflake;
 import cn.hutool.core.net.NetUtil;
 import cn.hutool.core.util.IdUtil;
+import org.jetbrains.annotations.NotNull;
 
 import javax.persistence.Embeddable;
 import java.util.Objects;
@@ -15,7 +16,7 @@ import java.util.Random;
  * @date 2022/5/20 11:26
  */
 @Embeddable
-public class LongIdentity implements Identity<Long>{
+public class LongIdentity implements Identity<Long>, Comparable<Object>{
     private long id;
 
     protected LongIdentity(long id) {
@@ -77,4 +78,14 @@ public class LongIdentity implements Identity<Long>{
         return String.valueOf(this.id);
     }
 
+    @Override
+    public int compareTo(@NotNull Object o) {
+        if (o instanceof LongIdentity other ) {
+            return (int)(this.id - other.id);
+        }
+        if (o instanceof Long other ) {
+            return (int)(this.id - other);
+        }
+        return -1;
+    }
 }

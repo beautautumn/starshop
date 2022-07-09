@@ -12,8 +12,6 @@ import com.stardata.starshop2.authcontext.pl.WxLoginRequest;
 import com.stardata.starshop2.authcontext.south.port.LoginLogRepository;
 import com.stardata.starshop2.authcontext.south.port.UserRepository;
 import com.stardata.starshop2.sharedcontext.domain.LongIdentity;
-import javax.annotation.Resource;
-import javax.persistence.EntityManager;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
@@ -24,6 +22,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
+import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -612,7 +612,7 @@ class AuthLoginTests {
         // given: 准备好输入数据
         String code = "081sloll28T8d94nl8nl2hxKhh3slolv";
         String rawData = "{\"nickName\":\"深清秋\",\"gender\":0,\"language\":\"zh_CN\",\"city\":\"\",\"province\":\"\",\"country\":\"\",\"avatarUrl\":\"https://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTKq2CRmib1mpu4hOFYtcIHgAmS7DicCEfYkUHoPmPQn74BXH5GerjoMOxIqib7iafNNBw2ZAicBj6gZGUQ/132\"}";
-        String signature = "06846a4ba8b003af5d98fadfaf376a652e5d75d7";
+        String signature = "06846a4ba8b003af5d98fadfaf376a652e5d75d";
 
         WxLoginRequest request = new WxLoginRequest();
         request.setCode(code);

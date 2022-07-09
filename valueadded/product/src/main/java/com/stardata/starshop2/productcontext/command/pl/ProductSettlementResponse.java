@@ -1,9 +1,10 @@
 package com.stardata.starshop2.productcontext.command.pl;
 
 import com.stardata.starshop2.productcontext.command.domain.productcategory.ProductSettlement;
+import com.stardata.starshop2.sharedcontext.domain.LongIdentity;
 import lombok.Data;
 
-import java.util.List;
+import java.util.Map;
 
 /**
  * @author Samson Shu
@@ -13,7 +14,7 @@ import java.util.List;
  */
 @Data
 public class ProductSettlementResponse {
-    public static ProductSettlementResponse from(List<ProductSettlement> settlements) {
+    public static ProductSettlementResponse from(Map<LongIdentity, ProductSettlement> settlements) {
         //todo 商品价格结算map转DTO
         return null;
     }

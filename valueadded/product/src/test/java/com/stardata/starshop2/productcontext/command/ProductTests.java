@@ -21,10 +21,7 @@ import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -32,6 +29,7 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * @author Samson Shu
  * @version 1.0
+ * @email shush@stardata.top
  * @email shush@stardata.top
  * @date 2022/6/4 23:53
  */
@@ -459,6 +457,7 @@ public class ProductTests {
         assertEquals(settlement3, emptySettlement3);
     }
 
+
     /**
      * 任务级测试：对多个商品ID、下单数量进行结算
      * 按照先聚合再端口、先原子再组合、从内向外的原则。
@@ -523,23 +522,23 @@ public class ProductTests {
         productCountsMap.put(product1.getId(), 5);
         productCountsMap.put(product2.getId(), 5);
         productCountsMap.put(product3.getId(), 5);
-        List<ProductSettlement> settlements = settlementService.calcSettlement(productCountsMap);
+        Map<LongIdentity, ProductSettlement> settlements = settlementService.calcSettlement(productCountsMap);
 
         //then: 所有商品的结算总价正确、各商品结算数量和价格正确
-        long totalPriceFen = settlements.stream().mapToLong(ProductSettlement::settlePriceFen).sum();
+        long totalPriceFen = settlements.values().stream().mapToLong(ProductSettlement::settlePriceFen).sum();
         assertEquals(totalPriceFen, (5000+990+15000));
 
         ProductSettlement settlement1 = new ProductSettlement(product1, 5000L, 5,
                 new BigDecimal("2.5"), true);
-        assertEquals(settlements.get(0), settlement1);
+        assertEquals( settlement1, settlements.get(product1.getId()));
 
         ProductSettlement settlement2 = new ProductSettlement(product2,990L, 1,
-                new BigDecimal("1.0"), true);
-        assertEquals(settlements.get(1), settlement2);
+                new BigDecimal("1"), true);
+        assertEquals( settlement2, settlements.get(product2.getId()));
 
         ProductSettlement settlement3 = new ProductSettlement(product3,15000L, 5,
                 new BigDecimal("5.0"), true);
-        assertEquals(settlements.get(2), settlement3);
+        assertEquals( settlement3, settlements.get(product3.getId()));
     }
 
     //3.2. 根据多个已有产品的id（其中有的id对应的产品不存在）、下单数量，正确完成结算；
@@ -596,22 +595,22 @@ public class ProductTests {
         productCountsMap.put(product1.getId(), 5);
         productCountsMap.put(product2.getId(), 5);
         productCountsMap.put(product3.getId(), 5);
-        List<ProductSettlement> settlements = settlementService.calcSettlement(productCountsMap);
+        Map<LongIdentity, ProductSettlement> settlements = settlementService.calcSettlement(productCountsMap);
 
         //then: 所有商品的结算总价正确、各商品结算数量和价格正确
-        long totalPriceFen = settlements.stream().mapToLong(ProductSettlement::settlePriceFen).sum();
+        long totalPriceFen = settlements.values().stream().mapToLong(ProductSettlement::settlePriceFen).sum();
         assertEquals(totalPriceFen, (5000+990));
 
         ProductSettlement settlement1 = new ProductSettlement(product1, 5000L, 5,
                 new BigDecimal("2.5"), true);
-        assertEquals(settlements.get(0), settlement1);
+        assertEquals( settlement1, settlements.get(product1.getId()));
 
         ProductSettlement settlement2 = new ProductSettlement(product2,990L, 1,
                 new BigDecimal("1.0"), true);
-        assertEquals(settlements.get(1), settlement2);
+        assertEquals( settlement2, settlements.get(product2.getId()));
 
         ProductSettlement settlement3 = new ProductSettlement(product3,0, 0,
                 new BigDecimal("0.0"), false);
-        assertEquals(settlements.get(2), settlement3);
+        assertEquals( settlement3, settlements.get(product3.getId()));
     }
 }

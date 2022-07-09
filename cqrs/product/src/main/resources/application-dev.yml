@@ -1,0 +1,47 @@
+server:
+  port: 8082
+  servlet:
+    context-path: /
+    encoding:
+      force-response: true
+  tomcat:
+    uri-encoding: utf-8
+
+spring:
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/starshop_test?useSSL=false&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true
+    username: root
+    password: root
+  jpa:
+    open_in_view: false
+    show_sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+    default-property-inclusion: non_null
+    deserialization:
+      FAIL_ON_UNKNOWN_PROPERTIES: false
+      USE_BIG_DECIMAL_FOR_FLOATS: true
+logging:
+  level:
+    root: warn
+    org.springframework.web: info
+    cn.binarywang.wx.miniapp: debug
+    com.stardata.starshop2: trace
+  pattern:
+    console: '%p%m%n'
+mybatis-plus:
+  global-config:
+    db-config:
+      logic-delete-field: isValid
+      logic-delete-value: 0
+      logic-not-delete-value: 1
+      table-prefix: tb_
+      id-type: assign_id
+
+

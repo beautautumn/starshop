@@ -8,7 +8,7 @@ import lombok.AllArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -23,14 +23,14 @@ import java.util.Map;
 public class ProductSettlementService {
     private  final ProductRepository repository;
 
-    public List<ProductSettlement> calcSettlement(@NotNull Map<LongIdentity, Integer> productCountsMap) {
+    public Map<LongIdentity, ProductSettlement> calcSettlement(@NotNull Map<LongIdentity, Integer> productCountsMap) {
         List<Product> products = repository.instancesOf(productCountsMap.keySet());
 
-        List<ProductSettlement> result = new ArrayList<>();
+        Map<LongIdentity, ProductSettlement> result = new HashMap<>();
         for (Product product : products) {
             int count = productCountsMap.get(product.getId());
             ProductSettlement settlement = product.settlePrice(count);
-            result.add(settlement);
+            result.put(product.getId(), settlement);
         }
         return result;
     }

@@ -68,8 +68,8 @@ public class ProductSettlement {
         // 结算商品购买数量，只支持3位小数
         BigDecimal thousand = new BigDecimal(1000);
 
-        return (other.productId.equals(this.productId)) &&
-                (other.productName.equals(this.productName)) &&
+        return  other.productId.equals(this.productId) &&
+                other.productName.equals(this.productName) &&
                 (other.available == this.available) &&
                 (other.settlePriceFen == this.settlePriceFen) &&
                 (other.orderCount == this.orderCount) &&
