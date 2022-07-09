@@ -32,3 +32,8 @@ build/
 
 ### VS Code ###
 .vscode/
+
+
+## test and production configuration
+**/application-test.yml
+**/application-prod.yml
