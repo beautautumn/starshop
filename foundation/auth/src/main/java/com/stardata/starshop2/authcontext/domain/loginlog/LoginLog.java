@@ -4,9 +4,9 @@ import com.stardata.starshop2.authcontext.domain.user.User;
 import com.stardata.starshop2.sharedcontext.domain.AbstractEntity;
 import com.stardata.starshop2.sharedcontext.domain.AggregateRoot;
 import com.stardata.starshop2.sharedcontext.domain.LongIdentity;
-import jakarta.persistence.*;
 import lombok.Getter;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 /**

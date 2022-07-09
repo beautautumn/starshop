@@ -5,7 +5,6 @@ import com.stardata.starshop2.sharedcontext.domain.AggregateRoot;
 import com.stardata.starshop2.sharedcontext.domain.LongIdentity;
 import com.stardata.starshop2.sharedcontext.domain.MobileNumber;
 import com.stardata.starshop2.sharedcontext.helper.Constants;
-import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,6 +12,7 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.Where;
 
+import javax.persistence.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.LocalDateTime;

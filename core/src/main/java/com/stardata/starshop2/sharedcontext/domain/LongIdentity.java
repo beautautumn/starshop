@@ -3,8 +3,8 @@ package com.stardata.starshop2.sharedcontext.domain;
 import cn.hutool.core.lang.Snowflake;
 import cn.hutool.core.net.NetUtil;
 import cn.hutool.core.util.IdUtil;
-import jakarta.persistence.Embeddable;
 
+import javax.persistence.Embeddable;
 import java.util.Objects;
 import java.util.Random;
 

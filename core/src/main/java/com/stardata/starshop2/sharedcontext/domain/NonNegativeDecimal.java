@@ -1,7 +1,7 @@
 package com.stardata.starshop2.sharedcontext.domain;
 
 import com.stardata.starshop2.sharedcontext.exception.DomainException;
-import jakarta.persistence.Embeddable;
+import javax.persistence.Embeddable;
 
 import java.math.BigDecimal;
 

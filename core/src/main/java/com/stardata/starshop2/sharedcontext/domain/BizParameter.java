@@ -1,7 +1,11 @@
 package com.stardata.starshop2.sharedcontext.domain;
 
-import jakarta.persistence.*;
 import lombok.Getter;
+
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 
 /**
  * @author Samson Shu

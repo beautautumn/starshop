@@ -10,15 +10,16 @@ import com.stardata.starshop2.authcontext.pl.WxEncryptedUserInfo;
 import com.stardata.starshop2.authcontext.south.port.UserRepository;
 import com.stardata.starshop2.sharedcontext.domain.LongIdentity;
 import com.stardata.starshop2.sharedcontext.domain.MobileNumber;
-import com.stardata.starshop2.sharedcontext.exception.ApplicationValidationException;
 import com.stardata.starshop2.sharedcontext.domain.SessionUser;
-import jakarta.annotation.Resource;
-import jakarta.persistence.EntityManager;
-import jakarta.transaction.Transactional;
+import com.stardata.starshop2.sharedcontext.exception.ApplicationValidationException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
+
+import javax.annotation.Resource;
+import javax.persistence.EntityManager;
+import javax.transaction.Transactional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;

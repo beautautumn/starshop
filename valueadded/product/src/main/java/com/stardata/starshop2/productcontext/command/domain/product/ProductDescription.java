@@ -1,7 +1,8 @@
 package com.stardata.starshop2.productcontext.command.domain.product;
 
-import jakarta.persistence.Embeddable;
 import lombok.Getter;
+
+import javax.persistence.Embeddable;
 
 /**
  * @author Samson Shu

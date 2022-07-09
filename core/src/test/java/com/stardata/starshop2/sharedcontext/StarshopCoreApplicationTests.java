@@ -1,8 +1,9 @@
 package com.stardata.starshop2.sharedcontext;
 
-import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import javax.transaction.Transactional;
 
 @SpringBootTest
 class StarshopCoreApplicationTests {

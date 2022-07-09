@@ -1,9 +1,9 @@
 package com.stardata.starshop2.sharedcontext.domain;
 
 import com.stardata.starshop2.sharedcontext.exception.ApplicationValidationException;
-import jakarta.persistence.Embeddable;
 import lombok.Getter;
 
+import javax.persistence.Embeddable;
 import java.io.Serializable;
 import java.util.regex.Pattern;
 

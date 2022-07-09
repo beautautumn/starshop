@@ -1,10 +1,10 @@
 package com.stardata.starshop2.ordercontext.command.domain.order;
 
 import com.stardata.starshop2.sharedcontext.domain.LongIdentity;
-import jakarta.persistence.*;
 import lombok.Getter;
 import org.hibernate.annotations.Type;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 /**

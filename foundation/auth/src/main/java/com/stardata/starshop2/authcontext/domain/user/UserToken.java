@@ -1,7 +1,7 @@
 package com.stardata.starshop2.authcontext.domain.user;
 
 import com.stardata.starshop2.sharedcontext.helper.CharUtil;
-import jakarta.persistence.Embeddable;
+import javax.persistence.Embeddable;
 import lombok.Getter;
 
 import java.io.Serializable;

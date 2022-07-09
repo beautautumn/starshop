@@ -2,11 +2,11 @@ package com.stardata.starshop2.productcontext.command.domain.product;
 
 import com.stardata.starshop2.sharedcontext.domain.NonNegativeDecimal;
 import com.stardata.starshop2.sharedcontext.domain.PriceFen;
-import jakarta.persistence.Embeddable;
-import jakarta.persistence.Embedded;
 import lombok.Getter;
 import org.hibernate.annotations.Type;
 
+import javax.persistence.Embeddable;
+import javax.persistence.Embedded;
 import java.math.BigDecimal;
 
 /**

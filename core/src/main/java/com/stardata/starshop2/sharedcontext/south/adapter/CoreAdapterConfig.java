@@ -2,11 +2,12 @@ package com.stardata.starshop2.sharedcontext.south.adapter;
 
 import com.stardata.starshop2.sharedcontext.domain.BizParameter;
 import com.stardata.starshop2.sharedcontext.domain.StringIdentity;
-import jakarta.annotation.Resource;
-import jakarta.persistence.EntityManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+
+import javax.annotation.Resource;
+import javax.persistence.EntityManager;
 
 /**
  * @author Samson Shu

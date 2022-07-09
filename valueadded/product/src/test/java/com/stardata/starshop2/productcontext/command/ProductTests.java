@@ -1,25 +1,25 @@
 package com.stardata.starshop2.productcontext.command;
 
-import com.stardata.starshop2.productcontext.command.domain.productcategory.ProductSettlement;
 import com.stardata.starshop2.productcontext.command.domain.ProductSettlementService;
 import com.stardata.starshop2.productcontext.command.domain.product.Product;
 import com.stardata.starshop2.productcontext.command.domain.product.ProductDiscount;
 import com.stardata.starshop2.productcontext.command.domain.product.ProductUoM;
 import com.stardata.starshop2.productcontext.command.domain.productcategory.ProductCategory;
+import com.stardata.starshop2.productcontext.command.domain.productcategory.ProductSettlement;
 import com.stardata.starshop2.productcontext.command.south.port.ProductCategoryRepository;
 import com.stardata.starshop2.productcontext.command.south.port.ProductRepository;
 import com.stardata.starshop2.sharedcontext.domain.LongIdentity;
 import com.stardata.starshop2.sharedcontext.domain.NonNegativeDecimal;
 import com.stardata.starshop2.sharedcontext.domain.NonNegativeInteger;
 import com.stardata.starshop2.sharedcontext.domain.PriceFen;
-import jakarta.annotation.Resource;
-import jakarta.persistence.EntityManager;
-import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 
+import javax.annotation.Resource;
+import javax.persistence.EntityManager;
+import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;

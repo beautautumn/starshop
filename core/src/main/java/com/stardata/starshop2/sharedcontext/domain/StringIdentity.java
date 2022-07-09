@@ -1,6 +1,6 @@
 package com.stardata.starshop2.sharedcontext.domain;
 
-import jakarta.persistence.Embeddable;
+import javax.persistence.Embeddable;
 
 /**
  * @author Samson Shu

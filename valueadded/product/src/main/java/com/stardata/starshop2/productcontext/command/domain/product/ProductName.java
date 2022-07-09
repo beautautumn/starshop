@@ -1,9 +1,9 @@
 package com.stardata.starshop2.productcontext.command.domain.product;
 
 import com.stardata.starshop2.sharedcontext.exception.InvalidFieldValueException;
-import jakarta.persistence.Embeddable;
 import org.apache.commons.lang3.StringUtils;
 
+import javax.persistence.Embeddable;
 import java.util.Objects;
 
 /**

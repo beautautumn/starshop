@@ -3,16 +3,16 @@ package com.stardata.starshop2.sharedcontext.south.adapter;
 import com.stardata.starshop2.sharedcontext.domain.AggregateRoot;
 import com.stardata.starshop2.sharedcontext.domain.Identity;
 import com.stardata.starshop2.sharedcontext.exception.InitializedEntityManagerException;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.TypedQuery;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Predicate;
-import jakarta.persistence.criteria.Root;
-import jakarta.transaction.TransactionScoped;
 import lombok.SneakyThrows;
 import org.springframework.data.jpa.domain.Specification;
 
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import javax.transaction.TransactionScoped;
 import java.util.Collection;
 import java.util.List;
 

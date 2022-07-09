@@ -8,7 +8,6 @@ import com.stardata.starshop2.sharedcontext.exception.DomainException;
 import com.stardata.starshop2.sharedcontext.helper.BooleanCharConverter;
 import com.stardata.starshop2.sharedcontext.helper.Constants;
 import com.stardata.starshop2.sharedcontext.helper.JSONUtil;
-import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,6 +16,7 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.Where;
 
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;

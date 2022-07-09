@@ -3,7 +3,7 @@ package com.stardata.starshop2.ordercontext.command.domain.shoppingcart;
 import com.stardata.starshop2.sharedcontext.domain.AbstractEntity;
 import com.stardata.starshop2.sharedcontext.domain.AggregateRoot;
 import com.stardata.starshop2.sharedcontext.domain.LongIdentity;
-import jakarta.persistence.*;
+import javax.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
