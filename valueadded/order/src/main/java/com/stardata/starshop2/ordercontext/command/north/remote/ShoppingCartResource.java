@@ -5,6 +5,7 @@ import com.stardata.starshop2.sharedcontext.domain.SessionUser;
 import com.stardata.starshop2.ordercontext.command.north.local.ShoppingCartAppService;
 import com.stardata.starshop2.ordercontext.command.pl.ShoppingCartRequest;
 import com.stardata.starshop2.ordercontext.command.pl.ShoppingCartResponse;
+import com.stardata.starshop2.sharedcontext.north.Resources;
 import io.swagger.annotations.Api;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -28,14 +29,20 @@ public class ShoppingCartResource {
     public ResponseEntity<ShoppingCartResponse> save(@LoginUser SessionUser loginUser,
                                                                  @PathVariable Long shopId, ShoppingCartRequest request)
     {
-        ShoppingCartResponse response = appService.save(loginUser, shopId, request);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return Resources.with("save shopping cart")
+                .onSuccess(HttpStatus.OK)
+                .onError(HttpStatus.BAD_REQUEST)
+                .onFailed(HttpStatus.FORBIDDEN)
+                .execute(() -> appService.save(loginUser, shopId, request));
     }
 
     @GetMapping("")
     public ResponseEntity<ShoppingCartResponse> query(@LoginUser SessionUser loginUser, @PathVariable Long shopId)
     {
-        ShoppingCartResponse response = appService.query(loginUser.getId().value(), shopId);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return Resources.with("query shopping cart")
+                .onSuccess(HttpStatus.OK)
+                .onError(HttpStatus.BAD_REQUEST)
+                .onFailed(HttpStatus.FORBIDDEN)
+                .execute(() -> appService.query(loginUser.getId().value(), shopId));
     }
 }

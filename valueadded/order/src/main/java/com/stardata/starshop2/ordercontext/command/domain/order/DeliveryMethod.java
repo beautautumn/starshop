@@ -8,13 +8,13 @@ import com.stardata.starshop2.sharedcontext.usertype.PersistentCharEnum;
  * @email shush@stardata.top
  * @date 2022/4/18 15:29
  */
-public enum DeliveryType implements PersistentCharEnum {
+public enum DeliveryMethod implements PersistentCharEnum {
     SELF_PICK_UP('1'),
     HOME_DELIVERY('2');
 
     private char value;
 
-    DeliveryType(char value){
+    DeliveryMethod(char value){
         this.value = value;
     }
 

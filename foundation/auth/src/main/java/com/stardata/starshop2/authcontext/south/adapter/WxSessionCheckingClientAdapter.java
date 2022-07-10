@@ -31,6 +31,7 @@ public class WxSessionCheckingClientAdapter implements WxSessionCheckingClient {
             WxMaJscode2SessionResult session = wxService.getUserService().getSessionInfo(code);
             wxAuthInfo.setOpenid(session.getOpenid());
             wxAuthInfo.setSessionKey(session.getSessionKey());
+            wxAuthInfo.setUnionid(session.getUnionid());
         } catch (WxErrorException e) {
             WxError wxError = e.getError();
             throw new WxLoginErrorException(wxError.getErrorCode(), wxError.getErrorMsg());

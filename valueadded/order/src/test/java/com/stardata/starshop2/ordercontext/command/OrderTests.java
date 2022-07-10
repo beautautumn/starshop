@@ -19,15 +19,15 @@ import com.stardata.starshop2.ordercontext.command.south.port.PrepayingClient;
 import com.stardata.starshop2.sharedcontext.domain.LongIdentity;
 import com.stardata.starshop2.sharedcontext.domain.SessionUser;
 import com.thoughtworks.xstream.XStream;
-import javax.annotation.Resource;
-import javax.persistence.EntityManager;
-import javax.transaction.Transactional;
 import me.chanjar.weixin.common.util.xml.XStreamInitializer;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 
+import javax.annotation.Resource;
+import javax.persistence.EntityManager;
+import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -48,8 +48,8 @@ public class OrderTests {
 
     /**
      * 任务级测试：创建付款订单——结算订单商品（含生成快照）
-     * 按照先聚合再端口、先原子再组合、从内向外的原则。
-     * 1. 测试南向网关客户端接口：结算订单商品，包括测试案例有：
+     * 按照先聚合再端口、先原子再组合、从内向外的分解步骤。
+     * 1. 测试南向网关客户端接口：结算订单商品，包括测试用例有：
      * 1.1 创建订单，其中有的商品是可售的、有的商品不可售，要求订单结算结果正确
          * 根据已经插入的商品数据，可以知道：
          * productId: 1，单价：10元，可售，无折扣
@@ -106,8 +106,8 @@ public class OrderTests {
 
     /**
      * 任务级测试：创建付款订单——生成订单支付；（原子任务，聚合，实体对象行为）
-     * 按照先聚合再端口、先原子再组合、从内向外的原则。
-     * 2. 测试订单聚合生成订单支付，测试案例包括：
+     * 按照先聚合再端口、先原子再组合、从内向外的分解步骤。
+     * 2. 测试订单聚合生成订单支付，测试用例包括：
      * 2.1 创建订单，其中有的商品是可售的、有的商品不可售，要求订单结算结果正确
          * 根据已经插入的商品数据，可以知道：
          * productId: 1，单价：10元，可售，无折扣
@@ -150,8 +150,8 @@ public class OrderTests {
 
     /**
      * 任务级测试：创建付款订单——生成订单操作日志；（原子任务，聚合，实体对象行为）
-     * 按照先聚合再端口、先原子再组合、从内向外的原则。
-     * 3. 测试订单聚合生成订单操作日志，相关测试案例包括：
+     * 按照先聚合再端口、先原子再组合、从内向外的分解步骤。
+     * 3. 测试订单聚合生成订单操作日志，相关测试用例包括：
      * 3.1. 创建订单，然后针对订单创建操作日志
      */
 
@@ -187,8 +187,8 @@ public class OrderTests {
 
     /**
      * 任务级测试：创建付款订单——新订单持久化；（原子任务，资源库端口，访问数据库）
-     * 按照先聚合再端口、先原子再组合、从内向外的原则。
-     * 4. 测试订单聚合的持久化，测试案例包括：
+     * 按照先聚合再端口、先原子再组合、从内向外的分解步骤。
+     * 4. 测试订单聚合的持久化，测试用例包括：
      * 4.1 创建订单，然后完成商品价格计算、创建订单支付、创建操作日志后保存，再查询重建后信息正确
      */
 
@@ -237,8 +237,8 @@ public class OrderTests {
 
     /**
      * 任务级测试：创建付款订单——提交新订单；（组合任务，领域服务）
-     * 按照先聚合再端口、先原子再组合、从内向外的原则。
-     * 5. 测试领域服务提交新订单，相关测试案例包括：
+     * 按照先聚合再端口、先原子再组合、从内向外的分解步骤。
+     * 5. 测试领域服务提交新订单，相关测试用例包括：
      * 5.1 领域服务提交付款订单
      */
 
@@ -284,7 +284,7 @@ public class OrderTests {
 
     /**
      * 服务级测试：创建付款订单——创建付款订单；（组合任务，应用服务）
-     * 6. 测试订单应用服务创建订单接口，测试案例包括：
+     * 6. 测试订单应用服务创建订单接口，测试用例包括：
      * 6.1 应用服务创建订单
      */
 
@@ -330,7 +330,7 @@ public class OrderTests {
 
     /**
      * 任务级测试：发起订单预支付；——发起订单预支付；（原子任务，客户端端口，访问微信支付接口）
-     * 按照先聚合再端口、先原子再组合、从内向外的原则。
+     * 按照先聚合再端口、先原子再组合、从内向外的分解步骤。
      * 7. 测试微信支付客户端预支付接口
      * 7.1 根据从数据库重建的订单聚合，调用微信支付客户端端口，发起支付
      */
@@ -376,7 +376,7 @@ public class OrderTests {
 
     /**
      * 任务级测试：发起订单预支付；——发起订单预支付；（组合任务，领域服务）
-     * 按照先聚合再端口、先原子再组合、从内向外的原则。
+     * 按照先聚合再端口、先原子再组合、从内向外的分解步骤。
      * 8. 测试订单领域服务预支付功能
      * 8.1 调用订单领域服务 OrderManagingService.prepay，发起预支付
      */
@@ -417,7 +417,7 @@ public class OrderTests {
 
     /**
      * 服务级测试：发起订单预支付；（组合任务，应用服务）
-     * 9. 测试订单应用服务发起订单预支付，测试案例包括：
+     * 9. 测试订单应用服务发起订单预支付，测试用例包括：
      * 9.1 应用服务发起订单预支付，获取供前端app使用的返回参数
      */
 
@@ -450,7 +450,7 @@ public class OrderTests {
 
     /**
      * 任务级测试：生效订单——根据订单外部编号重建订单对象；（原子任务，资源库端口，访问数据库）
-     * 按照先聚合再端口、先原子再组合、从内向外的原则。
+     * 按照先聚合再端口、先原子再组合、从内向外的分解步骤。
      * 10. 测试根据订单编号从数据库重建订单对象功能
      * 10.1 调用订单资源库服务，从数据库重建订单对象
      */
@@ -504,7 +504,7 @@ public class OrderTests {
 
     /**
      * 任务级测试：生效订单——生效订单；（组合任务，领域服务）
-     * 按照先聚合再端口、先原子再组合、从内向外的原则。
+     * 按照先聚合再端口、先原子再组合、从内向外的分解步骤。
      * 10. 测试生效订单领域服务
      * 10.1 支付成功，调用领域服务，对指定外部编号的订单完成生效操作，标记订单支付成功、支付时间等，并记录相关支付结果信息
      * 10.2 支付失败，调用领域服务，对指定外部编号的订单完成生效操作，标记订单支付失败
@@ -621,7 +621,7 @@ public class OrderTests {
 
     /**
      * 服务级测试：生效订单——处理微信支付通知；（组合任务，应用服务）
-     * 11. 测试订单应用服务处理微信支付通知接口，测试案例包括：
+     * 11. 测试订单应用服务处理微信支付通知接口，测试用例包括：
      * 11.1 处理微信支付通知消息成功，订单被标记为支付成功状态
      */
     @Test

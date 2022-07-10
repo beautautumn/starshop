@@ -121,6 +121,13 @@ public class User extends AbstractEntity<LongIdentity> implements AggregateRoot<
     private final List<UserToken> tokens = new ArrayList<>();
 
     /**
+     * 业务代码不要使用，这是给Hibernate、MapStruct使用的构造子
+     */
+    public User() {
+        this( "UNKNOWN", 0);
+    }
+
+    /**
      * 构造子，包内可调用，确保创建后的用户对象可用
      * @param nickName 网络昵称
      * @param gender 性别
@@ -130,16 +137,7 @@ public class User extends AbstractEntity<LongIdentity> implements AggregateRoot<
         this.gender = gender;
         this.id = LongIdentity.snowflakeId();
         this.openid = WxOpenId.of("UNKNOWN");
-        LocalDateTime now = LocalDateTime.now();
-        this.registerTime = now;
-        this.updateTime = now;
-    }
-
-    /**
-     * 业务代码不要使用，这是给Hibernate、MapStruct使用的构造子
-     */
-    public User() {
-        this( "UNKNOWN", 0);
+        this.registerTime = LocalDateTime.now();
     }
 
     public static User of(String nickName, Integer gender) {

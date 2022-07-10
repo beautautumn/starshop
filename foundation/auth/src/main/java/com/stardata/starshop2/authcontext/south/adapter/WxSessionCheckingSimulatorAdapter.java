@@ -4,6 +4,8 @@ package com.stardata.starshop2.authcontext.south.adapter;
 import com.stardata.starshop2.authcontext.domain.WxLoginErrorException;
 import com.stardata.starshop2.authcontext.domain.user.WxAuthInfo;
 import com.stardata.starshop2.authcontext.south.port.WxSessionCheckingClient;
+import com.stardata.starshop2.sharedcontext.annotation.Adapter;
+import com.stardata.starshop2.sharedcontext.annotation.PortType;
 import com.stardata.starshop2.sharedcontext.south.adapter.DevOrTestProfileCondition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,11 +18,11 @@ import org.springframework.stereotype.Component;
  * @email shush@stardata.top
  * @date 2022/5/11 11:19
  */
+@Adapter(PortType.Client)
 @Conditional(DevOrTestProfileCondition.class)
 @Component
 public class WxSessionCheckingSimulatorAdapter implements WxSessionCheckingClient {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
-
 
     @Override
     public void code2session(String code, WxAuthInfo wxAuthInfo) throws WxLoginErrorException {

@@ -35,8 +35,8 @@ public class AuthDecryptingTests {
 
     /**
      * 任务级测试：解密微信手机号 ——1. 解密微信手机号；（组合任务，领域服务）
-     * 按照先聚合再端口、先原子再组合、从内向外的原则。
-     * 设计原子任务级测试案例包括：
+     * 按照先聚合再端口、先原子再组合、从内向外的分解步骤。
+     * 设计原子任务级测试用例包括：
      * 1.1. 正常的已有用户、加密数据encryptedData、iv，成功解密手机号，并更新用户对象手机号
      * 1.2. 系统中不存在该用户，解密报业务异常 ApplicationValidationException
      * 1.3. 加密数据encryptedData、iv内容不合格，解密报业务异常 ApplicationValidationException
@@ -173,7 +173,7 @@ public class AuthDecryptingTests {
 
     /**
      * 服务级测试：解密微信手机号；（组合任务，应用服务）
-     * 2. 测试解密微信手机号应用服务，包括的测试案例有：
+     * 2. 测试解密微信手机号应用服务，包括的测试用例有：
      * 2.1. 正常的已有用户、加密数据encryptedData、iv，成功解密手机号，并更新用户对象手机号
      */
 

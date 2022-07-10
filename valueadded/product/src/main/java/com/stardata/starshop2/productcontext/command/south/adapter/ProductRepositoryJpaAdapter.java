@@ -33,8 +33,14 @@ public class ProductRepositoryJpaAdapter implements ProductRepository {
 
     @Override
     public List<Product> instancesOf(Collection<LongIdentity> productIds) {
-
-        return this.repository.findByIds(productIds);
+        /* 这里被重构掉了
+        List<Product> result = new ArrayList<>();
+        for (LongIdentity productId : productIds) {
+            result.add(this.repository.findById(productId));
+        }
+        return result;
+         */
+        return repository.findByIds(productIds);
     }
 
     @Override

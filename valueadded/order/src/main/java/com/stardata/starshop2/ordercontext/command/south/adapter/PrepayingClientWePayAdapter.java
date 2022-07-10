@@ -52,6 +52,7 @@ public class PrepayingClientWePayAdapter implements PrepayingClient {
             throw new ApplicationValidationException(HttpStatus.INTERNAL_SERVER_ERROR.value(),
                     String.format("微信预支付请求字符串不是有效的XML: %s", e.getMessage()));
         }
+        //...
 
         //2. 调用微信支付平台接口创建统一支付
         HashSet<String> localIps = NetUtil.localIpv4s();

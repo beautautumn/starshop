@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
  * @date 2022/7/2 17:45
  */
 public interface PrepayRequestGenerationService {
-    String ORDER_URL_BASE = "https://apis.stardata.top/v2";
+    String ORDER_URL_BASE = "https://starshop_apis.stardata.top/v2";
     String WX_NOTIFY_ORDER_PAY_URL = ORDER_URL_BASE + "/orders/wxnotify/pay";
     String APP_NAME = "群买菜";
 

@@ -15,6 +15,8 @@ import java.util.List;
  */
 @Data
 public class OrderSubmitRequest {
+    private List<Item> items = new ArrayList<>();
+
     @Data
     public static class Item {
         private long productId;
@@ -26,7 +28,6 @@ public class OrderSubmitRequest {
         }
     }
 
-    private List<Item> items = new ArrayList<>();
 
     public Order toOrder(LongIdentity shopId, LongIdentity userId) {
         Order order = Order.createFor(shopId, userId);

@@ -35,49 +35,26 @@ class AuthLoginTests {
 
     /**
      * 任务级测试：微信用户登录——1. 确保用户记录存在；（组合任务，领域服务）
-     * 按照先聚合再端口、先原子再组合、从内向外的原则。
-     * 设计相关任务级测试案例包括：
-     * 1.1. 针对微信前端小程序获得用户信息字段，更新已有用户信息（昵称、头像等）；（相关任务，"用户"聚合行为）
-     * 1.2. 设置新用户openid；（相关任务，"用户"聚合行为）
-     * 1.3. 根据openid查找用户记录；（相关任务，资源库端口，访问数据库）
-     * 1.4. 确保前端微信用户信息对应的记录存在；（对应openid的用户存在，根据微信前端用户信息更新用户）；
-     * 1.5. 确保前端微信用户信息对应的记录存在；（对应openid的用户不存在，根据微信前端用户信息新建用户）；
+     * 按照先聚合再端口、先原子再组合、从内向外的分解步骤。
+     * 设计相关任务级测试用例包括：
+     * 1.1. 设置新用户openid；（相关任务，"用户"聚合行为）
+     * 1.2. 实现根据userId从数据库重建User对象
+     * 1.3. 新增用户持久化；（原子任务，资源库端口）
+     * 1.4. 针对微信前端小程序获得用户信息字段，更新已有用户信息（昵称、头像等）；（相关任务，"用户"聚合行为）
+     * 1.5  更新用户持久化；（原子任务，资源库端口）
+     * 1.6. 根据openid查找用户记录；（相关任务，资源库端口）
+     * 1.7. 确保前端微信用户信息对应的记录存在；（对应openid的用户存在，根据微信前端用户信息更新用户）；
+     * 1.8. 确保前端微信用户信息对应的记录存在；（对应openid的用户不存在，根据微信前端用户信息新建用户）；
      */
 
-    //1.1. 针对微信前端小程序获得用户信息字段，更新已有用户信息（昵称、头像等）；（相关任务，"用户"聚合行为）
+    //1.1. 设置新用户openid；（相关任务，"用户"聚合行为）
     @Test
-    void after_copy_user1_wxinfo_to_user2_should_equal_values_except_id() {
-        // given: 准备好user1对象并给除ID之外所有属性赋值、以及空的user2对象
-        User user1 = User.of("testUser1", 1)
-                .avatarUrl("https://www.somehost.com/someAvatar.png")
-                .country("中国")
-                .province("江苏")
-                .city("南京")
-                .language("zh_CN");
-        User user2 = User.of("testUser2", 2);
-
-        // when: 调用user2的copyInfoFrom方法
-        user2.copyMiniAppInfoFrom(user1);
-
-        // then: 检查user1和user2的相应属性是否相等
-        assertNotEquals(user1.getId(), user2.getId());
-        assertEquals(user1.getNickName(), user2.getNickName());
-        assertEquals(user1.getGender(), user2.getGender());
-        assertEquals(user1.getAvatarUrl(), user2.getAvatarUrl());
-        assertEquals(user1.getCountry(), user2.getCountry());
-        assertEquals(user1.getProvince(), user2.getProvince());
-        assertEquals(user1.getCity(), user2.getCity());
-        assertEquals(user1.getLanguage(), user2.getLanguage());
-    }
-
-    //1.2. 设置新用户openid；（相关任务，"用户"聚合行为）
-    @Test
-    void after_set_openid_should_get_openid_correctly() {
-        // given: 准备好openid，并创建user对象
+    void should_get_openid_correctly_after_set_openid() {
+        // given: 准备好openid
         WxOpenId openId = WxOpenId.of("o9Nvx4gUq9dfO1KQy7LL-gXS_EkI");
-        User user = User.of("testUser", 1);
 
-        // when: 为user对象赋值openId
+        // when: 创建user对象，并为user对象赋值openId
+        User user = User.of("testUser", 1);
         user.setOpenid(openId);
 
         // then: 新用户的OpenId等于原先的OpenId
@@ -87,7 +64,109 @@ class AuthLoginTests {
     @Autowired
     UserRepository userRepository;
 
-    //1.3. 根据openid查找用户记录；（相关任务，资源库端口，访问数据库）
+    //1.2. 实现根据userId从数据库重建User对象
+    @Test
+    @Transactional
+    void should_load_user_success_by_given_user_id()  {
+        //given: 已经在数据库存在的userId （注意，之前已经用sql向数据库插入了记录）
+        LongIdentity userId = LongIdentity.from(1L);
+
+        //when: 使用repository重建用户对象
+        User user = userRepository.instanceOf(userId);
+
+        //then: 对象重建成功
+        assertNotNull(user);
+        assertEquals(user.getId(), userId);
+    }
+
+
+    //1.3  新增用户持久化；（原子任务，资源库端口）
+    @Test
+    @Transactional
+    @Rollback(true)
+    void should_save_new_user_success_for_given_openid() {
+        // given: 准备好openid，并创建user对象
+        WxOpenId openId = WxOpenId.of("o9Nvx4gUq9dfO1KQy7LL-gXS_EkI");
+        User user = User.of("testUser", 1);
+        user.setOpenid(openId);
+        LongIdentity userId = user.getId();
+
+        // when: 将新用户持久化、并重建
+        userRepository.add(user);
+        entityManager.flush();
+        User loadedUser = userRepository.instanceOf(userId);
+
+        // then: 新用户的OpenId等于原先的OpenId
+        assertNotNull(loadedUser);
+        assertEquals(loadedUser.getId(), userId);
+        assertEquals(loadedUser.getOpenid(), openId);
+    }
+
+    private boolean isSameMiniAppUserInfo(@NotNull User user1, @NotNull User user2) {
+        return user1.getNickName().equals(user2.getNickName()) &&
+                user1.getGender().equals(user2.getGender()) &&
+                ((user1.getAvatarUrl() == user2.getAvatarUrl())
+                        ||user1.getAvatarUrl().equals(user2.getAvatarUrl())) &&
+                user1.getCountry().equals(user2.getCountry()) &&
+                user1.getProvince().equals(user2.getProvince()) &&
+                user1.getCity().equals(user2.getCity()) &&
+                user1.getLanguage().equals(user2.getLanguage());
+
+    }
+
+    //1.4  针对微信前端小程序获得用户信息字段，更新已有用户信息（昵称、头像等）；（相关任务，"用户"聚合行为）
+    @Test
+    void should_equal_all_values_except_id_after_copy_user1_wxinfo_to_user2() {
+        // given: 准备好user1对象并给除ID之外所有属性赋值、以及空的user2对象
+        User user1 = User.of("testUser1", 1)
+                .avatarUrl("https://www.somehost.com/someAvatar.png")
+                .country("中国")
+                .province("江苏")
+                .city("南京")
+                .language("zh_CN");
+        User user2 = User.of("testUser2", 2);
+
+        // when: 调用user2的copyInfoFrom方法更新用户信息
+        user2.copyMiniAppInfoFrom(user1);
+
+        // then: 检查user1和user2的相应属性是否相等
+        assertNotEquals(user1.getId(), user2.getId());
+        assertTrue(isSameMiniAppUserInfo(user1, user2));
+    }
+
+    //1.5. 更新用户持久化；（原子任务，资源库端口）
+    @Test
+    @Transactional
+    void should_update_exists_user_success_except_id_after_copy_other_user_wxinfo() {
+        // given: 准备好user1对象并给除ID之外所有属性赋值、以及空的user2对象
+        User existUser = User.of("testUser2", 2);
+        LongIdentity existsUserId = existUser.getId();
+        userRepository.add(existUser);
+        entityManager.flush();
+
+        User user1 = User.of("testUser1", 1)
+                .avatarUrl("https://www.somehost.com/someAvatar.png")
+                .country("中国")
+                .province("江苏")
+                .city("南京")
+                .language("zh_CN");
+
+        // when: 调用user2的copyInfoFrom方法，并持久化更新后的User
+        existUser.copyMiniAppInfoFrom(user1);
+        userRepository.update(existUser);
+        entityManager.flush();
+        User loadedUser = userRepository.instanceOf(existsUserId);
+
+        // then: 检查user1和loadedUser的相应属性是否相等
+        assertNotEquals(user1.getId(), loadedUser.getId());
+        assertTrue(isSameMiniAppUserInfo(user1, loadedUser));
+    }
+
+
+    @Autowired
+    UserExistenceService userExistenceService;
+
+    //1.6. 根据openid查找用户记录；（相关任务，资源库端口）
     @Test
     @Transactional
     @Rollback(true)
@@ -98,7 +177,7 @@ class AuthLoginTests {
         user.setOpenid(openId);
         userRepository.add(user);
 
-        // when: 向资源库加入该用户，并重新从资源库根据openid重建用户对象
+        // when: 从资源库根据openid重建用户对象
         User loadedUser = userRepository.findByOpenId(openId);
 
         // then: 重建的用户对象存在且OpenId等于给定的openid
@@ -106,10 +185,7 @@ class AuthLoginTests {
         assertEquals(openId, loadedUser.getOpenid());
     }
 
-    @Autowired
-    UserExistenceService userExistenceService;
-
-    //1.4. 确保前端微信用户信息对应的记录存在；（对应openid的用户存在，根据微信前端用户信息更新用户）；
+    //1.7. 确保前端微信用户信息对应的记录存在；（对应openid的用户存在，根据微信前端用户信息更新用户）；
     @Test
     @Transactional
     @Rollback(true)
@@ -122,7 +198,6 @@ class AuthLoginTests {
                 .province("testProvinceX")
                 .city("testCityX")
                 .language("testLanguageX");
-
         existsUser.setOpenid(openId);
         userRepository.add(existsUser);
 
@@ -138,24 +213,12 @@ class AuthLoginTests {
         User user = userExistenceService.ensureUser(openId, frontUser);
         User loadedUser = userRepository.instanceOf(user.getId());
 
-                // then: 返回用户对象的所有前端小程序可传入属性字段，与给定的用户信息完全相同
+        // then: 返回用户对象的所有前端小程序可传入属性字段，与给定的用户信息完全相同
         assertNotNull(loadedUser);
         assertTrue(isSameMiniAppUserInfo(loadedUser, frontUser));
     }
 
-    private boolean isSameMiniAppUserInfo(@NotNull User loadedUser, @NotNull User frontUser) {
-        return loadedUser.getNickName().equals(frontUser.getNickName()) &&
-                loadedUser.getGender().equals(frontUser.getGender()) &&
-                ((loadedUser.getAvatarUrl() == frontUser.getAvatarUrl())
-                        ||loadedUser.getAvatarUrl().equals(frontUser.getAvatarUrl())) &&
-                loadedUser.getCountry().equals(frontUser.getCountry()) &&
-                loadedUser.getProvince().equals(frontUser.getProvince()) &&
-                loadedUser.getCity().equals(frontUser.getCity()) &&
-                loadedUser.getLanguage().equals(frontUser.getLanguage());
-
-    }
-
-    //1.5. 确保前端微信用户信息对应的记录存在；（对应openid的用户不存在，根据微信前端用户信息新建用户）；
+    //1.8. 确保前端微信用户信息对应的记录存在；（对应openid的用户不存在，根据微信前端用户信息新建用户）；
     @Test
     @Transactional
     @Rollback(true)
@@ -178,13 +241,12 @@ class AuthLoginTests {
         // then: 返回用户对象的所有前端小程序可传入属性字段，与给定的用户信息完全相同
         assertNotNull(loadedUser);
         assertTrue(isSameMiniAppUserInfo(loadedUser, frontUser));
-
     }
 
     /**
      * 任务级测试：微信用户登录——2.生成用户登录令牌；（组合任务，领域服务）
-     * 按照先聚合再端口、先原子再组合、从内向外的原则。
-     * 设计相关任务级测试案例包括：
+     * 按照先聚合再端口、先原子再组合、从内向外的分解步骤。
+     * 设计相关任务级测试用例包括：
      * 2.1. 创建用户登录令牌；（相关任务，用户聚合行为，用户原来无令牌，创建新令牌）
      * 2.2. 创建用户登录令牌；（相关任务，用户聚合行为，用户原来有令牌，更新令牌）
      * 2.3. 生成用户登录令牌；（组合任务，领域服务，保存令牌后重建用户对象，令牌正确）
@@ -237,7 +299,6 @@ class AuthLoginTests {
         //when: 调用User.refreshLoginToken创建令牌，并持久化用户对象后再重建
        UserToken token = newUser.refreshLoginToken(sessionKey);
        userRepository.add(newUser);
-
        User loadedUser = userRepository.instanceOf(newUser.getId());
 
        //then: 用户令牌被保存，且内容正确
@@ -280,8 +341,8 @@ class AuthLoginTests {
 
     /**
      * 任务级测试：微信用户登录——3. 微信后台登录并校验；（组合任务，领域服务）
-     * 按照先聚合再端口、先原子再组合、从内向外的原则。
-     * 设计相关任务级测试案例包括：
+     * 按照先聚合再端口、先原子再组合、从内向外的分解步骤。
+     * 设计相关任务级测试用例包括：
      * 3.1. 微信后台登录并校验；（组合任务，领域服务，微信code有效且未被使用过）
      * 3.2. 微信后台登录并校验；（组合任务，领域服务，微信code有效且未被使用过，但signature 不正确）
      * 3.3. 微信后台登录并校验；（组合任务，领域服务，微信code有效但已被使用过）
@@ -376,8 +437,8 @@ class AuthLoginTests {
 
     /**
      * 任务级测试：微信用户登录——4.生成微信登录令牌；（组合任务，领域服务）
-     * 按照先聚合再端口、先原子再组合、从内向外的原则。
-     * 设计相关任务级测试案例包括：
+     * 按照先聚合再端口、先原子再组合、从内向外的分解步骤。
+     * 设计相关任务级测试用例包括：
      * 4.1. 微信登录成功,生成登录令牌；（组合任务，领域服务）
      * 4.2. 微信登录异常,未生成微信登录令牌；（组合任务，领域服务）
      */
@@ -448,8 +509,8 @@ class AuthLoginTests {
 
     /**
      * 任务级测试：微信用户登录——5. 记录用户登录日志；（组合任务，领域服务）
-     * 按照先聚合再端口、先原子再组合、从内向外的原则。
-     * 设计相关任务级测试案例包括：
+     * 按照先聚合再端口、先原子再组合、从内向外的分解步骤。
+     * 设计相关任务级测试用例包括：
      * 5.1. 记录用户登录日志；（组合任务，领域服务）
      */
 
@@ -492,7 +553,7 @@ class AuthLoginTests {
 
     /**
      * 服务级测试：微信用户登录
-     * 6. 测试微信用户登录应用服务，包括的测试案例有：
+     * 6. 测试微信用户登录应用服务，包括的测试用例有：
      * 6.1 正确的微信code，且未过期，该用户为新用户，要求返回72小时内有效的新token
      * 6.2 正确的微信code，且未过期，该用户为老用户，要求返回72小时内有效的新token
      * 6.3 正确的微信code，且未过期，但用户信息完整性被破坏，要求返回业务失败

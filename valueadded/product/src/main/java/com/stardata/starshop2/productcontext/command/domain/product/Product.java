@@ -110,6 +110,8 @@ public class Product  extends AbstractEntity<LongIdentity> implements AggregateR
         this.name = ProductName.of(name);
         this.unit = unit.toString();
         this.minPurchase = new NonNegativeDecimal("1.0");
+        this.isAvailable = true;
+        this.onShelves = true;
     }
 
     protected Product() {}

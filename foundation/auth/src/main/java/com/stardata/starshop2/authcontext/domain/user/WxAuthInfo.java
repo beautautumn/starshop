@@ -11,9 +11,11 @@ import org.apache.commons.codec.digest.DigestUtils;
  */
 @Data
 public class WxAuthInfo {
+    //进行微信登录认证时的请求信息
     private String rawData;
     private String signature;
 
+    //完成微信登录认证后返回的信息
     private String openid;
     private String unionid;
     private String sessionKey;

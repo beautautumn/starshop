@@ -37,8 +37,8 @@ import static org.junit.jupiter.api.Assertions.*;
 public class ProductTests {
     /**
      * 任务级测试：从数据库重建多个Product对象
-     * 按照先聚合再端口、先原子再组合、从内向外的原则。
-     * 设计相关任务级测试案例包括：
+     * 按照先聚合再端口、先原子再组合、从内向外的分解步骤。
+     * 设计相关任务级测试用例包括：
      * 1.1. 根据多个已有产品的id，从数据库正常重建对应的Product对象列表；
      * 1.2. 根据多个已有产品的id、其中有的id对应的产品不存在，从数据库正常重建那些已有产品id对应的Product对象列表；
      * 1.3. 根据多个已有产品的id，其中所有产品id不存在，从数据库重建的产品列表为空；
@@ -177,8 +177,8 @@ public class ProductTests {
 
     /**
      * 任务级测试：Product实体对象计算结算价格
-     * 按照先聚合再端口、先原子再组合、从内向外的原则。
-     * 设计相关任务级测试案例包括：
+     * 按照先聚合再端口、先原子再组合、从内向外的分解步骤。
+     * 设计相关任务级测试用例包括：
      * 2.1. 正常商品，有货、且已经上架、没有优惠折扣、有或没有购买限制，计算结果符合要求：
          *  settlePriceFen = [下单数量 or 购买限量] * 原始价格
          *  orderCount = [下单数量 or 购买限量]
@@ -216,14 +216,10 @@ public class ProductTests {
         NonNegativeInteger purchaseLimit = new NonNegativeInteger(3);
 
         Product product1 = Product.from(shopId, category, "testProduct1", unit)
-                .isAvailable(true)
-                .onShelves(true)
                 .originalPriceFen(originalPriceFen)
                 .minPurchase(minPurchase);
 
         Product product2 = Product.from(shopId, category, "testProduct2", unit)
-                .isAvailable(true)
-                .onShelves(true)
                 .originalPriceFen(originalPriceFen)
                 .minPurchase(minPurchase)
                 .purchaseLimit(purchaseLimit);
@@ -245,6 +241,11 @@ public class ProductTests {
         assertEquals(, settlement1.orderCount());
         assertEquals(, settlement1.settleQuantity());
         assertTrue(settlement1.available());
+
+        assertEquals(purchaseLimit.value()*originalPriceFen.value(), settlement2.settlePriceFen());
+        assertEquals(purchaseLimit.value(), settlement2.orderCount());
+        assertEquals(minPurchase.value().multiply(BigDecimal.valueOf(purchaseLimit.value())), settlement2.settleQuantity());
+        assertTrue(settlement2.available());
          */
 
         assertEquals(settlement1, new ProductSettlement(
@@ -253,14 +254,6 @@ public class ProductTests {
                 orderCount,
                 minPurchase.value().multiply(BigDecimal.valueOf(orderCount)),
                 true));
-
-
-        /* 下面的代码被重构优化掉 (为 ProductSettlement 重载 equals 方法 ）
-        assertEquals(purchaseLimit.value()*originalPriceFen.value(), settlement2.settlePriceFen());
-        assertEquals(purchaseLimit.value(), settlement2.orderCount());
-        assertEquals(minPurchase.value().multiply(BigDecimal.valueOf(purchaseLimit.value())), settlement2.settleQuantity());
-        assertTrue(settlement2.available());
-         */
 
         assertEquals(settlement2, new ProductSettlement(
                 product2,
@@ -459,11 +452,11 @@ public class ProductTests {
 
 
     /**
-     * 任务级测试：对多个商品ID、下单数量进行结算
-     * 按照先聚合再端口、先原子再组合、从内向外的原则。
-     * 设计相关任务级测试案例包括：
+     * 任务级测试：对多个商品ID、下单数量进行结算——计算多商品结算；（组合任务，领域服务）
+     * 按照先聚合再端口、先原子再组合、从内向外的分解步骤。
+     * 设计相关任务级测试用例包括：
      * 3.1. 根据多个已有产品的id（所有商品均可售）、下单数量，正确完成结算；
-     * 3.2. 根据多个已有产品的id（其中有的id对应的产品不存在）、下单数量，正确完成结算；
+     * 3.2. 根据多个已有产品的id（其中部分id对应的产品不存在）、下单数量，正确完成结算；
      */
     @Autowired
     ProductSettlementService settlementService;
@@ -551,8 +544,6 @@ public class ProductTests {
         LongIdentity categoryId = LongIdentity.from(1L);
         ProductCategory category = categoryRepository.instanceOf(categoryId);
         ProductUoM unit = ProductUoM.JIN;
-
-
         PriceFen originalPriceFen1 = new PriceFen(1000L);
         NonNegativeDecimal minPurchase1 = new NonNegativeDecimal("0.5");
         Product product1 = Product.from(shopId, category, "testProduct1", unit)
@@ -612,5 +603,6 @@ public class ProductTests {
         ProductSettlement settlement3 = new ProductSettlement(product3,0, 0,
                 new BigDecimal("0.0"), false);
         assertEquals( settlement3, settlements.get(product3.getId()));
+
     }
 }

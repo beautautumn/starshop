@@ -23,28 +23,28 @@ import java.util.List;
 @Component
 @AllArgsConstructor
 public class UserRepositoryJpaAdapter implements UserRepository {
-    private final GenericRepository<User, LongIdentity> userRepository;
+    private final GenericRepository<User, LongIdentity> repositoryInstance;
 
     @Override
     public User findByOpenId(WxOpenId openID) {
         Specification<User> specification = (root, criteriaQuery, criteriaBuilder) ->
                 criteriaBuilder.equal(root.get("openid"), openID);
-        List<User> users = userRepository.findBy(specification);
+        List<User> users = repositoryInstance.findBy(specification);
         return users.size()>0? users.get(0): null;
     }
 
     @Override
     public void add(User user) {
-        userRepository.saveOrUpdate(user);
+        repositoryInstance.saveOrUpdate(user);
     }
 
     @Override
     public void update(User user) {
-        userRepository.saveOrUpdate(user);
+        repositoryInstance.saveOrUpdate(user);
     }
 
     @Override
     public User instanceOf(LongIdentity userId) {
-        return userRepository.findById(userId);
+        return repositoryInstance.findById(userId);
     }
 }

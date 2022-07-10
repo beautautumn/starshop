@@ -4,6 +4,7 @@ import com.stardata.starshop2.ordercontext.command.north.local.OrderAppService;
 import com.stardata.starshop2.ordercontext.command.pl.*;
 import com.stardata.starshop2.sharedcontext.annotation.LoginUser;
 import com.stardata.starshop2.sharedcontext.domain.SessionUser;
+import com.stardata.starshop2.sharedcontext.north.Resources;
 import io.swagger.annotations.Api;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -28,39 +29,55 @@ public class OrderCommandResource {
     public ResponseEntity<OrderResponse> create(@LoginUser SessionUser loginUser,
                                                 @PathVariable Long shopId, OrderSubmitRequest request)
     {
-        OrderResponse response = appService.create(loginUser, shopId, request);
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-
-    @GetMapping("/{orderId}")
-    public ResponseEntity<OrderResponse> getDetail(@LoginUser SessionUser loginUser,
-                                                   @PathVariable Long orderId)
-    {
-        OrderResponse response = appService.getDetail(orderId);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return Resources.with("create order")
+                .onSuccess(HttpStatus.OK)
+                .onError(HttpStatus.BAD_REQUEST)
+                .onFailed(HttpStatus.FORBIDDEN)
+                .execute(() -> appService.create(loginUser, shopId, request));
     }
 
     @PostMapping("/{orderId}/prepayments")
     public ResponseEntity<PrepayOrderResponse> prepay(@LoginUser SessionUser loginUser,
                                                       @PathVariable Long orderId)
     {
-        PrepayOrderResponse response = appService.prepay(orderId);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return Resources.with("prepay order")
+                .onSuccess(HttpStatus.OK)
+                .onError(HttpStatus.BAD_REQUEST)
+                .onFailed(HttpStatus.FORBIDDEN)
+                .execute(() -> appService.prepay(orderId));
     }
 
-    @PostMapping("/{orderId}/confirmation")
+    @GetMapping("/{orderId}")
+    public ResponseEntity<OrderResponse> getDetail(@LoginUser SessionUser loginUser,
+                                                   @PathVariable Long orderId)
+    {
+        return Resources.with("get order detail info")
+                .onSuccess(HttpStatus.OK)
+                .onError(HttpStatus.BAD_REQUEST)
+                .onFailed(HttpStatus.FORBIDDEN)
+                .execute(() -> appService.getDetail(orderId));
+
+    }
+
+    @PutMapping("/{orderId}/confirmation")
     public ResponseEntity<OrderConfirmedResponse> confirmReceived(@LoginUser SessionUser loginUser,
                                                                   @PathVariable Long orderId)
     {
-        OrderConfirmedResponse response = appService.confirmReceived(orderId);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return Resources.with("confirm order received")
+                .onSuccess(HttpStatus.OK)
+                .onError(HttpStatus.BAD_REQUEST)
+                .onFailed(HttpStatus.FORBIDDEN)
+                .execute(() -> appService.confirmReceived(orderId));
     }
 
-    @PostMapping("/{orderId}/invisible_setting")
+    @PutMapping("/{orderId}/invisible_setting")
     public ResponseEntity<OrderDeletedResponse> delete(@LoginUser SessionUser loginUser,
                                                        @PathVariable Long orderId)
     {
-        OrderDeletedResponse response = appService.delete(orderId);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return Resources.with("delete order")
+                .onSuccess(HttpStatus.OK)
+                .onError(HttpStatus.BAD_REQUEST)
+                .onFailed(HttpStatus.FORBIDDEN)
+                .execute(() -> appService.delete(orderId));
     }
 }

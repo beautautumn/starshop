@@ -121,11 +121,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product>
         //2. 查询该店所有上架的商品
         QueryWrapper<Product> productQueryWrapper = new QueryWrapper<>();
         List<String> orderBy = Arrays.asList("category_id", "display_order");
-        productQueryWrapper
-                .eq("shop_id", shopId)
-                .eq("is_valid", "1")
-                .eq("on_shelves", "1")
-                .orderByAsc(orderBy);
+        productQueryWrapper.eq("shop_id", shopId).eq("on_shelves", "1").orderByAsc(orderBy);
         List<Product> products = productMapper.selectList(productQueryWrapper);
 
         //3. 为这些商品查询指定月份的销量、图片
@@ -154,8 +150,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product>
             }
         }
 
-
-        //3. 将查询结果 Map 对象整理成 ProductSaleVo 并同时完成商品分组
+        //4. 将查询结果 Map 对象整理成 ProductSaleVo 并同时完成商品分组
         return convertToCatProdMapList(prodCategories, products);
     }
 }
