@@ -45,11 +45,13 @@ public class ProductDiscount{
     public PriceFen settlePrice(PriceFen originalPriceFen) {
         if (this.discountType == null) return originalPriceFen;
 
-        return switch (discountType) {
-            case NONE -> originalPriceFen;
-            case BY_RATE -> new PriceFen(discountRate.value().multiply(BigDecimal.valueOf(originalPriceFen.value())).longValue());
-            case FIXED_PRICE -> discountPriceFen.value() < originalPriceFen.value() ? discountPriceFen : originalPriceFen;
-        };
+        if (discountType == ProductDiscountType.BY_RATE) {
+            return new PriceFen(discountRate.value().multiply(BigDecimal.valueOf(originalPriceFen.value())).longValue());
+        }
+        else if (discountType == ProductDiscountType.FIXED_PRICE) {
+            return discountPriceFen.value() < originalPriceFen.value() ? discountPriceFen : originalPriceFen;
+        }
+        return originalPriceFen;
     }
 
 }

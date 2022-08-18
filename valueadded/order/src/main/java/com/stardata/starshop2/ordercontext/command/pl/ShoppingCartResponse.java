@@ -16,8 +16,24 @@ import java.util.List;
 @Data
 public class ShoppingCartResponse {
 
-    public record Item(Long categoryId, Long productId, Integer count,
-                       boolean available, Integer orderCount, Long amountFen, BigDecimal totalQuantity ) { }
+    @Data
+    public static class Item{
+        private Long categoryId;
+        private Long productId;
+        private Integer count;
+        private boolean available;
+        private Integer orderCount;
+        private Long amountFen;
+        private BigDecimal totalQuantity;
+
+        public Long categoryId() {return categoryId;}
+        public Long productId() {return productId;}
+        public Integer count() {return count;}
+        public boolean available() {return available;}
+        public Integer orderCount() {return orderCount;}
+        public Long amountFen() {return amountFen;}
+        public BigDecimal totalQuantity() {return totalQuantity;}
+    }
 
     private long totalAmountFen;
     private List<Item> items = new ArrayList<>();

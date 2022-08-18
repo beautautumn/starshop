@@ -14,7 +14,16 @@ import java.util.List;
  */
 @Data
 public class OrderResponse {
-    public record Item(Long productId, Integer count, Long amountFen) { }
+    @Data
+    public static class Item{
+        private Long productId;
+        private Integer count;
+        private Long amountFen;
+
+        public Long productId(){return productId;}
+        public Integer count(){return count;}
+        public Long amountFen(){return amountFen;}
+    }
 
     private long totalAmountFen;
     private List<Item> items = new ArrayList<>();

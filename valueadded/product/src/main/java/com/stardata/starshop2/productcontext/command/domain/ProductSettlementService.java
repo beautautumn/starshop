@@ -1,7 +1,7 @@
 package com.stardata.starshop2.productcontext.command.domain;
 
 import com.stardata.starshop2.productcontext.command.domain.product.Product;
-import com.stardata.starshop2.productcontext.command.domain.productcategory.ProductSettlement;
+import com.stardata.starshop2.productcontext.command.domain.product.ProductSettlement;
 import com.stardata.starshop2.productcontext.command.south.port.ProductRepository;
 import com.stardata.starshop2.sharedcontext.domain.LongIdentity;
 import lombok.AllArgsConstructor;
@@ -23,7 +23,7 @@ import java.util.Map;
 public class ProductSettlementService {
     private  final ProductRepository repository;
 
-    public Map<LongIdentity, ProductSettlement> calcSettlement(@NotNull Map<LongIdentity, Integer> productCountsMap) {
+    public Map<LongIdentity, ProductSettlement>  calcSettlement(@NotNull Map<LongIdentity, Integer> productCountsMap) {
         List<Product> products = repository.instancesOf(productCountsMap.keySet());
 
         Map<LongIdentity, ProductSettlement> result = new HashMap<>();

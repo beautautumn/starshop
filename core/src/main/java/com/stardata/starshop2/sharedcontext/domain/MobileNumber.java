@@ -45,10 +45,12 @@ public class MobileNumber implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (o == this) return true;
-        if (o instanceof MobileNumber that) {
+        if (o instanceof MobileNumber) {
+            MobileNumber that = (MobileNumber)o;
             return this.value.equals(that.value);
         }
-        if (o instanceof String str) {
+        if (o instanceof String) {
+            String str = (String) o;
             return this.value.equals(str);
         }
         return false;

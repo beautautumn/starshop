@@ -4,11 +4,13 @@ import com.stardata.starshop2.ordercontext.command.domain.order.Order;
 import com.stardata.starshop2.ordercontext.command.domain.shoppingcart.ShoppingCart;
 import com.stardata.starshop2.sharedcontext.domain.LongIdentity;
 import com.stardata.starshop2.sharedcontext.south.adapter.GenericRepository;
+import lombok.AllArgsConstructor;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
 import javax.annotation.Resource;
 import javax.persistence.EntityManager;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
 
 /**
  * @author Samson Shu
@@ -17,10 +19,11 @@ import org.springframework.context.annotation.Configuration;
  * @date 2022/5/19 21:39
  */
 @Configuration
-@ComponentScan
+@EnableConfigurationProperties(AdapterSwitchProperties.class)
+@AllArgsConstructor
 public class OrderAdapterConfig {
     @Resource
-    EntityManager entityManager;
+    private EntityManager entityManager;
 
     @Bean
     GenericRepository<Order, LongIdentity> createOrderRepository() {
@@ -31,4 +34,6 @@ public class OrderAdapterConfig {
     GenericRepository<ShoppingCart, LongIdentity> createShoppingCartRepository() {
         return new GenericRepository<>(ShoppingCart.class, entityManager);
     }
+
+
 }

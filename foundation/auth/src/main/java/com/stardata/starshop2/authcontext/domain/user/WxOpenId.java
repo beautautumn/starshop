@@ -28,12 +28,12 @@ public class WxOpenId implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
 
-        if (o instanceof WxOpenId that) {
-            return this.value.equals(that.value);
+        if (o instanceof WxOpenId) {
+            return this.value.equals(((WxOpenId)o).value);
         }
 
-        if (o instanceof String str) {
-            return this.value.equals(str);
+        if (o instanceof String) {
+            return this.value.equals(o);
         }
         return false;
     }

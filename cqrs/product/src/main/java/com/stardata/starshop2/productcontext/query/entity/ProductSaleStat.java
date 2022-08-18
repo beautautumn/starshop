@@ -2,7 +2,6 @@ package com.stardata.starshop2.productcontext.query.entity;
 
 import lombok.Data;
 
-import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -15,7 +14,6 @@ import java.time.LocalDateTime;
 @Data
 public class ProductSaleStat  implements Serializable {
 
-	@Serial
 	private static final long serialVersionUID =  2675561165939383345L;
 
 	private Long id;

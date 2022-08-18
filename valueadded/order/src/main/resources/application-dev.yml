@@ -1,5 +1,5 @@
 server:
-  port: 8082
+  port: 8081
   servlet:
     context-path: /
     encoding:
@@ -8,6 +8,8 @@ server:
     uri-encoding: utf-8
 
 spring:
+  application:
+    name: order-biz-services
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -43,4 +45,34 @@ logging:
     com.stardata.starshop2: trace
   pattern:
     console: '%p%m%n'
+eureka:
+  #客户端
+  client:
+    #注册中心地址
+    service-url:
+      defaultZone: http://localhost:7771/eureka/
+  # 修改Eureka上的默认描述信息
+  instance:
+    instance-id: order-biz-center-8081
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+dubbo:
+  application:
+    name: order-biz-center
+  protocol:
+    name: dubbo
+    port: 20882
+  registry:
+    id: zk-registry
+    address: zookeeper://127.0.0.1:2181
+    timeout: 10000
+  config-center:
+    address: zookeeper://127.0.0.1:2181
+  metadata-report:
+    address: zookeeper://127.0.0.1:2181
+adapter:
+  orderItemsSettlement: orderItemsSettlementClientLocalAdapter
 

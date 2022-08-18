@@ -28,7 +28,7 @@ public class LongIdentity implements Identity<Long>, Comparable<Object>{
     }
 
     private static Snowflake getSnowflake() {
-        long datacenterId = new Random().nextLong(0L, 31L);
+        long datacenterId = new Random().nextInt( 31);
         long workerId;
         try {
             workerId = NetUtil.ipv4ToLong(NetUtil.getLocalhostStr());
@@ -59,10 +59,12 @@ public class LongIdentity implements Identity<Long>, Comparable<Object>{
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o instanceof LongIdentity that) {
+        if (o instanceof LongIdentity) {
+            LongIdentity that = (LongIdentity) o;
             return that.id == this.id;
         }
-        if (o instanceof Long that) {
+        if (o instanceof Long ) {
+            Long that = (Long)o;
             return that == this.id;
         }
         return false;
@@ -80,10 +82,12 @@ public class LongIdentity implements Identity<Long>, Comparable<Object>{
 
     @Override
     public int compareTo(@NotNull Object o) {
-        if (o instanceof LongIdentity other ) {
+        if (o instanceof LongIdentity ) {
+            LongIdentity other = (LongIdentity) o;
             return (int)(this.id - other.id);
         }
-        if (o instanceof Long other ) {
+        if (o instanceof Long ) {
+            Long other = (Long) o;
             return (int)(this.id - other);
         }
         return -1;

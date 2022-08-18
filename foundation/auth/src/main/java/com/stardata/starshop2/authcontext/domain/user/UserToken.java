@@ -1,9 +1,9 @@
 package com.stardata.starshop2.authcontext.domain.user;
 
 import com.stardata.starshop2.sharedcontext.helper.CharUtil;
-import javax.persistence.Embeddable;
 import lombok.Getter;
 
+import javax.persistence.Embeddable;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -49,7 +49,8 @@ public class UserToken  implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (! (o instanceof UserToken that)) return false;
+        if (! (o instanceof UserToken)) return false;
+        UserToken that = (UserToken)o;
         return Objects.equals(this.token, that.token) &&
                 Objects.equals(this.sessionKey, that.sessionKey);
     }

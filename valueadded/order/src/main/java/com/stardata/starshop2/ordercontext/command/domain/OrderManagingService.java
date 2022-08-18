@@ -15,6 +15,7 @@ import lombok.AllArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -26,7 +27,8 @@ import java.util.List;
 @Service
 @AllArgsConstructor
 public class OrderManagingService {
-    private final OrderItemsSettlementClient settlementClient;
+    @Resource(name="${adapter.orderItemsSettlement}")
+    private OrderItemsSettlementClient settlementClient;
     private final PrepayingClient prepayingClient;
     private final OrderRepository orderRepository;
     private final BizParameterRepository parameterRepository;

@@ -1,9 +1,10 @@
 package com.stardata.starshop2.productcontext.command.north.remote;
 
-import com.stardata.starshop2.sharedcontext.annotation.LoginUser;
-import com.stardata.starshop2.sharedcontext.domain.SessionUser;
 import com.stardata.starshop2.productcontext.command.north.local.ProductAppService;
 import com.stardata.starshop2.productcontext.command.pl.ProductResponse;
+import com.stardata.starshop2.sharedcontext.annotation.LoginUser;
+import com.stardata.starshop2.sharedcontext.domain.SessionUser;
+import com.stardata.starshop2.sharedcontext.north.Resources;
 import io.swagger.annotations.Api;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Api(tags = "商品命令类资源接口")
 @RestController
-@RequestMapping("/v2/shops/{shopId}/products")
+@RequestMapping("/v2//products")
 @AllArgsConstructor
 public class ProductCommandResource {
     private final ProductAppService appService;
@@ -30,9 +31,24 @@ public class ProductCommandResource {
     public ResponseEntity<ProductResponse> getDetail(@LoginUser SessionUser loginUser,
                                                    @PathVariable Long productId)
     {
-        ProductResponse response = appService.getDetail(productId);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return Resources.with("get product detail info")
+                .onSuccess(HttpStatus.OK)
+                .onError(HttpStatus.BAD_REQUEST)
+                .onFailed(HttpStatus.FORBIDDEN)
+                .execute(() -> appService.getDetail(productId));
     }
+
+//    @GetMapping("/settlements")
+//    public ResponseEntity<ProductSettlementResponse> calcSettlement(@LoginUser SessionUser loginUser,
+//                                                                    @RequestBody ProductSettlementRequest request)
+//    {
+//        return Resources.with("calculate products settlement prices")
+//                .onSuccess(HttpStatus.OK)
+//                .onError(HttpStatus.BAD_REQUEST)
+//                .onFailed(HttpStatus.FORBIDDEN)
+//                .execute(() -> appService.calcSettlement(request));
+//    }
+
 
 
 }

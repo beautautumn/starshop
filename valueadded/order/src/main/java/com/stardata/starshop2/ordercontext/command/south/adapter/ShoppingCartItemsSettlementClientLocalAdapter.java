@@ -4,7 +4,7 @@ import com.stardata.starshop2.ordercontext.command.domain.shoppingcart.ShoppingC
 import com.stardata.starshop2.ordercontext.command.domain.shoppingcart.ShoppingCartItemSubtotal;
 import com.stardata.starshop2.ordercontext.command.south.port.ShoppingCartItemsSettlementClient;
 import com.stardata.starshop2.productcontext.command.domain.ProductSettlementService;
-import com.stardata.starshop2.productcontext.command.domain.productcategory.ProductSettlement;
+import com.stardata.starshop2.productcontext.command.domain.product.ProductSettlement;
 import com.stardata.starshop2.sharedcontext.annotation.Adapter;
 import com.stardata.starshop2.sharedcontext.annotation.PortType;
 import com.stardata.starshop2.sharedcontext.domain.LongIdentity;

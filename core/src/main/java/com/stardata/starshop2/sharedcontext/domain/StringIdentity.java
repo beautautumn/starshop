@@ -1,6 +1,7 @@
 package com.stardata.starshop2.sharedcontext.domain;
 
 import javax.persistence.Embeddable;
+import java.util.Objects;
 
 /**
  * @author Samson Shu
@@ -27,5 +28,19 @@ public class StringIdentity implements Identity<String>{
     @Override
     public String value() {
         return this.code;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof StringIdentity) {
+            StringIdentity that = (StringIdentity)o;
+            return this.code.equals(that.code);
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.code);
     }
 }

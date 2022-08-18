@@ -3,7 +3,6 @@ package com.stardata.starshop2.productcontext.query.entity;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
-import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -17,7 +16,6 @@ import java.time.LocalDateTime;
 @TableName("tb_prod_category")
 public class ProductCategory implements Serializable {
 
-	@Serial
 	private static final long serialVersionUID =  860154376245995461L;
 
 	private Long id;

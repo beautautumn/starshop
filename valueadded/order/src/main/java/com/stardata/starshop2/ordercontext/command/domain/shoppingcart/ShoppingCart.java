@@ -3,12 +3,12 @@ package com.stardata.starshop2.ordercontext.command.domain.shoppingcart;
 import com.stardata.starshop2.sharedcontext.domain.AbstractEntity;
 import com.stardata.starshop2.sharedcontext.domain.AggregateRoot;
 import com.stardata.starshop2.sharedcontext.domain.LongIdentity;
-import javax.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -90,6 +90,7 @@ public class ShoppingCart extends AbstractEntity<LongIdentity>  implements Aggre
     }
 
     public void removeItem(LongIdentity productId) {
+
         this.items.removeAll(
                 this.items.stream().filter(item -> item.getProductId().equals(productId))
                 .collect(Collectors.toList())

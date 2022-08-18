@@ -4,13 +4,13 @@ import com.stardata.starshop2.sharedcontext.domain.AbstractEntity;
 import com.stardata.starshop2.sharedcontext.domain.AggregateRoot;
 import com.stardata.starshop2.sharedcontext.domain.LongIdentity;
 import com.stardata.starshop2.sharedcontext.helper.Constants;
+import lombok.Getter;
+import org.hibernate.annotations.*;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.*;
-import lombok.Getter;
-import org.hibernate.annotations.*;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -47,7 +47,6 @@ public class Order extends AbstractEntity<LongIdentity> implements AggregateRoot
     //归属用户ID
     @Embedded
     private LongIdentity userId;
-
 
     /**
      * 订单类型
@@ -119,7 +118,7 @@ public class Order extends AbstractEntity<LongIdentity> implements AggregateRoot
 
     private String generateOderNumber(LongIdentity shopId, LongIdentity userId) {
         Random random = new Random(shopId.value());
-        long orderSeq = random.nextLong(1000, 9999);
+        long orderSeq = 1000L + random.nextInt(999);
         String todayStr = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
         String shopIdStr = shopId.toString();
         String shopNumber = (shopIdStr.length() > 18)?

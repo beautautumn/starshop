@@ -4,11 +4,11 @@ import com.stardata.starshop2.authcontext.domain.loginlog.LoginLog;
 import com.stardata.starshop2.authcontext.domain.user.User;
 import com.stardata.starshop2.sharedcontext.domain.LongIdentity;
 import com.stardata.starshop2.sharedcontext.south.adapter.GenericRepository;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
 import javax.annotation.Resource;
 import javax.persistence.EntityManager;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
 
 /**
  * @author Samson Shu
@@ -17,7 +17,6 @@ import org.springframework.context.annotation.Configuration;
  * @date 2022/5/19 21:39
  */
 @Configuration
-@ComponentScan
 public class AuthAdapterConfig {
     @Resource
     EntityManager entityManager;

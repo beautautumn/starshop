@@ -2,7 +2,6 @@ package com.stardata.starshop2.productcontext.command.domain.product;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.stardata.starshop2.productcontext.command.domain.productcategory.ProductCategory;
-import com.stardata.starshop2.productcontext.command.domain.productcategory.ProductSettlement;
 import com.stardata.starshop2.sharedcontext.domain.*;
 import com.stardata.starshop2.sharedcontext.exception.DomainException;
 import com.stardata.starshop2.sharedcontext.helper.BooleanCharConverter;

@@ -1,12 +1,13 @@
 package com.stardata.starshop2.productcontext.command.north.local;
 
+import com.stardata.starshop2.api.ProductSettlementRequest;
+import com.stardata.starshop2.api.ProductSettlementResponse;
 import com.stardata.starshop2.productcontext.command.domain.ProductManagingService;
 import com.stardata.starshop2.productcontext.command.domain.ProductSettlementService;
 import com.stardata.starshop2.productcontext.command.domain.product.Product;
-import com.stardata.starshop2.productcontext.command.domain.productcategory.ProductSettlement;
+import com.stardata.starshop2.productcontext.command.domain.product.ProductSettlement;
 import com.stardata.starshop2.productcontext.command.pl.ProductResponse;
-import com.stardata.starshop2.productcontext.command.pl.ProductSettlementRequest;
-import com.stardata.starshop2.productcontext.command.pl.ProductSettlementResponse;
+import com.stardata.starshop2.productcontext.command.pl.ProductSettlementFactory;
 import com.stardata.starshop2.sharedcontext.domain.LongIdentity;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -30,12 +31,13 @@ public class ProductAppService {
     }
 
     public ProductSettlementResponse calcSettlement(ProductSettlementRequest request) {
-        Map<LongIdentity, ProductSettlement> settlements = settlementService.calcSettlement(request.composeToMap());
-        return ProductSettlementResponse.from(settlements);
+        Map<LongIdentity, ProductSettlement> settlements = settlementService
+                .calcSettlement(ProductSettlementFactory.composeRequestToMap(request));
+        return ProductSettlementFactory.settlementToResponse(settlements);
     }
 
     public void increaseCurMonthSale(ProductSettlementRequest request) {
-        settlementService.increaseCurMonthSale(request.composeToMap());
+        settlementService.increaseCurMonthSale(ProductSettlementFactory.composeRequestToMap(request));
     }
 
     public ProductResponse getDetail(Long productIdLong) {

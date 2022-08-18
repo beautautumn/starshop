@@ -213,8 +213,8 @@ public class User extends AbstractEntity<LongIdentity> implements AggregateRoot<
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (! (o instanceof User user)) return false;
-        return Objects.equals(id, user.id) ;
+        if (! (o instanceof User)) return false;
+        return Objects.equals(id, ((User)o).id) ;
     }
 
     @Override
