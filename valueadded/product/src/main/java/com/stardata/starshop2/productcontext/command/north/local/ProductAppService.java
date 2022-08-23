@@ -32,12 +32,12 @@ public class ProductAppService {
 
     public ProductSettlementResponse calcSettlement(ProductSettlementRequest request) {
         Map<LongIdentity, ProductSettlement> settlements = settlementService
-                .calcSettlement(ProductSettlementFactory.composeRequestToMap(request));
+                .calcSettlement(request.composeRequestToMap());
         return ProductSettlementFactory.settlementToResponse(settlements);
     }
 
     public void increaseCurMonthSale(ProductSettlementRequest request) {
-        settlementService.increaseCurMonthSale(ProductSettlementFactory.composeRequestToMap(request));
+        settlementService.increaseCurMonthSale(request.composeRequestToMap());
     }
 
     public ProductResponse getDetail(Long productIdLong) {

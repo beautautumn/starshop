@@ -104,7 +104,7 @@
             <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
             <version>${eureka.version}</version>
         </dependency>
-        <!--actuator完善监控信息-->
+        <!--actuator monitor info-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>

@@ -29,10 +29,17 @@ import java.util.List;
 public class OrderManagingService {
     @Resource(name="${adapter.orderItemsSettlement}")
     private OrderItemsSettlementClient settlementClient;
-    private final PrepayingClient prepayingClient;
-    private final OrderRepository orderRepository;
-    private final BizParameterRepository parameterRepository;
 
+    @Resource
+    private PrepayingClient prepayingClient;
+
+    @Resource
+    private OrderRepository orderRepository;
+
+    @Resource
+    private BizParameterRepository parameterRepository;
+
+    @Resource
     private PrepayRequestGenerationService prepayRequestGenerationService;
 
     public void submitOrder(@NotNull SessionUser user, @NotNull Order order) {

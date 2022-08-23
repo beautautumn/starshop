@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Api(tags = "商品命令类资源接口")
 @RestController
-@RequestMapping("/v2//products")
+@RequestMapping("/v2/products")
 @AllArgsConstructor
 public class ProductCommandResource {
     private final ProductAppService appService;
@@ -37,18 +37,4 @@ public class ProductCommandResource {
                 .onFailed(HttpStatus.FORBIDDEN)
                 .execute(() -> appService.getDetail(productId));
     }
-
-//    @GetMapping("/settlements")
-//    public ResponseEntity<ProductSettlementResponse> calcSettlement(@LoginUser SessionUser loginUser,
-//                                                                    @RequestBody ProductSettlementRequest request)
-//    {
-//        return Resources.with("calculate products settlement prices")
-//                .onSuccess(HttpStatus.OK)
-//                .onError(HttpStatus.BAD_REQUEST)
-//                .onFailed(HttpStatus.FORBIDDEN)
-//                .execute(() -> appService.calcSettlement(request));
-//    }
-
-
-
 }
