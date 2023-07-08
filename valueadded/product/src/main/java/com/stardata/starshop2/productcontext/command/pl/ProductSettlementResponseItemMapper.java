@@ -1,6 +1,6 @@
 package com.stardata.starshop2.productcontext.command.pl;
 
-import com.stardata.starshop2.api.ProductSettlementResponse;
+import com.stardata.starshop2.pl.ProductSettlementResponse;
 import com.stardata.starshop2.productcontext.command.domain.product.ProductSettlement;
 import com.stardata.starshop2.sharedcontext.pl.MapStructBaseMapper;
 import org.mapstruct.Mapper;

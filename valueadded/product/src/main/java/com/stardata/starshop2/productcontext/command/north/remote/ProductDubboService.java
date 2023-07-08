@@ -1,8 +1,8 @@
 package com.stardata.starshop2.productcontext.command.north.remote;
 
 import com.stardata.starshop2.api.ProductBizService;
-import com.stardata.starshop2.api.ProductSettlementRequest;
-import com.stardata.starshop2.api.ProductSettlementResponse;
+import com.stardata.starshop2.pl.ProductSettlementRequest;
+import com.stardata.starshop2.pl.ProductSettlementResponse;
 import com.stardata.starshop2.productcontext.command.north.local.ProductAppService;
 import lombok.AllArgsConstructor;
 import org.apache.dubbo.config.annotation.DubboService;

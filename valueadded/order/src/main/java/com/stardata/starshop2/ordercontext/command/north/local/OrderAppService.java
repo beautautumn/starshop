@@ -3,14 +3,15 @@ package com.stardata.starshop2.ordercontext.command.north.local;
 import com.github.binarywang.wxpay.bean.notify.WxPayNotifyResponse;
 import com.stardata.starshop2.ordercontext.command.domain.OrderManagingService;
 import com.stardata.starshop2.ordercontext.command.domain.order.Order;
-import com.stardata.starshop2.ordercontext.command.domain.order.PayResult;
 import com.stardata.starshop2.ordercontext.command.domain.order.PrepayOrder;
 import com.stardata.starshop2.ordercontext.command.pl.*;
 import com.stardata.starshop2.ordercontext.command.south.port.OrderEventPublisher;
+import com.stardata.starshop2.ordercontext.command.south.port.OrderRepository;
 import com.stardata.starshop2.sharedcontext.domain.LongIdentity;
 import com.stardata.starshop2.sharedcontext.domain.SessionUser;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -25,13 +26,17 @@ import java.util.List;
 public class OrderAppService {
     private final OrderManagingService managingService;
     private final OrderEventPublisher orderEventPublisher;
+    private final OrderRepository orderRepository;
 
+
+    @Transactional
     public OrderResponse create(SessionUser loginUser, Long shopId, OrderSubmitRequest request) {
         Order order = request.toOrder(LongIdentity.from(shopId), loginUser.getId());
         managingService.submitOrder(loginUser, order);
         return OrderResponse.from(order);
     }
 
+    @Transactional
     public PrepayOrderResponse prepay(Long orderIdLong) {
         LongIdentity orderId = LongIdentity.from(orderIdLong);
         PrepayOrder prepay = managingService.prepayOrder(orderId);
@@ -40,23 +45,22 @@ public class OrderAppService {
 
     public OrderResponse getDetail(Long orderIdLong) {
         LongIdentity orderId = LongIdentity.from(orderIdLong);
-        Order order = managingService.detail(orderId);
+        Order order = orderRepository.instanceOf(orderId);
         return OrderResponse.from(order);
     }
 
+    @Transactional
     public String handleWxPayNotify(OrderPayResultRequest request) {
         try {
-            PayResult payResult = request.toPayResult();
-            Order order = managingService.makeOrderEffectively(payResult);
-
-            OrderPaidEvent orderEvent = new OrderPaidEvent(order);
-            orderEventPublisher.publish(orderEvent);
-            return WxPayNotifyResponse.success("成功");
+            Order order = managingService.makeOrderEffectively(request.toPayResult());
+            orderEventPublisher.publish(new OrderPaidEvent(order));
+            return WxPayNotifyResponse.success("success");
         } catch (Exception e) {
             return WxPayNotifyResponse.fail(e.getMessage());
         }
     }
 
+    @Transactional
     public OrderConfirmedResponse confirmReceived(Long orderIdLong) {
         LongIdentity orderId = LongIdentity.from(orderIdLong);
         Order order = managingService.closeOrder(orderId);
@@ -65,6 +69,7 @@ public class OrderAppService {
         return OrderConfirmedResponse.from(order);
     }
 
+    @Transactional
     public void autoConfirm() {
         List<Order> orders = managingService.getConfirmExpired();
         for (Order order : orders) {
@@ -74,12 +79,14 @@ public class OrderAppService {
         }
     }
 
+    @Transactional
     public OrderDeletedResponse delete(Long orderIdLong) {
         LongIdentity orderId = LongIdentity.from(orderIdLong);
         Order order = managingService.setInvisible(orderId);
         return OrderDeletedResponse.from(order);
     }
 
+    @Transactional
     public void autoCancel() {
         List<Order> orders = managingService.getPayExpired();
         for (Order order : orders) {

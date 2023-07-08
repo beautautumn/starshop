@@ -7,10 +7,11 @@ import com.stardata.starshop2.authcontext.domain.user.UserToken;
 import com.stardata.starshop2.authcontext.domain.user.WxAuthInfo;
 import com.stardata.starshop2.authcontext.domain.user.WxOpenId;
 import com.stardata.starshop2.authcontext.north.local.AuthAppService;
-import com.stardata.starshop2.authcontext.pl.UserResponse;
+import com.stardata.starshop2.authcontext.pl.UserLoginResponse;
 import com.stardata.starshop2.authcontext.pl.WxLoginRequest;
 import com.stardata.starshop2.authcontext.south.port.LoginLogRepository;
 import com.stardata.starshop2.authcontext.south.port.UserRepository;
+import com.stardata.starshop2.sharedcontext.domain.Gender;
 import com.stardata.starshop2.sharedcontext.domain.LongIdentity;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -54,7 +55,7 @@ class AuthLoginTests {
         WxOpenId openId = WxOpenId.of("o9Nvx4gUq9dfO1KQy7LL-gXS_EkI");
 
         // when: 创建user对象，并为user对象赋值openId
-        User user = User.of("testUser", 1);
+        User user = User.of("testUser",  Gender.MALE);
         user.setOpenid(openId);
 
         // then: 新用户的OpenId等于原先的OpenId
@@ -87,7 +88,7 @@ class AuthLoginTests {
     void should_save_new_user_success_for_given_openid() {
         // given: 准备好openid，并创建user对象
         WxOpenId openId = WxOpenId.of("o9Nvx4gUq9dfO1KQy7LL-gXS_EkI");
-        User user = User.of("testUser", 1);
+        User user = User.of("testUser",  Gender.MALE);
         user.setOpenid(openId);
         LongIdentity userId = user.getId();
 
@@ -118,13 +119,13 @@ class AuthLoginTests {
     @Test
     void should_equal_all_values_except_id_after_copy_user1_wxinfo_to_user2() {
         // given: 准备好user1对象并给除ID之外所有属性赋值、以及空的user2对象
-        User user1 = User.of("testUser1", 1)
+        User user1 = User.of("testUser1", Gender.MALE)
                 .avatarUrl("https://www.somehost.com/someAvatar.png")
                 .country("中国")
                 .province("江苏")
                 .city("南京")
                 .language("zh_CN");
-        User user2 = User.of("testUser2", 2);
+        User user2 = User.of("testUser2",  Gender.MALE);
 
         // when: 调用user2的copyInfoFrom方法更新用户信息
         user2.copyMiniAppInfoFrom(user1);
@@ -139,12 +140,12 @@ class AuthLoginTests {
     @Transactional
     void should_update_exists_user_success_except_id_after_copy_other_user_wxinfo() {
         // given: 准备好user1对象并给除ID之外所有属性赋值、以及空的user2对象
-        User existUser = User.of("testUser2", 2);
+        User existUser = User.of("testUser2",  Gender.MALE);
         LongIdentity existsUserId = existUser.getId();
         userRepository.add(existUser);
         entityManager.flush();
 
-        User user1 = User.of("testUser1", 1)
+        User user1 = User.of("testUser1",  Gender.MALE)
                 .avatarUrl("https://www.somehost.com/someAvatar.png")
                 .country("中国")
                 .province("江苏")
@@ -173,7 +174,7 @@ class AuthLoginTests {
     void should_load_exists_user_correctly_by_openid() {
         // given: 创建新用户，并设置其openid后保存
         WxOpenId openId = WxOpenId.of("testOpenIdX");
-        User user = User.of("testUserX", 1);
+        User user = User.of("testUserX",  Gender.MALE);
         user.setOpenid(openId);
         userRepository.add(user);
 
@@ -192,7 +193,7 @@ class AuthLoginTests {
     void should_update_wx_user_info_correctly_for_exists_user_by_openid() {
         // given: 已有微信用户信息、openid、并根据该openid在系统中插入用户记录
         WxOpenId openId = WxOpenId.of("testOpenId");
-        User existsUser = User.of("testUserX", 1)
+        User existsUser = User.of("testUserX",  Gender.MALE)
                 .avatarUrl("testUrlX")
                 .country("testCountryX")
                 .province("testProvinceX")
@@ -201,7 +202,7 @@ class AuthLoginTests {
         existsUser.setOpenid(openId);
         userRepository.add(existsUser);
 
-        User frontUser = User.of("testUserY", 2)
+        User frontUser = User.of("testUserY",  Gender.FEMALE)
                 .avatarUrl("testUrlY")
                 .country("testCountryY")
                 .province("testProvinceY")
@@ -226,7 +227,7 @@ class AuthLoginTests {
         // given: 已有openid，但db中没有对应的User对象
         WxOpenId openId = WxOpenId.of("testOpenId");
 
-        User frontUser = User.of("testUserY", 2)
+        User frontUser = User.of("testUserY",  Gender.FEMALE)
                 .avatarUrl("testUrlY")
                 .country("testCountryY")
                 .province("testProvinceY")
@@ -257,7 +258,7 @@ class AuthLoginTests {
     @Test
     void should_create_new_token_correctly_for_given_user() {
         //given: 一个新用户
-        User newUser = User.of("testUser", 1);
+        User newUser = User.of("testUser",  Gender.MALE);
         String sessionKey = "testSessionKey";
 
         //when: 调用User.refreshLoginToken创建令牌
@@ -273,7 +274,7 @@ class AuthLoginTests {
     @Test
     void should_update_token_to_different_if_refresh_twice_for_given_user() {
         //given: 一个新用户
-        User newUser = User.of("testUser", 1);
+        User newUser = User.of("testUser",  Gender.MALE);
         String sessionKey = "testSessionKey";
 
         //when: 调用User.refreshLoginToken创建两次令牌
@@ -293,7 +294,7 @@ class AuthLoginTests {
     @Rollback(true)
     void should_save_token_correctly_for_given_user() {
         //given: 一个新用户
-        User newUser = User.of("testUser", 1);
+        User newUser = User.of("testUser",  Gender.MALE);
         String sessionKey = "testSessionKey";
 
         //when: 调用User.refreshLoginToken创建令牌，并持久化用户对象后再重建
@@ -317,7 +318,7 @@ class AuthLoginTests {
     void should_update_user_token_to_different_given_token_updated() {
         //given: 创建一个用户及其登录令牌保存到db
         String sessionKey = "testSessionKey";
-        User user = User.of("testUser", 1);
+        User user = User.of("testUser",  Gender.MALE);
         user.refreshLoginToken(sessionKey);
         userRepository.add(user);
         entityManager.flush();
@@ -454,7 +455,7 @@ class AuthLoginTests {
         String rawData = "{\"nickName\":\"深清秋\",\"gender\":0,\"language\":\"zh_CN\",\"city\":\"\",\"province\":\"\",\"country\":\"\",\"avatarUrl\":\"https://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTKq2CRmib1mpu4hOFYtcIHgAmS7DicCEfYkUHoPmPQn74BXH5GerjoMOxIqib7iafNNBw2ZAicBj6gZGUQ/132\"}";
         String signature = "06846a4ba8b003af5d98fadfaf376a652e5d75d7";
         WxAuthInfo wxAuthInfo = new WxAuthInfo(rawData, signature);
-        User frontUser = User.of("testUser", 2)
+        User frontUser = User.of("testUser",  Gender.FEMALE)
                 .avatarUrl("testUrl")
                 .country("testCountry")
                 .province("testProvince")
@@ -484,7 +485,7 @@ class AuthLoginTests {
         String rawData = "{\"nickName\":\"深清秋\",\"gender\":0,\"language\":\"zh_CN\",\"city\":\"\",\"province\":\"\",\"country\":\"\",\"avatarUrl\":\"https://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTKq2CRmib1mpu4hOFYtcIHgAmS7DicCEfYkUHoPmPQn74BXH5GerjoMOxIqib7iafNNBw2ZAicBj6gZGUQ/132\"}";
         String signature = "06846a4ba8b003af5d98fadfaf376a652e5d75d8";
         WxAuthInfo wxAuthInfo = new WxAuthInfo(rawData, signature);
-        User frontUser = User.of("testUser", 2)
+        User frontUser = User.of("testUser",  Gender.FEMALE)
                 .avatarUrl("testUrl")
                 .country("testCountry")
                 .province("testProvince")
@@ -527,7 +528,7 @@ class AuthLoginTests {
     void should_create_and_save_login_log_correctly_given_login_log() {
         // given:
         WxOpenId openId = WxOpenId.of("testOpenId");
-        User user = User.of("testUser", 2)
+        User user = User.of("testUser",  Gender.FEMALE)
                 .avatarUrl("testUrl")
                 .country("testCountry")
                 .province("testProvince")
@@ -580,7 +581,7 @@ class AuthLoginTests {
         request.setRawData(rawData);
         request.setSignature(signature);
         request.setNickName("testUser1");
-        request.setGender(1);
+        request.setGender('1');
         request.setAvatarUrl("https://www.somehost.com/someAvatar.png");
         request.setCountry("中国");
         request.setProvince("江苏");
@@ -589,7 +590,7 @@ class AuthLoginTests {
 
 
         // when: 执行authAppService.loginByWx方法调用
-        UserResponse response = authAppService.loginByWx(request);
+        UserLoginResponse response = authAppService.loginByWx(request);
 
         // then: 检查调用结果是否正确
         assertNotNull(response);
@@ -597,7 +598,7 @@ class AuthLoginTests {
         assertNotNull(response.getToken());
 
         User loadedUser = userRepository.instanceOf(LongIdentity.from(response.getId()));
-        User frontUser = User.of("testUser1", 1)
+        User frontUser = User.of("testUser1",  Gender.MALE)
                         .avatarUrl("https://www.somehost.com/someAvatar.png")
                         .country("中国")
                         .province("江苏")
@@ -616,7 +617,7 @@ class AuthLoginTests {
     @Rollback(true)
     void app_service_should_login_success_given_old_user_valid_code_and_encrypt_info() {
         // given: 准备好输入数据
-        User user = User.of("testUser", 1)
+        User user = User.of("testUser",  Gender.MALE)
                 .avatarUrl("testUrl")
                 .country("testCountry")
                 .province("testProvince")
@@ -635,7 +636,7 @@ class AuthLoginTests {
         request.setRawData(rawData);
         request.setSignature(signature);
         request.setNickName("testUser1");
-        request.setGender(1);
+        request.setGender('1');
         request.setAvatarUrl("https://www.somehost.com/someAvatar.png");
         request.setCountry("中国");
         request.setProvince("江苏");
@@ -644,7 +645,7 @@ class AuthLoginTests {
 
 
         // when: 执行authAppService.loginByWx方法调用
-        UserResponse response = authAppService.loginByWx(request);
+        UserLoginResponse response = authAppService.loginByWx(request);
 
         // then: 检查调用结果是否正确
         assertNotNull(response);
@@ -652,7 +653,7 @@ class AuthLoginTests {
         assertNotNull(response.getToken());
 
         User loadedUser = userRepository.instanceOf(LongIdentity.from(response.getId()));
-        User frontUser = User.of("testUser1", 1)
+        User frontUser = User.of("testUser1",  Gender.MALE)
                 .avatarUrl("https://www.somehost.com/someAvatar.png")
                 .country("中国")
                 .province("江苏")
@@ -681,7 +682,7 @@ class AuthLoginTests {
         request.setRawData(rawData);
         request.setSignature(signature);
         request.setNickName("testUser1");
-        request.setGender(1);
+        request.setGender('1');
         request.setAvatarUrl("https://www.somehost.com/someAvatar.png");
         request.setCountry("中国");
         request.setProvince("江苏");
@@ -691,7 +692,7 @@ class AuthLoginTests {
         try {
 
             // when: 执行authAppService.loginByWx方法调用
-            UserResponse response = authAppService.loginByWx(request);
+            UserLoginResponse response = authAppService.loginByWx(request);
 
             // 如下这些应该不被执行到
             assertEquals(1, 0);
@@ -719,7 +720,7 @@ class AuthLoginTests {
         request.setRawData(rawData);
         request.setSignature(signature);
         request.setNickName("testUser1");
-        request.setGender(1);
+        request.setGender('1');
         request.setAvatarUrl("https://www.somehost.com/someAvatar.png");
         request.setCountry("中国");
         request.setProvince("江苏");
@@ -729,7 +730,7 @@ class AuthLoginTests {
         try {
 
             // when: 执行authAppService.loginByWx方法调用
-            UserResponse response = authAppService.loginByWx(request);
+            UserLoginResponse response = authAppService.loginByWx(request);
 
             // 如下这些应该不被执行到
             assertEquals(1, 0);
@@ -757,7 +758,7 @@ class AuthLoginTests {
         request.setRawData(rawData);
         request.setSignature(signature);
         request.setNickName("testUser1");
-        request.setGender(1);
+        request.setGender('1');
         request.setAvatarUrl("https://www.somehost.com/someAvatar.png");
         request.setCountry("中国");
         request.setProvince("江苏");
@@ -767,7 +768,7 @@ class AuthLoginTests {
         try {
 
             // when: 执行authAppService.loginByWx方法调用
-            UserResponse response = authAppService.loginByWx(request);
+            UserLoginResponse response = authAppService.loginByWx(request);
 
             // 如下这些应该不被执行到
             assertEquals(1, 0);

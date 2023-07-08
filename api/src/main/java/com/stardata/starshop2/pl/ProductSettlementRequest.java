@@ -1,4 +1,4 @@
-package com.stardata.starshop2.api;
+package com.stardata.starshop2.pl;
 
 import com.stardata.starshop2.sharedcontext.domain.LongIdentity;
 import lombok.AllArgsConstructor;

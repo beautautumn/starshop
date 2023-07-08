@@ -1,5 +1,7 @@
 package com.stardata.starshop2.api;
 
+import com.stardata.starshop2.pl.ProductSettlementRequest;
+import com.stardata.starshop2.pl.ProductSettlementResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;

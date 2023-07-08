@@ -21,7 +21,7 @@ import javax.persistence.EntityManager;
 @Configuration
 @EnableConfigurationProperties(AdapterSwitchProperties.class)
 @AllArgsConstructor
-public class OrderAdapterConfig {
+public class OrderRepositoryAdapterConfig {
     @Resource
     private EntityManager entityManager;
 

@@ -64,7 +64,7 @@ dubbo:
     name: order-biz-center
   protocol:
     name: dubbo
-    port: 20882
+    port: 20881
   registry:
     id: zk-registry
     address: zookeeper://127.0.0.1:2181
@@ -74,5 +74,6 @@ dubbo:
   metadata-report:
     address: zookeeper://127.0.0.1:2181
 adapter:
-  orderItemsSettlement: orderItemsSettlementClientLocalAdapter
+  orderSettlementClient: orderItemsSettlementClientLocalAdapter
+  fillCustomerIdClient: fillCustomerIdClientLocalAdapter
 

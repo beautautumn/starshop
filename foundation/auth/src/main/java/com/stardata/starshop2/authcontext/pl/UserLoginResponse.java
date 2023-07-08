@@ -10,11 +10,11 @@ import lombok.Data;
  * @date 2022/2/28 14:21
  */
 @Data
-public class UserResponse {
+public class UserLoginResponse {
     private Long id;
     private String token;
 
-    public static UserResponse from(User user) {
-        return UserResponseMapper.INSTANCE.convert(user);
+    public static UserLoginResponse from(User user) {
+        return UserLoginResponseMapper.INSTANCE.convert(user);
     }
 }

@@ -28,7 +28,7 @@ public enum OrderOperType implements PersistentCharEnum {
     }
 
     @Override
-    public char getValue() {
+    public char value() {
         return this.value;
     }
 }

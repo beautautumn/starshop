@@ -12,11 +12,11 @@ import org.mapstruct.factory.Mappers;
  * @date 2022/5/24 22:41
  */
 @Mapper
-public interface UserResponseMapper {
-    UserResponseMapper INSTANCE = Mappers.getMapper(UserResponseMapper.class);
+public interface UserLoginResponseMapper {
+    UserLoginResponseMapper INSTANCE = Mappers.getMapper(UserLoginResponseMapper.class);
 
     @Mapping(expression="java(user.currentToken().getToken())", target="token")
     @Mapping(expression="java(user.getId().value())", target="id")
-    UserResponse convert(User user);
+    UserLoginResponse convert(User user);
 
 }

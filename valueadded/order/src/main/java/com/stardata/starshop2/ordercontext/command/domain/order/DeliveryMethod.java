@@ -19,7 +19,7 @@ public enum DeliveryMethod implements PersistentCharEnum {
     }
 
     @Override
-    public char getValue() {
+    public char value() {
         return 0;
     }
 }

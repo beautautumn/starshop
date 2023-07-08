@@ -1,7 +1,7 @@
 package com.stardata.starshop2.authcontext.north.remote;
 
 import com.stardata.starshop2.authcontext.north.local.AuthAppService;
-import com.stardata.starshop2.authcontext.pl.UserResponse;
+import com.stardata.starshop2.authcontext.pl.UserLoginResponse;
 import com.stardata.starshop2.authcontext.pl.WxEncryptedUserInfo;
 import com.stardata.starshop2.authcontext.pl.WxLoginRequest;
 import com.stardata.starshop2.sharedcontext.annotation.IgnoreAuth;
@@ -34,7 +34,7 @@ public class AuthResource {
 
     @PostMapping("/wxlogin")
     @IgnoreAuth
-    public ResponseEntity<UserResponse> loginByWx(WxLoginRequest request) {
+    public ResponseEntity<UserLoginResponse> loginByWx(WxLoginRequest request) {
         return Resources.with("login by wechat user info")
                 .onSuccess(HttpStatus.OK)
                 .onError(HttpStatus.BAD_REQUEST)

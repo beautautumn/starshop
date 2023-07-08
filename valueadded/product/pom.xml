@@ -18,7 +18,7 @@
         <spring-cloud.version>2021.0.1</spring-cloud.version>
         <curator-framework.version>5.1.0</curator-framework.version>
         <curator-recipes.version>5.1.0</curator-recipes.version>
-        <zookeeper.version>3.5.4-beta</zookeeper.version>
+        <zookeeper.version>3.6.0</zookeeper.version>
     </properties>
 
     <dependencies>
@@ -30,7 +30,7 @@
         <dependency>
             <groupId>com.stardata.starshop2</groupId>
             <artifactId>api</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>${project.parent.version}</version>
             <scope>compile</scope>
         </dependency>
         <dependency>

@@ -28,7 +28,7 @@ public class WxDecryptingClientAdapter implements WxDecryptingClient {
         try{
             WxMaPhoneNumberInfo phoneNumberInfo = wxService.getUserService()
                     .getPhoneNoInfo(userToken.getSessionKey(), encryptedData, iv);
-            return new MobileNumber(phoneNumberInfo.getPhoneNumber());
+            return MobileNumber.from(phoneNumberInfo.getPhoneNumber());
         }
         catch(JsonSyntaxException | WxRuntimeException e) {
             throw new ApplicationValidationException(ApplicationValidationException.INVALID_REQUEST_DATA, "encryptedData or iv data error", e);

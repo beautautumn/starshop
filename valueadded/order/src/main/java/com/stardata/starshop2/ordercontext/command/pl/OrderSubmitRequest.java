@@ -22,6 +22,8 @@ public class OrderSubmitRequest {
         private long productId;
         private int count;
 
+        public Item() {}
+
         Item(long productId, int count) {
             this.productId = productId;
             this.count = count;

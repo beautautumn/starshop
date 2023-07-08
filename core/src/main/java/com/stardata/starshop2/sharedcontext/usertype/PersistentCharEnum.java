@@ -7,5 +7,5 @@ package com.stardata.starshop2.sharedcontext.usertype;
  * @date 2022/6/28 21:51
  */
 public interface PersistentCharEnum {
-    char getValue();
+    char value();
 }

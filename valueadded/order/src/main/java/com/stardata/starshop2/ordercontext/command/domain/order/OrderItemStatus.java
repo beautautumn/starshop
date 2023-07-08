@@ -20,7 +20,7 @@ public enum OrderItemStatus implements PersistentCharEnum {
     }
 
     @Override
-    public char getValue() {
+    public char value() {
         return this.value;
     }
 

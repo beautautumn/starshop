@@ -27,7 +27,7 @@ public class WxLoginRequest {
     private String province;
     private String city;
     private String language;
-    private Integer gender;
+    private Character gender;
     private String nickName;
 
     /**

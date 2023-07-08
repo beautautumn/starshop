@@ -1,7 +1,7 @@
 package com.stardata.starshop2.productcontext.command.north.local;
 
-import com.stardata.starshop2.api.ProductSettlementRequest;
-import com.stardata.starshop2.api.ProductSettlementResponse;
+import com.stardata.starshop2.pl.ProductSettlementRequest;
+import com.stardata.starshop2.pl.ProductSettlementResponse;
 import com.stardata.starshop2.productcontext.command.domain.ProductManagingService;
 import com.stardata.starshop2.productcontext.command.domain.ProductSettlementService;
 import com.stardata.starshop2.productcontext.command.domain.product.Product;

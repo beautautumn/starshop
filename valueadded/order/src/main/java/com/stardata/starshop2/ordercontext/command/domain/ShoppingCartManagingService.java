@@ -1,12 +1,14 @@
 package com.stardata.starshop2.ordercontext.command.domain;
 
 import com.stardata.starshop2.ordercontext.command.domain.shoppingcart.ShoppingCart;
-import com.stardata.starshop2.ordercontext.command.south.port.ShoppingCartItemsSettlementClient;
+import com.stardata.starshop2.ordercontext.command.south.port.ShoppingCartSettlementClient;
 import com.stardata.starshop2.ordercontext.command.south.port.ShoppingCartRepository;
 import com.stardata.starshop2.sharedcontext.domain.LongIdentity;
 import lombok.AllArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
 
 /**
  * @author Samson Shu
@@ -17,7 +19,8 @@ import org.springframework.stereotype.Service;
 @Service
 @AllArgsConstructor
 public class ShoppingCartManagingService {
-    private final ShoppingCartItemsSettlementClient settlementClient;
+    @Resource(name="${adapter.shoppingCartSettlementClient}")
+    private final ShoppingCartSettlementClient settlementClient;
     private final ShoppingCartRepository shoppingCartRepository;
 
     public ShoppingCart replaceShoppingCart(@NotNull ShoppingCart shoppingCart) {

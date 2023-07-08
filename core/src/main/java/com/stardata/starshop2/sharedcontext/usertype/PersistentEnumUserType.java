@@ -36,7 +36,7 @@ public abstract class PersistentEnumUserType<T extends PersistentCharEnum> imple
 
         char c = str.charAt(0);
         for(PersistentCharEnum elem : returnedClass().getEnumConstants()) {
-            if(c == elem.getValue()) {
+            if(c == elem.value()) {
                 return elem;
             }
         }
@@ -49,7 +49,7 @@ public abstract class PersistentEnumUserType<T extends PersistentCharEnum> imple
         if (value == null) {
             st.setNull(index, Types.CHAR);
         } else {
-            st.setString(index, String.valueOf(((PersistentCharEnum)value).getValue()));
+            st.setString(index, String.valueOf(((PersistentCharEnum)value).value()));
         }
     }
 

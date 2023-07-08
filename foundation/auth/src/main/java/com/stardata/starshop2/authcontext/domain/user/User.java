@@ -1,18 +1,16 @@
 package com.stardata.starshop2.authcontext.domain.user;
 
-import com.stardata.starshop2.sharedcontext.domain.AbstractEntity;
-import com.stardata.starshop2.sharedcontext.domain.AggregateRoot;
-import com.stardata.starshop2.sharedcontext.domain.LongIdentity;
-import com.stardata.starshop2.sharedcontext.domain.MobileNumber;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.stardata.starshop2.sharedcontext.domain.*;
 import com.stardata.starshop2.sharedcontext.helper.Constants;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.UpdateTimestamp;
-import org.hibernate.annotations.Where;
+import org.hibernate.annotations.*;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.LocalDateTime;
@@ -27,10 +25,14 @@ import java.util.Objects;
  * @date 2022/2/24 21:06
  */
 @Entity
-@Getter
 @Table(name = "tb_user")
 @SQLDelete(sql = "update user set is_valid = '"+ Constants.DELETE_FLAG.DELETED+"' where id = ?")
 @Where(clause = "is_valid = '"+ Constants.DELETE_FLAG.NORMAL+"'")
+@AttributeOverrides({
+        @AttributeOverride(name="openid.value", column = @Column(name="openid", length =40, nullable = false)),
+        @AttributeOverride(name="mobileNumber.value", column = @Column(name="mobile", length =20))
+})
+@Getter
 public class User extends AbstractEntity<LongIdentity> implements AggregateRoot<User> {
     /**
      * 主键ID
@@ -41,7 +43,6 @@ public class User extends AbstractEntity<LongIdentity> implements AggregateRoot<
     /**
      * 头像图片URL
      */
-    @Setter
     @Column(name = "avatarurl")
     private URL avatarUrl;
 
@@ -74,7 +75,8 @@ public class User extends AbstractEntity<LongIdentity> implements AggregateRoot<
      */
     @Setter
     @Column(nullable = false)
-    private Integer gender;
+    @Type(type = "com.stardata.starshop2.sharedcontext.usertype.GenderUserType")
+    private Gender gender;
 
     /**
      * 网络昵称
@@ -86,7 +88,8 @@ public class User extends AbstractEntity<LongIdentity> implements AggregateRoot<
     /**
      * 注册时间
      */
-    @Column(nullable = false)
+    @Column(nullable = false, updatable = false)
+    @JsonIgnore
     private LocalDateTime registerTime;
 
     /**
@@ -94,6 +97,7 @@ public class User extends AbstractEntity<LongIdentity> implements AggregateRoot<
      */
     @Column(nullable = false)
     @UpdateTimestamp
+    @JsonIgnore
     private LocalDateTime updateTime;
 
     /**
@@ -101,14 +105,12 @@ public class User extends AbstractEntity<LongIdentity> implements AggregateRoot<
      */
     @Setter
     @Embedded
-    @AttributeOverride(name="value", column = @Column(name="openid", length =40, nullable = false))
     private WxOpenId openid;
 
     /**
      * 手机号码
      */
     @Embedded
-    @AttributeOverride(name="value", column = @Column(name="mobile", length =20))
     private MobileNumber mobileNumber;
 
     /**
@@ -124,7 +126,7 @@ public class User extends AbstractEntity<LongIdentity> implements AggregateRoot<
      * 业务代码不要使用，这是给Hibernate、MapStruct使用的构造子
      */
     public User() {
-        this( "UNKNOWN", 0);
+        this( "UNKNOWN",  Gender.UNKNOWN);
     }
 
     /**
@@ -132,7 +134,7 @@ public class User extends AbstractEntity<LongIdentity> implements AggregateRoot<
      * @param nickName 网络昵称
      * @param gender 性别
      */
-    User(String nickName, Integer gender) {
+    User(String nickName, Gender gender) {
         this.nickName = nickName;
         this.gender = gender;
         this.id = LongIdentity.snowflakeId();
@@ -140,7 +142,7 @@ public class User extends AbstractEntity<LongIdentity> implements AggregateRoot<
         this.registerTime = LocalDateTime.now();
     }
 
-    public static User of(String nickName, Integer gender) {
+    public static User of(String nickName, Gender gender) {
        return new User(nickName, gender);
     }
 

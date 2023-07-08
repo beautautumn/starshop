@@ -23,5 +23,5 @@ public enum OrderStatus implements PersistentCharEnum {
     }
 
     @Override
-    public char getValue() { return this.value; }
+    public char value() { return this.value; }
 }

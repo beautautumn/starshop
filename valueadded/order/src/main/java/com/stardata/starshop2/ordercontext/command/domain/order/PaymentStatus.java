@@ -19,6 +19,6 @@ public enum PaymentStatus implements PersistentCharEnum {
     }
 
     @Override
-    public char getValue() { return this.value; }
+    public char value() { return this.value; }
 
 }

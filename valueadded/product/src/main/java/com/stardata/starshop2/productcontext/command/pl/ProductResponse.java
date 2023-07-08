@@ -11,8 +11,15 @@ import lombok.Data;
  */
 @Data
 public class ProductResponse {
+    private Object content;
+
+    private ProductResponse(Product product) {
+        this.content = product;
+    }
+
     public static ProductResponse from(Product product) {
         //todo 完成商品对象转DTO
-        return null;
+
+        return new ProductResponse(product);
     }
 }

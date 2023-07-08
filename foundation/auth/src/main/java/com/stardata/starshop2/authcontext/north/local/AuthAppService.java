@@ -5,7 +5,7 @@ import com.stardata.starshop2.authcontext.domain.MobileNumberDecryptingService;
 import com.stardata.starshop2.authcontext.domain.WxLoginWithTokenService;
 import com.stardata.starshop2.authcontext.domain.user.User;
 import com.stardata.starshop2.authcontext.domain.user.WxAuthInfo;
-import com.stardata.starshop2.authcontext.pl.UserResponse;
+import com.stardata.starshop2.authcontext.pl.UserLoginResponse;
 import com.stardata.starshop2.authcontext.pl.WxEncryptedUserInfo;
 import com.stardata.starshop2.authcontext.pl.WxLoginRequest;
 import com.stardata.starshop2.sharedcontext.domain.LongIdentity;
@@ -29,13 +29,13 @@ public class AuthAppService {
     private LoginLogService logService;
     private MobileNumberDecryptingService decryptService;
 
-    public UserResponse loginByWx(@NotNull WxLoginRequest request) {
+    public UserLoginResponse loginByWx(@NotNull WxLoginRequest request) {
         String code = request.getCode();
         WxAuthInfo wxAuthInfo = request.getWxAuthInfo();
         User loginUser = request.getRequestUser();
         User user = loginWithTokenService.loginWithToken(code, wxAuthInfo, loginUser);
         logService.recordLogin(user, request.getRequestIp());
-        return UserResponse.from(user);
+        return UserLoginResponse.from(user);
     }
 
     public MobileNumberResponse decryptWxMobileNumber(SessionUser loginUser, WxEncryptedUserInfo encryptedUserInfo) {

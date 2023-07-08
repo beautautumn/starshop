@@ -13,7 +13,7 @@ import com.stardata.starshop2.ordercontext.command.pl.OrderPayResultRequest;
 import com.stardata.starshop2.ordercontext.command.pl.OrderResponse;
 import com.stardata.starshop2.ordercontext.command.pl.OrderSubmitRequest;
 import com.stardata.starshop2.ordercontext.command.pl.PrepayOrderResponse;
-import com.stardata.starshop2.ordercontext.command.south.port.OrderItemsSettlementClient;
+import com.stardata.starshop2.ordercontext.command.south.port.OrderSettlementClient;
 import com.stardata.starshop2.ordercontext.command.south.port.OrderRepository;
 import com.stardata.starshop2.ordercontext.command.south.port.PrepayingClient;
 import com.stardata.starshop2.sharedcontext.domain.LongIdentity;
@@ -44,7 +44,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class OrderTests {
 
     @Resource(name="${adapter.orderItemsSettlement}")
-    OrderItemsSettlementClient settlementClient;
+    OrderSettlementClient settlementClient;
 
     /**
      * 任务级测试：创建付款订单——结算订单商品（含生成快照）

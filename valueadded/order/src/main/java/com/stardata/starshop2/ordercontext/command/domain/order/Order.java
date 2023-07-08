@@ -5,6 +5,7 @@ import com.stardata.starshop2.sharedcontext.domain.AggregateRoot;
 import com.stardata.starshop2.sharedcontext.domain.LongIdentity;
 import com.stardata.starshop2.sharedcontext.helper.Constants;
 import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.*;
 
 import javax.persistence.CascadeType;
@@ -31,9 +32,9 @@ import java.util.stream.Collectors;
 @Where(clause = "is_valid = '"+ Constants.DELETE_FLAG.NORMAL+"'")
 @AttributeOverrides({
         @AttributeOverride(name = "shopId.id", column = @Column(name = "shop_id", nullable = false)),
-        @AttributeOverride(name = "userId.id", column = @Column(name = "user_id", nullable = false))
+        @AttributeOverride(name = "userId.id", column = @Column(name = "user_id", nullable = false)),
+        @AttributeOverride(name = "customerId.id", column = @Column(name = "cust_id", nullable = false))
 })
-
 @Getter
 public class Order extends AbstractEntity<LongIdentity> implements AggregateRoot<Order> {
 
@@ -47,6 +48,11 @@ public class Order extends AbstractEntity<LongIdentity> implements AggregateRoot
     //归属用户ID
     @Embedded
     private LongIdentity userId;
+
+    //归属客户ID
+    @Embedded
+    @Setter
+    private LongIdentity customerId;
 
     /**
      * 订单类型

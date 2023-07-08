@@ -1,0 +1,23 @@
+server:
+  #服务端口
+  port: 7771
+eureka:
+  client:
+    service-url:
+      # 需要进行消息注册的请求地址，不需要用户名密码验证
+      #defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka
+      #其他服务想注册到Eureka上需要添加用户名和密码进行认证
+      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka
+    #表示当前服务不会注册到服务中心
+    register-with-eureka: false
+    #表示当前服务不会拉取其他服务
+    fetch-registry: false
+  instance:
+    hostname: localhost
+spring:
+  #登录Eureka所需的用户名和密码
+  security:
+    user:
+      name: admin
+      password: admin
+

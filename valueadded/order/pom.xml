@@ -19,7 +19,7 @@
         <spring-cloud.version>2021.0.1</spring-cloud.version>
         <curator-framework.version>5.1.0</curator-framework.version>
         <curator-recipes.version>5.1.0</curator-recipes.version>
-        <zookeeper.version>3.5.4-beta</zookeeper.version>
+        <zookeeper.version>3.6.0</zookeeper.version>
     </properties>
 
     <dependencies>
@@ -35,16 +35,31 @@
             <scope>compile</scope>
         </dependency>
 
+        <!-- following is for demo calling services in other contexts locally-->
+<!--        <dependency>-->
+<!--            <groupId>com.stardata.starshop2</groupId>-->
+<!--            <artifactId>productcontext-command</artifactId>-->
+<!--            <version>${project.parent.version}</version>-->
+<!--            <scope>compile</scope>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>com.stardata.starshop2</groupId>-->
+<!--            <artifactId>customercontext</artifactId>-->
+<!--            <version>${project.parent.version}</version>-->
+<!--            <scope>compile</scope>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>com.stardata.starshop2</groupId>-->
+<!--            <artifactId>usercontext</artifactId>-->
+<!--            <version>${project.parent.version}</version>-->
+<!--            <scope>compile</scope>-->
+<!--        </dependency>-->
+
+        <!-- mysql -->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.stardata.starshop2</groupId>
-            <artifactId>productcontext-command</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-            <scope>compile</scope>
         </dependency>
 
         <!-- dubbo -->

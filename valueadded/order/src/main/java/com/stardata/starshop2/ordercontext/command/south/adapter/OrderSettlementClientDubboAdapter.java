@@ -1,10 +1,10 @@
 package com.stardata.starshop2.ordercontext.command.south.adapter;
 
 import com.stardata.starshop2.api.ProductBizService;
-import com.stardata.starshop2.api.ProductSettlementRequest;
-import com.stardata.starshop2.api.ProductSettlementResponse;
+import com.stardata.starshop2.pl.ProductSettlementRequest;
+import com.stardata.starshop2.pl.ProductSettlementResponse;
 import com.stardata.starshop2.ordercontext.command.domain.order.Order;
-import com.stardata.starshop2.ordercontext.command.south.port.OrderItemsSettlementClient;
+import com.stardata.starshop2.ordercontext.command.south.port.OrderSettlementClient;
 import com.stardata.starshop2.sharedcontext.annotation.Adapter;
 import com.stardata.starshop2.sharedcontext.annotation.PortType;
 import com.stardata.starshop2.sharedcontext.domain.LongIdentity;
@@ -24,12 +24,12 @@ import java.util.List;
  * @date 2022/6/6 11:20
  */
 @Adapter(PortType.Client)
-@Component("orderItemsSettlementDubboAdapter")
+@Component("orderSettlementClientDubboAdapter")
 @AllArgsConstructor
 @Primary
-public class OrderItemsSettlementDubboAdapter implements OrderItemsSettlementClient {
+public class OrderSettlementClientDubboAdapter implements OrderSettlementClient {
     @DubboReference
-    private final ProductBizService productSettlementService;
+    private final ProductBizService productBizService;
 
     @Override
     public void settleProducts(@NotNull Order order) {
@@ -40,7 +40,7 @@ public class OrderItemsSettlementDubboAdapter implements OrderItemsSettlementCli
             productCounts.add(item.getPurchaseCount());
         });
         ProductSettlementRequest request = new ProductSettlementRequest(productIds, productCounts);
-        ProductSettlementResponse response = productSettlementService.calcSettlement(request);
+        ProductSettlementResponse response = productBizService.calcSettlement(request);
         for (ProductSettlementResponse.Item item : response.getItems()) {
             order.settleItem(LongIdentity.from(item.getId()), item.getName(), item.getCount(),
                     item.getPriceFen(), item.getProductSnapshot());

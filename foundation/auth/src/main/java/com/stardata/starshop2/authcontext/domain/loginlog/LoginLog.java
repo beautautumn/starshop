@@ -3,6 +3,7 @@ package com.stardata.starshop2.authcontext.domain.loginlog;
 import com.stardata.starshop2.authcontext.domain.user.User;
 import com.stardata.starshop2.sharedcontext.domain.AbstractEntity;
 import com.stardata.starshop2.sharedcontext.domain.AggregateRoot;
+import com.stardata.starshop2.sharedcontext.domain.Gender;
 import com.stardata.starshop2.sharedcontext.domain.LongIdentity;
 import lombok.Getter;
 
@@ -39,7 +40,7 @@ public class LoginLog extends AbstractEntity<LongIdentity> implements AggregateR
     }
 
     protected LoginLog() {
-        this(User.of("UNKNOWN", 0), "0.0.0.0");
+        this(User.of("UNKNOWN", Gender.UNKNOWN), "0.0.0.0");
     }
 
     public static LoginLog createFor(User user, String loginIp) {

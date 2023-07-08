@@ -1,0 +1,76 @@
+server:
+  port: 8083
+  servlet:
+    context-path: /
+    encoding:
+      force-response: true
+  tomcat:
+    uri-encoding: utf-8
+
+spring:
+  application:
+    name: order-biz-services
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/starshop_test?useSSL=false&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true
+    username: root
+    password: root
+  jpa:
+    open_in_view: false
+    show_sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+    default-property-inclusion: non_null
+    deserialization:
+      FAIL_ON_UNKNOWN_PROPERTIES: false
+      USE_BIG_DECIMAL_FOR_FLOATS: true
+wx:
+  pay:
+    appId: someappid #换成你自己的appid
+    mchId: 1224234 #换成你自己的微信支付mchId
+    mchKey: somekey #换成你自己的微信支付mchKey
+    #subAppId: #服务商模式下的子商户公众账号ID
+    #subMchId: #服务商模式下的子商户号
+    keyPath: classpath:apiclient_cert.p12
+logging:
+  level:
+    root: warn
+    org.springframework.web: info
+    cn.binarywang.wx.miniapp: debug
+    com.stardata.starshop2: trace
+  pattern:
+    console: '%p%m%n'
+eureka:
+  #客户端
+  client:
+    #注册中心地址
+    service-url:
+      defaultZone: http://localhost:7771/eureka/
+  # 修改Eureka上的默认描述信息
+  instance:
+    instance-id: order-biz-center-8081
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+dubbo:
+  application:
+    name: customer-biz-center
+  protocol:
+    name: dubbo
+    port: 20883
+  registry:
+    id: zk-registry
+    address: zookeeper://127.0.0.1:2181
+    timeout: 10000
+  config-center:
+    address: zookeeper://127.0.0.1:2181
+  metadata-report:
+    address: zookeeper://127.0.0.1:2181
+

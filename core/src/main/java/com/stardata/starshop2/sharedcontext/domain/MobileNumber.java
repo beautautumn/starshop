@@ -19,7 +19,7 @@ public class MobileNumber implements Serializable {
     private String value;
 
 
-    public MobileNumber(String value) {
+    private MobileNumber(String value) {
         if (!isMobilePhoneNumber(value)) {
             throw new ApplicationValidationException(ApplicationValidationException.INVALID_REQUEST_DATA, "Invalid mobile phone number.");
         }
@@ -33,6 +33,10 @@ public class MobileNumber implements Serializable {
     private boolean isMobilePhoneNumber(String value) {
         String mobilePhoneNumberPattern =  "^(\\+86)?[1][3|4|5|7|8|9][0-9]{9}$";
         return Pattern.compile(mobilePhoneNumberPattern).matcher(value).matches();
+    }
+
+    public static MobileNumber from(String value) {
+        return new MobileNumber(value);
     }
 
     public String value() {

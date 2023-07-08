@@ -8,6 +8,7 @@ import com.stardata.starshop2.authcontext.north.local.AuthAppService;
 import com.stardata.starshop2.authcontext.pl.MobileNumberResponse;
 import com.stardata.starshop2.authcontext.pl.WxEncryptedUserInfo;
 import com.stardata.starshop2.authcontext.south.port.UserRepository;
+import com.stardata.starshop2.sharedcontext.domain.Gender;
 import com.stardata.starshop2.sharedcontext.domain.LongIdentity;
 import com.stardata.starshop2.sharedcontext.domain.MobileNumber;
 import com.stardata.starshop2.sharedcontext.domain.SessionUser;
@@ -66,7 +67,7 @@ public class AuthDecryptingTests {
         String rawData = "{\"nickName\":\"深清秋\",\"gender\":0,\"language\":\"zh_CN\",\"city\":\"\",\"province\":\"\",\"country\":\"\",\"avatarUrl\":\"https://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTKq2CRmib1mpu4hOFYtcIHgAmS7DicCEfYkUHoPmPQn74BXH5GerjoMOxIqib7iafNNBw2ZAicBj6gZGUQ/132\"}";
         String signature = "3901b7322c7920ef4a5077eeba54b0d633585eef";
         WxAuthInfo wxAuthInfo = new WxAuthInfo(rawData, signature);
-        User requestUser = User.of("深清秋", 1)
+        User requestUser = User.of("深清秋",  Gender.MALE)
                 .avatarUrl("https://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTKq2CRmib1mpu4hOFYtcIHgAmS7DicCEfYkUHoPmPQn74BXH5GerjoMOxIqib7iafNNBw2ZAicBj6gZGUQ/132")
                 .country("中国")
                 .province("江苏")
@@ -105,7 +106,7 @@ public class AuthDecryptingTests {
         String rawData = "{\"nickName\":\"深清秋\",\"gender\":0,\"language\":\"zh_CN\",\"city\":\"\",\"province\":\"\",\"country\":\"\",\"avatarUrl\":\"https://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTKq2CRmib1mpu4hOFYtcIHgAmS7DicCEfYkUHoPmPQn74BXH5GerjoMOxIqib7iafNNBw2ZAicBj6gZGUQ/132\"}";
         String signature = "3901b7322c7920ef4a5077eeba54b0d633585eef";
         WxAuthInfo wxAuthInfo = new WxAuthInfo(rawData, signature);
-        User requestUser = User.of("深清秋", 1)
+        User requestUser = User.of("深清秋",  Gender.MALE)
                 .avatarUrl("https://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTKq2CRmib1mpu4hOFYtcIHgAmS7DicCEfYkUHoPmPQn74BXH5GerjoMOxIqib7iafNNBw2ZAicBj6gZGUQ/132")
                 .country("中国")
                 .province("江苏")
@@ -143,7 +144,7 @@ public class AuthDecryptingTests {
         String rawData = "{\"nickName\":\"深清秋\",\"gender\":0,\"language\":\"zh_CN\",\"city\":\"\",\"province\":\"\",\"country\":\"\",\"avatarUrl\":\"https://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTKq2CRmib1mpu4hOFYtcIHgAmS7DicCEfYkUHoPmPQn74BXH5GerjoMOxIqib7iafNNBw2ZAicBj6gZGUQ/132\"}";
         String signature = "3901b7322c7920ef4a5077eeba54b0d633585eef";
         WxAuthInfo wxAuthInfo = new WxAuthInfo(rawData, signature);
-        User requestUser = User.of("深清秋", 1)
+        User requestUser = User.of("深清秋",  Gender.MALE)
                 .avatarUrl("https://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTKq2CRmib1mpu4hOFYtcIHgAmS7DicCEfYkUHoPmPQn74BXH5GerjoMOxIqib7iafNNBw2ZAicBj6gZGUQ/132")
                 .country("中国")
                 .province("江苏")
@@ -186,7 +187,7 @@ public class AuthDecryptingTests {
     @Rollback(true)
     void should_get_mobile_phone_correctly_given_exists_userid_and_correct_encrypted_data_iv() {
         // given: 正常的已有用户、加密数据encryptedData、iv
-        User existsUser = User.of("深清秋", 1)
+        User existsUser = User.of("深清秋",  Gender.MALE)
                 .avatarUrl("https://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTKq2CRmib1mpu4hOFYtcIHgAmS7DicCEfYkUHoPmPQn74BXH5GerjoMOxIqib7iafNNBw2ZAicBj6gZGUQ/132")
                 .country("中国")
                 .province("江苏")

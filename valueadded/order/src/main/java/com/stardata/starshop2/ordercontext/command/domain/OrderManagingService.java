@@ -4,9 +4,7 @@ import com.stardata.starshop2.ordercontext.command.domain.order.Order;
 import com.stardata.starshop2.ordercontext.command.domain.order.OrderOperType;
 import com.stardata.starshop2.ordercontext.command.domain.order.PayResult;
 import com.stardata.starshop2.ordercontext.command.domain.order.PrepayOrder;
-import com.stardata.starshop2.ordercontext.command.south.port.OrderItemsSettlementClient;
-import com.stardata.starshop2.ordercontext.command.south.port.OrderRepository;
-import com.stardata.starshop2.ordercontext.command.south.port.PrepayingClient;
+import com.stardata.starshop2.ordercontext.command.south.port.*;
 import com.stardata.starshop2.sharedcontext.domain.BizParameter;
 import com.stardata.starshop2.sharedcontext.domain.LongIdentity;
 import com.stardata.starshop2.sharedcontext.domain.SessionUser;
@@ -27,8 +25,11 @@ import java.util.List;
 @Service
 @AllArgsConstructor
 public class OrderManagingService {
-    @Resource(name="${adapter.orderItemsSettlement}")
-    private OrderItemsSettlementClient settlementClient;
+    @Resource(name="${adapter.orderSettlementClient}")
+    private OrderSettlementClient settlementClient;
+
+    @Resource(name="${adapter.fillCustomerIdClient}")
+    private FillCustomerIdClient customerInfoClient;
 
     @Resource
     private PrepayingClient prepayingClient;
@@ -47,6 +48,7 @@ public class OrderManagingService {
         String requestMessage = prepayRequestGenerationService.generatePrepay(user, order);
         order.createPayment(requestMessage);
         order.recordOperLog(user.getId(), OrderOperType.CREATE, null);
+        customerInfoClient.fillCustomerId(order);
         orderRepository.add(order);
     }
 
@@ -55,10 +57,6 @@ public class OrderManagingService {
         PrepayOrder result = prepayingClient.prepay(order.getPayment());
         orderRepository.update(order);
         return result;
-    }
-
-    public Order detail(LongIdentity orderId) {
-        return orderRepository.instanceOf(orderId);
     }
 
     public Order makeOrderEffectively(PayResult payResult) {

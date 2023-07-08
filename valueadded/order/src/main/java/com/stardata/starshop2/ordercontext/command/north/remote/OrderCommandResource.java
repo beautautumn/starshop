@@ -26,9 +26,20 @@ public class OrderCommandResource {
     private final OrderAppService appService;
 
     @PostMapping("")
-    public ResponseEntity<OrderResponse> create(@LoginUser SessionUser loginUser,
-                                                @PathVariable Long shopId, OrderSubmitRequest request)
+//    public ResponseEntity<OrderResponse> create(@LoginUser SessionUser loginUser,
+//                                                @PathVariable Long shopId, OrderSubmitRequest request)
+//    {
+//        return Resources.with("create order")
+//                .onSuccess(HttpStatus.OK)
+//                .onError(HttpStatus.BAD_REQUEST)
+//                .onFailed(HttpStatus.FORBIDDEN)
+//                .execute(() -> appService.create(loginUser, shopId, request));
+//    }
+    public ResponseEntity<OrderResponse> create(@RequestParam Long userId,
+                                                @PathVariable Long shopId, @RequestBody OrderSubmitRequest request)
     {
+        SessionUser loginUser = SessionUser.from(userId);
+
         return Resources.with("create order")
                 .onSuccess(HttpStatus.OK)
                 .onError(HttpStatus.BAD_REQUEST)

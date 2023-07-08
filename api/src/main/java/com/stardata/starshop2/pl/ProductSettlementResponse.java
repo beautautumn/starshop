@@ -1,4 +1,4 @@
-package com.stardata.starshop2.api;
+package com.stardata.starshop2.pl;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

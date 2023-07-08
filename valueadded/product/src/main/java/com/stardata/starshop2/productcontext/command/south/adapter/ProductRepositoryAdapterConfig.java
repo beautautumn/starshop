@@ -17,7 +17,7 @@ import javax.persistence.EntityManager;
  * @date 2022/5/19 21:39
  */
 @Configuration
-public class ProductAdapterConfig {
+public class ProductRepositoryAdapterConfig {
     @Resource
     EntityManager entityManager;
 
