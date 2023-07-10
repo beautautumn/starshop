@@ -17,7 +17,6 @@ public interface UserInfoDtoMapper {
     UserInfoDtoMapper INSTANCE = Mappers.getMapper(UserInfoDtoMapper.class);
 
     @Mapping(expression="java(user.getId().value())", target="id")
-    @Mapping(expression="java(user.getAvatarUrl().toString())", target="avatarUrl")
     @Mapping(expression="java(user.getGender().value())", target="gender")
     @Mapping(expression="java(user.getMobileNumber().value())", target="mobileNumber")
     @Mapping(expression="java(user.getOpenid().value())", target="openid")

@@ -106,8 +106,7 @@ class AuthLoginTests {
     private boolean isSameMiniAppUserInfo(@NotNull User user1, @NotNull User user2) {
         return user1.getNickName().equals(user2.getNickName()) &&
                 user1.getGender().equals(user2.getGender()) &&
-                ((user1.getAvatarUrl() == user2.getAvatarUrl())
-                        ||user1.getAvatarUrl().equals(user2.getAvatarUrl())) &&
+                (user1.getAvatarUrl().equals(user2.getAvatarUrl())) &&
                 user1.getCountry().equals(user2.getCountry()) &&
                 user1.getProvince().equals(user2.getProvince()) &&
                 user1.getCity().equals(user2.getCity()) &&

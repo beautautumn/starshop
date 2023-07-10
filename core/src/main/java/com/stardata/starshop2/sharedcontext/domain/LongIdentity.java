@@ -6,6 +6,7 @@ import cn.hutool.core.util.IdUtil;
 import org.jetbrains.annotations.NotNull;
 
 import javax.persistence.Embeddable;
+import java.io.Serializable;
 import java.util.Objects;
 import java.util.Random;
 
@@ -16,7 +17,7 @@ import java.util.Random;
  * @date 2022/5/20 11:26
  */
 @Embeddable
-public class LongIdentity implements Identity<Long>, Comparable<Object>{
+public class LongIdentity implements Identity<Long>, Comparable<Object>, Serializable {
     private long id;
 
     protected LongIdentity(long id) {

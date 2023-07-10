@@ -21,6 +21,7 @@ import javax.annotation.Resource;
 public class ShoppingCartManagingService {
     @Resource(name="${adapter.shoppingCartSettlementClient}")
     private final ShoppingCartSettlementClient settlementClient;
+
     private final ShoppingCartRepository shoppingCartRepository;
 
     public ShoppingCart replaceShoppingCart(@NotNull ShoppingCart shoppingCart) {

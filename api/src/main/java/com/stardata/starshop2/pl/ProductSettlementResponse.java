@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,10 +16,10 @@ import java.util.List;
  * @date 2022/5/4 11:46
  */
 @Data
-public class ProductSettlementResponse {
+public class ProductSettlementResponse implements Serializable {
     @Getter
     @AllArgsConstructor
-    public static class Item {
+    public static class Item implements Serializable {
             private Long id;
             private String name;
             private Long priceFen;

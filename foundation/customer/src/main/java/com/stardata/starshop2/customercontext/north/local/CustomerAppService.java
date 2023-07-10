@@ -24,9 +24,8 @@ import javax.annotation.Resource;
 @Service
 @AllArgsConstructor
 public class CustomerAppService {
-    @Resource
+    @Resource(name="${adapter.customerReposity}")
     private CustomerRepository customerRepository;
-
 
     @Transactional
     public CustomerInfoDto ensureCustomerByUser(@NotNull UserInfoDto userInfoDTO, @NotNull Long shopId) {
@@ -46,6 +45,11 @@ public class CustomerAppService {
                     .city(userInfoDTO.getCity());
             customerRepository.add(customer);
         }
+        return CustomerToDtoMapper.INSTANCE.convert(customer);
+    }
+
+    public CustomerInfoDto getCustomerByUserId(@NotNull Long userId) {
+        Customer customer = customerRepository.findByUserId(LongIdentity.from(userId));
         return CustomerToDtoMapper.INSTANCE.convert(customer);
     }
 }

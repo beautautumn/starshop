@@ -45,6 +45,12 @@ public class JsonEnableConfig implements WebMvcConfigurer {
         SimpleModule simpleModule = new SimpleModule();
         simpleModule.addSerializer(Long.class, ToStringSerializer.instance);
         simpleModule.addSerializer(Long.TYPE, ToStringSerializer.instance);
+
+//        simpleModule.addSerializer(LongIdentity.class, LongIdentitySerializer.instance);
+//        simpleModule.addDeserializer(LongIdentity.class, LongIdentityDeserializer.instance);
+//        simpleModule.addSerializer(MobileNumber.class, MobileNumberSerializer.instance);
+//        simpleModule.addDeserializer(MobileNumber.class, MobileNumberDeserializer.instance);
+
         objectMapper.registerModule(simpleModule);
         objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 

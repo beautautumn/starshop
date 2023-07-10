@@ -9,7 +9,7 @@ server:
 
 spring:
   application:
-    name: order-biz-services
+    name: customer-biz-services
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -53,7 +53,7 @@ eureka:
       defaultZone: http://localhost:7771/eureka/
   # 修改Eureka上的默认描述信息
   instance:
-    instance-id: order-biz-center-8081
+    instance-id: customer-biz-center
 management:
   endpoints:
     web:

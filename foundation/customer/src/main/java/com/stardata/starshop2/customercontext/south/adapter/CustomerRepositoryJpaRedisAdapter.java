@@ -6,8 +6,9 @@ import com.stardata.starshop2.sharedcontext.annotation.Adapter;
 import com.stardata.starshop2.sharedcontext.annotation.PortType;
 import com.stardata.starshop2.sharedcontext.domain.LongIdentity;
 import com.stardata.starshop2.sharedcontext.south.adapter.GenericRepository;
-import org.springframework.context.annotation.Primary;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -19,12 +20,14 @@ import java.util.List;
  * @date 2023/7/7 20:04
  */
 @Adapter(PortType.Repository)
-@Component("customerRepositoryJpaAdapter")
-@Primary
-public class CustomerRepositoryJpaAdapter implements CustomerRepository {
+@Component("customerRepositoryJpaRedisAdapter")
+public class CustomerRepositoryJpaRedisAdapter implements CustomerRepository {
     private final GenericRepository<Customer, LongIdentity> repository;
 
-    public CustomerRepositoryJpaAdapter(GenericRepository<Customer, LongIdentity> repository) {
+    @Autowired
+    private RedisTemplate<String, Object> redisCacheTemplate;
+
+    public CustomerRepositoryJpaRedisAdapter(GenericRepository<Customer, LongIdentity> repository) {
         this.repository = repository;
     }
 
@@ -40,11 +43,18 @@ public class CustomerRepositoryJpaAdapter implements CustomerRepository {
 
     @Override
     public Customer findByUserId(LongIdentity userId) {
-        Specification<Customer> specification = (root, criteriaQuery, criteriaBuilder) ->
-                criteriaBuilder.equal(root.get("userId"), userId.value());
+        String customerKey = "customerCache-byUserId-"+userId.toString();
+        Customer customer = (Customer)redisCacheTemplate.opsForValue().get(customerKey);
+        if (customer == null) {
+            Specification<Customer> specification = (root, criteriaQuery, criteriaBuilder) ->
+                    criteriaBuilder.equal(root.get("userId"), userId.value());
 
-        List<Customer> customers = repository.findBy(specification);
-        return customers.size()>0?customers.get(0): null;
+            List<Customer> customers = repository.findBy(specification);
+            customer =  customers.size()>0?customers.get(0): null;
+
+            redisCacheTemplate.opsForValue().set(customerKey, customer);
+        }
+        return customer;
     }
 
     @Override

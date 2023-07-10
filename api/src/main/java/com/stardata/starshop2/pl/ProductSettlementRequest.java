@@ -4,6 +4,7 @@ import com.stardata.starshop2.sharedcontext.domain.LongIdentity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,7 +18,7 @@ import java.util.stream.Collectors;
  */
 @Data
 @AllArgsConstructor
-public class ProductSettlementRequest {
+public class ProductSettlementRequest implements Serializable {
     private List<Long> productIds;
     private List<Integer> productCounts;
 

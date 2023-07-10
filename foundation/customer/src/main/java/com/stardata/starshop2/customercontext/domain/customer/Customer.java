@@ -3,10 +3,9 @@ package com.stardata.starshop2.customercontext.domain.customer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.stardata.starshop2.sharedcontext.domain.*;
-import com.stardata.starshop2.sharedcontext.helper.Constants;
-import com.stardata.starshop2.sharedcontext.helper.JSONUtil;
-import com.stardata.starshop2.sharedcontext.helper.JsonAsStringDeserializer;
+import com.stardata.starshop2.sharedcontext.helper.*;
 import lombok.*;
 import org.hibernate.annotations.*;
 import org.jetbrains.annotations.NotNull;
@@ -14,6 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.*;
+import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.LocalDate;
@@ -32,39 +32,46 @@ import java.util.List;
 @Where(clause = "is_valid = '"+ Constants.DELETE_FLAG.NORMAL+"'")
 @AttributeOverrides({
         @AttributeOverride(name = "shopId.id", column = @Column(name = "shop_id", nullable = false)),
-        @AttributeOverride(name = "userId.id", column = @Column(name = "user_id", nullable = false))
+        @AttributeOverride(name = "userId.id", column = @Column(name = "user_id", nullable = false)),
+        @AttributeOverride(name = "mobilePhone.value", column = @Column(name = "mobile_phone", nullable = false))
 })
 @Data
 @EqualsAndHashCode(callSuper=false)
-public class Customer  extends AbstractEntity<LongIdentity> implements AggregateRoot<Customer> {
+public class Customer  extends AbstractEntity<LongIdentity> implements AggregateRoot<Customer>, Serializable {
     @EmbeddedId
+    @JsonSerialize(using = LongIdentitySerializer.class)
+    @JsonDeserialize(using = LongIdentityDeserializer.class)
     private LongIdentity id;
 
     //归属店铺ID
     @Embedded
+    @JsonSerialize(using = LongIdentitySerializer.class)
+    @JsonDeserialize(using = LongIdentityDeserializer.class)
     private LongIdentity shopId;
 
     //归属用户ID
     @Embedded
+    @JsonSerialize(using = LongIdentitySerializer.class)
+    @JsonDeserialize(using = LongIdentityDeserializer.class)
     private LongIdentity userId;
 
     //头像
-    @Column(name="avatarUrl")
-    @Setter(AccessLevel.NONE)
-    private URL avatarUrl;
+    @Column(name="avatarurl")
+    private String avatarUrl;
 
     private String name;
 
     /**
      * 1：男；2：女；0：未知；
      */
-    @Setter(AccessLevel.NONE)
     @Column(nullable = false)
     @Type(type = "com.stardata.starshop2.sharedcontext.usertype.GenderUserType")
     private Gender gender;
 
     @Embedded
-    @AttributeOverride(name="value", column = @Column(name="mobile", length =20))
+    @AttributeOverride(name="value", column = @Column(length =20))
+    @JsonSerialize(using = MobileNumberSerializer.class)
+    @JsonDeserialize(using = MobileNumberDeserializer.class)
     private MobileNumber mobilePhone;
 
     private String level;
@@ -115,7 +122,7 @@ public class Customer  extends AbstractEntity<LongIdentity> implements Aggregate
     public static  Customer of(@NotNull LongIdentity shopId,
                                @NotNull LongIdentity userId,
                                @NotNull String name,
-                               @NotNull MobileNumber mobilePhone,
+                               MobileNumber mobilePhone,
                                @NotNull Gender gender){
         Customer customer = new Customer();
         customer.setName(name);
@@ -138,14 +145,15 @@ public class Customer  extends AbstractEntity<LongIdentity> implements Aggregate
 
     public Customer avatarUrl(String avatarUrl) {
         try {
-            this.avatarUrl = new URL(avatarUrl);
+            URL url = new URL(avatarUrl);
+            this.avatarUrl = avatarUrl;
         } catch (MalformedURLException e) {
             this.avatarUrl = null;
         }
         return this;
     }
 
-    public URL avatarUrl() {return this.avatarUrl;}
+    public String getAvatarUrl() {return this.avatarUrl==null?"":this.avatarUrl;}
 
     public Customer country(String country) {
         this.country = country;

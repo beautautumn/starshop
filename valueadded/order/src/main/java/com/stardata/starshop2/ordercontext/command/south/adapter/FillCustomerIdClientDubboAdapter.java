@@ -24,7 +24,7 @@ import org.springframework.stereotype.Component;
  * @date 2023/7/7 19:35
  */
 @Adapter(PortType.Client)
-@Component("fillOrderCustomerInfoClientDubboAdapter")
+@Component("fillCustomerIdClientDubboAdapter")
 @AllArgsConstructor
 @Primary
 public class FillCustomerIdClientDubboAdapter implements FillCustomerIdClient {

@@ -6,10 +6,7 @@ import com.stardata.starshop2.pl.CustomerInfoDto;
 import com.stardata.starshop2.pl.UserInfoDto;
 import lombok.AllArgsConstructor;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author Samson Shu
@@ -27,5 +24,10 @@ public class CustomerSpringCloudService implements CustomerBizService {
     @Override
     public CustomerInfoDto ensureUserCustomerInfo(@NotNull UserInfoDto userInfo, @PathVariable Long shopId) {
         return appService.ensureCustomerByUser(userInfo, shopId);
+    }
+
+    @GetMapping("/by_user")
+    public CustomerInfoDto getCustomerByUserId(@RequestParam Long userId, @PathVariable String shopId) {
+        return appService.getCustomerByUserId(userId);
     }
 }

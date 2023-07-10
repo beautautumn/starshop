@@ -13,6 +13,7 @@ import com.stardata.starshop2.sharedcontext.domain.NonNegativeDecimal;
 import lombok.AllArgsConstructor;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -29,6 +30,7 @@ import java.util.Map;
 @Adapter(PortType.Client)
 @Component("shoppingCartSettlementClientDubboAdapter")
 @AllArgsConstructor
+@Primary
 public class ShoppingCartSettlementClientDubboAdapter implements ShoppingCartSettlementClient {
     @DubboReference
     private final ProductBizService productBizService;

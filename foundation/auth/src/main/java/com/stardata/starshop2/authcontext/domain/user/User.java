@@ -43,6 +43,7 @@ public class User extends AbstractEntity<LongIdentity> implements AggregateRoot<
     /**
      * 头像图片URL
      */
+    @Getter(AccessLevel.NONE)
     @Column(name = "avatarurl")
     private URL avatarUrl;
 
@@ -163,6 +164,14 @@ public class User extends AbstractEntity<LongIdentity> implements AggregateRoot<
             this.avatarUrl = null;
         }
         return this;
+    }
+
+    public String avatarUrl() {
+        return this.avatarUrl == null ? "": this.avatarUrl.toString();
+    }
+
+    public String getAvatarUrl() {
+        return this.avatarUrl == null ? "": this.avatarUrl.toString();
     }
 
     public User country(String country) {

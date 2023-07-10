@@ -53,7 +53,7 @@ eureka:
       defaultZone: http://localhost:7771/eureka/
   # 修改Eureka上的默认描述信息
   instance:
-    instance-id: order-biz-center-8081
+    instance-id: order-biz-center
 management:
   endpoints:
     web:

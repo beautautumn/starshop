@@ -2,6 +2,7 @@ package com.stardata.starshop2.pl;
 
 import lombok.Data;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -12,7 +13,7 @@ import java.util.List;
  * @date 2023/7/7 19:28
  */
 @Data
-public class CustomerInfoDto {
+public class CustomerInfoDto implements Serializable {
     private Long id;
 
     private Long shopId;

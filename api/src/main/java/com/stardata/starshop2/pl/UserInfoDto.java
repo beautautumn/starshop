@@ -2,7 +2,7 @@ package com.stardata.starshop2.pl;
 
 import lombok.Data;
 
-import java.time.LocalDateTime;
+import java.io.Serializable;
 
 /**
  * @author Samson Shu
@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
  * @date 2023/7/8 12:49
  */
 @Data
-public class UserInfoDto {
+public class UserInfoDto implements Serializable {
     private Long id;
 
     /**
@@ -48,11 +48,6 @@ public class UserInfoDto {
      * 网络昵称
      */
     private String nickName;
-
-    /**
-     * 注册时间
-     */
-    private LocalDateTime registerTime;
 
     /**
      * 微信openid
