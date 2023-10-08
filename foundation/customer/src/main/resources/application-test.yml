@@ -53,7 +53,7 @@ logging:
     root: warn
     org.springframework.web: info
     cn.binarywang.wx.miniapp: debug
-    com.stardata.starshop2: trace
+    com.stardata.starshop2: info
   pattern:
     console: '%p%m%n'
 eureka:

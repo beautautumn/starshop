@@ -43,7 +43,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 public class OrderTests {
 
-    @Resource(name="${adapter.orderItemsSettlement}")
+    @Resource(name="${adapter.orderSettlementClient}")
     OrderSettlementClient settlementClient;
 
     /**
