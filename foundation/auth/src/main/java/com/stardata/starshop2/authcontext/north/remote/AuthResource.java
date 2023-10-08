@@ -1,23 +1,20 @@
 package com.stardata.starshop2.authcontext.north.remote;
 
 import com.stardata.starshop2.authcontext.north.local.AuthAppService;
+import com.stardata.starshop2.authcontext.pl.MobileNumberResponse;
 import com.stardata.starshop2.authcontext.pl.UserLoginResponse;
 import com.stardata.starshop2.authcontext.pl.WxEncryptedUserInfo;
 import com.stardata.starshop2.authcontext.pl.WxLoginRequest;
 import com.stardata.starshop2.sharedcontext.annotation.IgnoreAuth;
 import com.stardata.starshop2.sharedcontext.annotation.LoginUser;
-import com.stardata.starshop2.sharedcontext.north.Resources;
-import com.stardata.starshop2.authcontext.pl.MobileNumberResponse;
 import com.stardata.starshop2.sharedcontext.domain.SessionUser;
+import com.stardata.starshop2.sharedcontext.north.Resources;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author Samson Shu
@@ -34,7 +31,7 @@ public class AuthResource {
 
     @PostMapping("/wxlogin")
     @IgnoreAuth
-    public ResponseEntity<UserLoginResponse> loginByWx(WxLoginRequest request) {
+    public ResponseEntity<UserLoginResponse> loginByWx(@RequestBody WxLoginRequest request) {
         return Resources.with("login by wechat user info")
                 .onSuccess(HttpStatus.OK)
                 .onError(HttpStatus.BAD_REQUEST)

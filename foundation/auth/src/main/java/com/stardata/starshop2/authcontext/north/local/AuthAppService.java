@@ -16,6 +16,8 @@ import lombok.AllArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+
 /**
  * @author Samson Shu
  * @version 1.0
@@ -29,6 +31,7 @@ public class AuthAppService {
     private LoginLogService logService;
     private MobileNumberDecryptingService decryptService;
 
+    @Transactional
     public UserLoginResponse loginByWx(@NotNull WxLoginRequest request) {
         String code = request.getCode();
         WxAuthInfo wxAuthInfo = request.getWxAuthInfo();

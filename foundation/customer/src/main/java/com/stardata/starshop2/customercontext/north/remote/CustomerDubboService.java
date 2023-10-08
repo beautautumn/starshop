@@ -5,7 +5,6 @@ import com.stardata.starshop2.customercontext.north.local.CustomerAppService;
 import com.stardata.starshop2.pl.CustomerInfoDto;
 import com.stardata.starshop2.pl.UserInfoDto;
 import lombok.AllArgsConstructor;
-import org.apache.dubbo.config.annotation.DubboService;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -14,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
  * @email shush@stardata.top
  * @date 2023/7/8 20:19
  */
-@DubboService
+//@DubboService
 @AllArgsConstructor
 public class CustomerDubboService implements CustomerBizService {
     private final CustomerAppService appService;

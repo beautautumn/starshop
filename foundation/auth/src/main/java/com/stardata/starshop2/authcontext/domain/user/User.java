@@ -83,7 +83,7 @@ public class User extends AbstractEntity<LongIdentity> implements AggregateRoot<
      * 网络昵称
      */
     @Setter
-    @Column(name = "nickname", nullable = false)
+    @Column(name = "nickname")
     private String nickName;
 
     /**
@@ -203,7 +203,7 @@ public class User extends AbstractEntity<LongIdentity> implements AggregateRoot<
     }
 
     public UserToken currentToken() {
-        return this.tokens.size()>0? this.tokens.get(0): null;
+        return !this.tokens.isEmpty()? this.tokens.get(0): null;
     }
 
     public void copyMiniAppInfoFrom(User fromUser) {

@@ -1,5 +1,5 @@
 server:
-  port: 8083
+  port: 8082
   servlet:
     context-path: /
     encoding:
@@ -9,7 +9,7 @@ server:
 
 spring:
   application:
-    name: customer-biz-services
+    name: product-biz-services
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -29,25 +29,6 @@ spring:
     deserialization:
       FAIL_ON_UNKNOWN_PROPERTIES: false
       USE_BIG_DECIMAL_FOR_FLOATS: true
-  redis:
-    port: 6379
-    password: root
-    host: localhost
-    lettuce:
-      pool:
-        max-active: 8
-        max-idle: 8
-        min-idle: 0
-        max-wait: 1000ms
-      shutdown-timeout: 100ms
-wx:
-  pay:
-    appId: wxaa0eca4be4ff2b3c
-    mchId: 1600639346
-    mchKey: lx8rBPIrBO3WeqhQyE216ZeaIlBtaF1H
-    #subAppId: #服务商模式下的子商户公众账号ID
-    #subMchId: #服务商模式下的子商户号
-    keyPath: classpath:apiclient_cert.p12
 logging:
   level:
     root: warn
@@ -59,33 +40,27 @@ logging:
 eureka:
   #客户端
   client:
-    enabled: true
-    #注册中心地址
+    # 注册中心地址
     service-url:
       defaultZone: http://localhost:7771/eureka/
   # 修改Eureka上的默认描述信息
   instance:
-    instance-id: customer-biz-center
-    prefer-ip-address: true
+    instance-id: product-biz-center
 management:
   endpoints:
     web:
       exposure:
         include: "*"
-#dubbo:
-#  application:
-#    name: customer-biz-center
-#  protocol:
-#    name: dubbo
-#    port: 20883
-#  registry:
-#    id: zk-registry
-#    address: zookeeper://127.0.0.1:2181
-#    timeout: 10000
-#  config-center:
-#    address: zookeeper://127.0.0.1:2181
-#  metadata-report:
-#    address: zookeeper://127.0.0.1:2181
-adapter:
-  customerReposity: customerRepositoryJpaRedisAdapter
-
+dubbo:
+  application:
+    name: product-biz-center
+  protocol:
+    name: dubbo
+    port: 20882
+  registry:
+    id: zk-registry
+    address: zookeeper://127.0.0.1:2181
+  config-center:
+    address: zookeeper://127.0.0.1:2181
+  metadata-report:
+    address: zookeeper://127.0.0.1:2181

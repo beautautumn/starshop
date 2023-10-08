@@ -1,6 +1,5 @@
 package com.stardata.starshop2.ordercontext.command;
 
-import org.apache.dubbo.config.spring.context.annotation.EnableDubbo;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
@@ -16,7 +15,7 @@ import org.springframework.context.annotation.ComponentScan;
 @SpringBootApplication
 @EnableDiscoveryClient
 @EnableFeignClients(basePackages = {"com.stardata.starshop2"})
-@EnableDubbo
+//@EnableDubbo
 @ComponentScan(basePackages = {"com.stardata.starshop2"})
 public class Starshop2OrderCommandApplication {
     public static void main(String[] args) {

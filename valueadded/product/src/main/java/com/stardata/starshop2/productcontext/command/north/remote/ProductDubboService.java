@@ -5,7 +5,6 @@ import com.stardata.starshop2.pl.ProductSettlementRequest;
 import com.stardata.starshop2.pl.ProductSettlementResponse;
 import com.stardata.starshop2.productcontext.command.north.local.ProductAppService;
 import lombok.AllArgsConstructor;
-import org.apache.dubbo.config.annotation.DubboService;
 
 /**
  * @author Samson Shu
@@ -13,7 +12,7 @@ import org.apache.dubbo.config.annotation.DubboService;
  * @email shush@stardata.top
  * @date 2022/8/16 08:47
  */
-@DubboService
+//@DubboService
 @AllArgsConstructor
 public class ProductDubboService implements ProductBizService {
     private final ProductAppService appService;

@@ -1,15 +1,14 @@
 package com.stardata.starshop2.ordercontext.command.south.adapter;
 
 import com.stardata.starshop2.api.ProductBizService;
-import com.stardata.starshop2.pl.ProductSettlementRequest;
-import com.stardata.starshop2.pl.ProductSettlementResponse;
 import com.stardata.starshop2.ordercontext.command.domain.order.Order;
 import com.stardata.starshop2.ordercontext.command.south.port.OrderSettlementClient;
+import com.stardata.starshop2.pl.ProductSettlementRequest;
+import com.stardata.starshop2.pl.ProductSettlementResponse;
 import com.stardata.starshop2.sharedcontext.annotation.Adapter;
 import com.stardata.starshop2.sharedcontext.annotation.PortType;
 import com.stardata.starshop2.sharedcontext.domain.LongIdentity;
 import lombok.AllArgsConstructor;
-import org.apache.dubbo.config.annotation.DubboReference;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
@@ -28,7 +27,7 @@ import java.util.List;
 @AllArgsConstructor
 @Primary
 public class OrderSettlementClientDubboAdapter implements OrderSettlementClient {
-    @DubboReference
+//    @DubboReference
     private final ProductBizService productBizService;
 
     @Override

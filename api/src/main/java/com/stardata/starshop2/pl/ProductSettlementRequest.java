@@ -3,8 +3,10 @@ package com.stardata.starshop2.pl;
 import com.stardata.starshop2.sharedcontext.domain.LongIdentity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,9 +20,10 @@ import java.util.stream.Collectors;
  */
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class ProductSettlementRequest implements Serializable {
-    private List<Long> productIds;
-    private List<Integer> productCounts;
+    private List<Long> productIds = new ArrayList<>();
+    private List<Integer> productCounts = new ArrayList<>();
 
     public Map<LongIdentity, Integer> composeRequestToMap() {
         List<LongIdentity> ids = this.getProductIds().stream().map(LongIdentity::from).collect(Collectors.toList());

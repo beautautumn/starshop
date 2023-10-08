@@ -48,29 +48,33 @@ logging:
 eureka:
   #客户端
   client:
+    enabled: true
     #注册中心地址
     service-url:
       defaultZone: http://localhost:7771/eureka/
   # 修改Eureka上的默认描述信息
   instance:
     instance-id: customer-biz-center
+    prefer-ip-address: true
 management:
   endpoints:
     web:
       exposure:
         include: "*"
-dubbo:
-  application:
-    name: customer-biz-center
-  protocol:
-    name: dubbo
-    port: 20883
-  registry:
-    id: zk-registry
-    address: zookeeper://127.0.0.1:2181
-    timeout: 10000
-  config-center:
-    address: zookeeper://127.0.0.1:2181
-  metadata-report:
-    address: zookeeper://127.0.0.1:2181
+#dubbo:
+#  application:
+#    name: customer-biz-center
+#  protocol:
+#    name: dubbo
+#    port: 20883
+#  registry:
+#    id: zk-registry
+#    address: zookeeper://127.0.0.1:2181
+#    timeout: 10000
+#  config-center:
+#    address: zookeeper://127.0.0.1:2181
+#  metadata-report:
+#    address: zookeeper://127.0.0.1:2181
 
+adapter:
+  customerReposity: customerRepositoryJpaRedisAdapter

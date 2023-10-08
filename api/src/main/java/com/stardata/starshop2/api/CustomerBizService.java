@@ -3,8 +3,8 @@ package com.stardata.starshop2.api;
 import com.stardata.starshop2.pl.CustomerInfoDto;
 import com.stardata.starshop2.pl.UserInfoDto;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 /**
@@ -15,6 +15,6 @@ import org.springframework.web.bind.annotation.RequestBody;
  */
 @FeignClient(value = "customer-biz-services")
 public interface CustomerBizService {
-     @GetMapping("/v2/shops/{shopId}/customers/corresponding_to_user")
+     @PutMapping("/v2/shops/{shopId}/customers/corresponding_to_user")
      CustomerInfoDto ensureUserCustomerInfo(@RequestBody UserInfoDto userInfo, @PathVariable Long shopId);
 }

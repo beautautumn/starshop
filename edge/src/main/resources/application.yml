@@ -1,0 +1,26 @@
+server:
+  port: 80
+#  servlet:
+#    context-path: /${spring.application.name}
+spring:
+  application:
+    name: gateway
+  cloud:
+    gateway:
+      routes:
+        - id: gateway-auth
+          uri: http://localhost:8080
+          predicates:
+            - Path=/v2/users/**,/v2/auth/**
+        - id: gateway-order-command
+          uri: http://localhost:8081
+          predicates:
+            - Path=/v2/shops/{shopId}/orders/**,/v2/shops/{shopId}/shoppingcarts/**,/v2/wxpaynotify
+        - id: gateway-product-command
+          uri: http://localhost:8082
+          predicates:
+            - Path=/v2/products/**
+        - id: gateway-customer
+          uri: http://localhost:8082
+          predicates:
+            - Path=/v2/shops/{shopId}/customers/**

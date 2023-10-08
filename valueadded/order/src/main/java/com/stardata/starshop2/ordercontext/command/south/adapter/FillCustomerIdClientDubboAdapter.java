@@ -12,7 +12,6 @@ import com.stardata.starshop2.sharedcontext.domain.LongIdentity;
 import com.stardata.starshop2.sharedcontext.exception.ApplicationValidationException;
 import com.stardata.starshop2.sharedcontext.helper.JSONUtil;
 import lombok.AllArgsConstructor;
-import org.apache.dubbo.config.annotation.DubboReference;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
@@ -28,8 +27,9 @@ import org.springframework.stereotype.Component;
 @AllArgsConstructor
 @Primary
 public class FillCustomerIdClientDubboAdapter implements FillCustomerIdClient {
-    @DubboReference
+//    @DubboReference
     private final CustomerBizService customerBizService;
+//    @DubboReference
     private final UserBizService userBizService;
 
     @Override
