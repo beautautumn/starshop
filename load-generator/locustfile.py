@@ -34,7 +34,7 @@ class ShopstarTestingUser(HttpUser):
                 product_id = randint(1,5)
                 product_count = randint(1, 30)
                 items.append({"productId":product_id, "count":product_count})
-            self.client.post(f"/v2/shops/1/orders?userId={user_id}", json={"items": items})
+            self.client.post(f"/v2/shops/1/orders?userId={user_id}", json={"items": items}, name="/placeOrder")
             time.sleep(1)
 
     def on_start(self):
