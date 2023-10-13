@@ -1,0 +1,127 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: starshop-ddd-demo
+  labels:
+    app: starshop-ddd-demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: starshop-ddd-demo
+  template:
+    metadata:
+      labels:
+        app: starshop-ddd-demo
+    spec:
+      containers:
+        - name: eurekaserver
+          image: beautautumn/starshop-eureka:0.0.1
+          ports:
+            - containerPort: 7771
+        - name: gateway
+          image: beautautumn/starshop-gateway:0.0.5
+          env:
+            - name: JAVA_TOOL_OPTIONS
+              value: "-javaagent:/otel-agent.jar -Dotel.resource.attributes=service.name=starshop_gateway -Dotel.exporter.otlp.endpoint=http://smartobserv-collector.smartobserv-dev:4317"
+          ports:
+            - containerPort: 80
+        - name: authapp
+          image: beautautumn/starshop-auth:0.0.5
+          env:
+            - name: JAVA_TOOL_OPTIONS
+              value: "-javaagent:/otel-agent.jar -Dotel.resource.attributes=service.name=starshop_authapp -Dotel.exporter.otlp.endpoint=http://smartobserv-collector.smartobserv-dev:4317"
+            - name: MYSQL_SERVER
+              value: smartobserv-mysql.smartobserv-dev
+            - name: MYSQL_PORT
+              value: '3306'
+            - name: MYSQL_USER
+              value: root
+            - name: MYSQL_PASSWORD
+              value: password
+          ports:
+            - containerPort: 8080
+        - name: orderapp
+          image: beautautumn/starshop-order:0.0.5
+          env:
+            - name: JAVA_TOOL_OPTIONS
+              value: "-javaagent:/otel-agent.jar -Dotel.resource.attributes=service.name=starshop_orderapp -Dotel.exporter.otlp.endpoint=http://smartobserv-collector.smartobserv-dev:4317"
+            - name: MYSQL_SERVER
+              value: smartobserv-mysql.smartobserv-dev
+            - name: MYSQL_PORT
+              value: '3306'
+            - name: MYSQL_USER
+              value: root
+            - name: MYSQL_PASSWORD
+              value: password
+          ports:
+            - containerPort: 8081
+        - name: productapp
+          image: beautautumn/starshop-product:0.0.5
+          env:
+            - name: JAVA_TOOL_OPTIONS
+              value: "-javaagent:/otel-agent.jar -Dotel.resource.attributes=service.name=starshop_productapp -Dotel.exporter.otlp.endpoint=http://smartobserv-collector.smartobserv-dev:4317"
+            - name: MYSQL_SERVER
+              value: smartobserv-mysql.smartobserv-dev
+            - name: MYSQL_PORT
+              value: '3306'
+            - name: MYSQL_USER
+              value: root
+            - name: MYSQL_PASSWORD
+              value: password
+          ports:
+            - containerPort: 8082
+        - name: customerapp
+          image: beautautumn/starshop-customer:0.0.5
+          env:
+            - name: JAVA_TOOL_OPTIONS
+              value: "-javaagent:/otel-agent.jar -Dotel.resource.attributes=service.name=starshop_customerapp -Dotel.exporter.otlp.endpoint=http://smartobserv-collector.smartobserv-dev:4317"
+            - name: MYSQL_SERVER
+              value: smartobserv-mysql.smartobserv-dev
+            - name: MYSQL_PORT
+              value: '3306'
+            - name: MYSQL_USER
+              value: root
+            - name: MYSQL_PASSWORD
+              value: password
+            - name: REDIS_SERVER
+              value: smartobserv-redis.smartobserv-dev
+            - name: REDIS_PORT
+              value: '6379'
+            - name: REDIS_USER
+              value: root
+            - name: REDIS_PASSWORD
+              value: ''
+          ports:
+            - containerPort: 8083
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: starshop-ddd-demo
+  labels:
+    app: starshop-ddd-demo
+spec:
+  ports:
+    - name: gateway
+      port: 80
+      targetPort: 80
+    - name: eureka
+      port: 7771
+      targetPort: 7771
+    - name: auth
+      port: 8080
+      targetPort: 8080
+    - name: order
+      port: 8081
+      targetPort: 8081
+    - name: product
+      port: 8082
+      targetPort: 8082
+    - name: customer
+      port: 8083
+      targetPort: 8083
+  selector:
+    app: starshop-ddd-demo
+  type: ClusterIP

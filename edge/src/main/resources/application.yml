@@ -21,6 +21,6 @@ spring:
           predicates:
             - Path=/v2/products/**
         - id: gateway-customer
-          uri: http://localhost:8082
+          uri: http://localhost:8083
           predicates:
             - Path=/v2/shops/{shopId}/customers/**

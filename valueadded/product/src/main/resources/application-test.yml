@@ -13,9 +13,9 @@ spring:
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/starshop_test?useSSL=false&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true
-    username: root
-    password: root
+    url: jdbc:mysql://${MYSQL_SERVER}:${MYSQL_PORT}/starshop_test?useSSL=false&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true
+    username: ${MYSQL_USER}
+    password: ${MYSQL_PASSWORD}
   jpa:
     open_in_view: false
     show_sql: true
@@ -51,16 +51,16 @@ management:
     web:
       exposure:
         include: "*"
-dubbo:
-  application:
-    name: product-biz-center
-  protocol:
-    name: dubbo
-    port: 20882
-  registry:
-    id: zk-registry
-    address: zookeeper://127.0.0.1:2181
-  config-center:
-    address: zookeeper://127.0.0.1:2181
-  metadata-report:
-    address: zookeeper://127.0.0.1:2181
+#dubbo:
+#  application:
+#    name: product-biz-center
+#  protocol:
+#    name: dubbo
+#    port: 20882
+#  registry:
+#    id: zk-registry
+#    address: zookeeper://127.0.0.1:2181
+#  config-center:
+#    address: zookeeper://127.0.0.1:2181
+#  metadata-report:
+#    address: zookeeper://127.0.0.1:2181

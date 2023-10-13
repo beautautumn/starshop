@@ -16,12 +16,22 @@
 #
 
 
-### getway proxy getUserInfo
+### gateway proxy getUserInfo
 GET http://localhost/v2/users/1
 Accept: application/json
 Content-Type: application/json
 
-### getway proxy wxLogin
+### gateway proxy customer by_user
+GET http://localhost/v2/shops/1/customers/by_user?userId=1
+Accept: application/json
+Content-Type: application/json
+
+### gateway proxy product detail
+GET http://localhost/v2/products/1
+Accept: application/json
+Content-Type: application/json
+
+### gateway proxy wxLogin
 POST http://localhost/v2/auth/wxlogin
 Accept: application/json
 Content-Type: application/json
@@ -32,3 +42,9 @@ Content-Type: application/json
 "signature": "06846a4ba8b003af5d98fadfaf376a652e5d75d7"
 }
 
+### gateway proxy post order
+POST http://localhost/v2/shops/1/orders?userId=1
+Accept: application/json
+Content-Type: application/json
+
+{"items":[{"productId":1, "count":3},{"productId":2, "count":2},{"productId":3, "count":12}]}
