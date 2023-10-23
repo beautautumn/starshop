@@ -94,6 +94,10 @@ spec:
               value: ''
           ports:
             - containerPort: 8083
+        - name: load-generator
+          image: ccr.ccs.tencentyun.com/default-ns/starshop-load:0.0.2
+          ports:
+            - containerPort: 8089
 
 ---
 apiVersion: v1
@@ -122,6 +126,9 @@ spec:
     - name: customer
       port: 8083
       targetPort: 8083
+    - name: loadgenerator
+      port: 8089
+      targetPort: 8089
   selector:
     app: starshop-ddd-demo
   type: ClusterIP
