@@ -55,7 +55,7 @@ spec:
             - name: MYSQL_PASSWORD
               value: password
           ports:
-            - containerPort: 8081
+            - containerPort: 7081
         - name: productapp
           image: beautautumn/starshop-product:0.0.5
           env:
@@ -70,7 +70,7 @@ spec:
             - name: MYSQL_PASSWORD
               value: password
           ports:
-            - containerPort: 8082
+            - containerPort: 7082
         - name: customerapp
           image: beautautumn/starshop-customer:0.0.5
           env:
@@ -93,11 +93,11 @@ spec:
             - name: REDIS_PASSWORD
               value: ''
           ports:
-            - containerPort: 8083
+            - containerPort: 7083
         - name: load-generator
           image: ccr.ccs.tencentyun.com/default-ns/starshop-load:0.0.2
           ports:
-            - containerPort: 8089
+            - containerPort: 7089
 
 ---
 apiVersion: v1
@@ -115,20 +115,20 @@ spec:
       port: 7771
       targetPort: 7771
     - name: auth
-      port: 8080
-      targetPort: 8080
+      port: 7080
+      targetPort: 7080
     - name: order
-      port: 8081
-      targetPort: 8081
+      port: 7081
+      targetPort: 7081
     - name: product
-      port: 8082
-      targetPort: 8082
+      port: 7082
+      targetPort: 7082
     - name: customer
-      port: 8083
-      targetPort: 8083
+      port: 7083
+      targetPort: 7083
     - name: loadgenerator
-      port: 8089
-      targetPort: 8089
+      port: 7089
+      targetPort: 7089
   selector:
     app: starshop-ddd-demo
   type: ClusterIP

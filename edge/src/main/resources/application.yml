@@ -9,18 +9,18 @@ spring:
     gateway:
       routes:
         - id: gateway-auth
-          uri: http://localhost:8080
+          uri: http://localhost:7080
           predicates:
             - Path=/v2/users/**,/v2/auth/**
         - id: gateway-order-command
-          uri: http://localhost:8081
+          uri: http://localhost:7081
           predicates:
             - Path=/v2/shops/{shopId}/orders/**,/v2/shops/{shopId}/shoppingcarts/**,/v2/wxpaynotify
         - id: gateway-product-command
-          uri: http://localhost:8082
+          uri: http://localhost:7082
           predicates:
             - Path=/v2/products/**
         - id: gateway-customer
-          uri: http://localhost:8083
+          uri: http://localhost:7083
           predicates:
             - Path=/v2/shops/{shopId}/customers/**

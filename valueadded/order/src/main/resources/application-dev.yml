@@ -1,5 +1,5 @@
 server:
-  port: 8081
+  port: 7081
   servlet:
     context-path: /
     encoding:
@@ -74,6 +74,6 @@ management:
 #  metadata-report:
 #    address: zookeeper://127.0.0.1:2181
 adapter:
-  shoppingCartSettlementClient: shoppingCartSettlementClientLocalAdapter
-  orderSettlementClient: orderSettlementClientLocalAdapter
-  fillCustomerIdClient: fillCustomerIdClientLocalAdapter
+  shoppingCartSettlementClient: shoppingCartSettlementClientSpringCloudAdapter
+  orderSettlementClient: orderSettlementClientSpringCloudAdapter
+  fillCustomerIdClient: fillCustomerIdClientSpringCloudAdapter
