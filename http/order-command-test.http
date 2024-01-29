@@ -1,3 +1,2 @@
+### simulate wxpay
 PUT http://localhost:7081/v2/shops/1/orders/1751964943814017024/wxpay_simulator?userId=1&orderNumber=P202401290000000000000000011880&cashFee=35990
-
-
