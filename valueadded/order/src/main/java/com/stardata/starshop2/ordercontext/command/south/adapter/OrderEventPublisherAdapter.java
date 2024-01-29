@@ -4,6 +4,9 @@ import com.stardata.starshop2.ordercontext.command.south.port.OrderEventPublishe
 import com.stardata.starshop2.sharedcontext.annotation.Adapter;
 import com.stardata.starshop2.sharedcontext.annotation.PortType;
 import com.stardata.starshop2.sharedcontext.domain.DomainEvent;
+import lombok.AllArgsConstructor;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
 /**
@@ -14,9 +17,13 @@ import org.springframework.stereotype.Component;
  */
 @Adapter(PortType.Publisher)
 @Component
+@AllArgsConstructor
 public class OrderEventPublisherAdapter implements OrderEventPublisher {
-    @Override
-    public void publish(DomainEvent event) {
+    private final KafkaTemplate<String, Object> kafkaTemplate;
 
+    @Override
+    public void publish(@NotNull DomainEvent event) {
+        String message = event.toString();
+        kafkaTemplate.send(event.getTopic(), message);
     }
 }

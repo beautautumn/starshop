@@ -12,11 +12,21 @@
     <artifactId>platintegrationcontext</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 
+    <properties>
+        <spring-kafka.version>2.8.0</spring-kafka.version>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>${project.parent.groupId}</groupId>
             <artifactId>sharedcontext</artifactId>
             <version>${project.parent.version}</version>
+        </dependency>
+        <!-- kafka 依赖 -->
+        <dependency>
+            <groupId>org.springframework.kafka</groupId>
+            <artifactId>spring-kafka</artifactId>
+            <version>${spring-kafka.version}</version>
         </dependency>
     </dependencies>
 </project>

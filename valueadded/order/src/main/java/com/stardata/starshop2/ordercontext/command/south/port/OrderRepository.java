@@ -16,7 +16,7 @@ public interface OrderRepository {
 
     Order instanceOf(LongIdentity orderId);
 
-    Order findByOutTradeNo(String outTradeNo);
+    Order findByOrderNumber(String outTradeNo);
 
     void update(Order order);
 

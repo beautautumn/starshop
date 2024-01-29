@@ -1,5 +1,7 @@
 package com.stardata.starshop2.sharedcontext.domain;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * @author Samson Shu
  * @version 1.0
@@ -7,5 +9,5 @@ package com.stardata.starshop2.sharedcontext.domain;
  * @date 2022/4/29 14:18
  */
 public interface DomainEventPublisher {
-    void publish(DomainEvent event);
+    void publish(@NotNull DomainEvent event);
 }

@@ -4,6 +4,7 @@ import com.stardata.starshop2.sharedcontext.domain.AbstractEntity;
 import com.stardata.starshop2.sharedcontext.domain.AggregateRoot;
 import com.stardata.starshop2.sharedcontext.domain.LongIdentity;
 import com.stardata.starshop2.sharedcontext.helper.Constants;
+import com.stardata.starshop2.sharedcontext.helper.JSONUtil;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.*;
@@ -76,11 +77,16 @@ public class Order extends AbstractEntity<LongIdentity> implements AggregateRoot
     List<OrderOperLog> operLogs = new ArrayList<>();
 
     /**
-     * 订单状态
-     * 1：待支付；2：已支付；3：已配货；4：已发货；5：已结束；6：已取消；
+     * 订单状态，1：待支付；2：已支付；3：已配货；4：已发货；5：已结束；6：已取消；
      */
     @Type(type="com.stardata.starshop2.ordercontext.command.usertype.OrderStatusUserType")
     private OrderStatus status;
+
+    /**
+     * 订单是否可视，0: 不可见；1：可见
+     */
+    @Type(type="com.stardata.starshop2.ordercontext.command.usertype.OrderVisibilityUserType")
+    private OrderVisibility visible;
 
     @Column(updatable = false)
     @CreationTimestamp
@@ -91,8 +97,8 @@ public class Order extends AbstractEntity<LongIdentity> implements AggregateRoot
 
 
     //订单支付记录
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "id", referencedColumnName = "order_id")
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "order")
+//    @JoinColumn(name = "id", referencedColumnName = "order_id")
     private OrderPayment payment;
 
     //订单项列表
@@ -116,14 +122,15 @@ public class Order extends AbstractEntity<LongIdentity> implements AggregateRoot
         this.id = LongIdentity.snowflakeId();
         this.shopId = shopId;
         this.userId = userId;
-        this.orderNumber = generateOderNumber(shopId, userId);
+        this.orderNumber = generateOderNumber(shopId);
         this.type = type;
         this.status = status;
+        this.visible = OrderVisibility.VISIBLE;
         this.createTime = LocalDateTime.now();
     }
 
-    private String generateOderNumber(LongIdentity shopId, LongIdentity userId) {
-        Random random = new Random(shopId.value());
+    private String generateOderNumber(LongIdentity shopId) {
+        Random random = new Random(System.currentTimeMillis());
         long orderSeq = 1000L + random.nextInt(999);
         String todayStr = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
         String shopIdStr = shopId.toString();
@@ -183,15 +190,18 @@ public class Order extends AbstractEntity<LongIdentity> implements AggregateRoot
     }
 
     public void close() {
-        //todo 完成订单关闭方法
+        this.status = OrderStatus.CLOSED;
+        this.updateTime = LocalDateTime.now();
     }
 
     public void setInvisible() {
-        //todo 完成订单设置不可见方法
+        this.visible = OrderVisibility.VISIBLE;
+        this.updateTime = LocalDateTime.now();
     }
 
     public void cancel() {
-        //todo 完成订单取消方法
+        this.status = OrderStatus.CANCELLED;
+        this.updateTime = LocalDateTime.now();
     }
 
     public String getBriefDescription() {
@@ -199,5 +209,8 @@ public class Order extends AbstractEntity<LongIdentity> implements AggregateRoot
         return null;
     }
 
-
+    @Override
+    public String toString() {
+        return JSONUtil.toJSONString(this);
+    }
 }

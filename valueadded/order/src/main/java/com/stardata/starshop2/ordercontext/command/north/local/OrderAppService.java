@@ -9,6 +9,7 @@ import com.stardata.starshop2.ordercontext.command.south.port.OrderEventPublishe
 import com.stardata.starshop2.ordercontext.command.south.port.OrderRepository;
 import com.stardata.starshop2.sharedcontext.domain.LongIdentity;
 import com.stardata.starshop2.sharedcontext.domain.SessionUser;
+import com.stardata.starshop2.sharedcontext.pl.EventConstants;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -53,7 +54,7 @@ public class OrderAppService {
     public String handleWxPayNotify(OrderPayResultRequest request) {
         try {
             Order order = managingService.makeOrderEffectively(request.toPayResult());
-            orderEventPublisher.publish(new OrderPaidEvent(order));
+            orderEventPublisher.publish(new OrderEvent(EventConstants.EventOperator.PAY,order));
             return WxPayNotifyResponse.success("success");
         } catch (Exception e) {
             return WxPayNotifyResponse.fail(e.getMessage());
@@ -64,8 +65,7 @@ public class OrderAppService {
     public OrderConfirmedResponse confirmReceived(Long orderIdLong) {
         LongIdentity orderId = LongIdentity.from(orderIdLong);
         Order order = managingService.closeOrder(orderId);
-        OrderClosedEvent orderEvent = new OrderClosedEvent(order);
-        orderEventPublisher.publish(orderEvent);
+        orderEventPublisher.publish(new OrderEvent(EventConstants.EventOperator.CLOSE,order));
         return OrderConfirmedResponse.from(order);
     }
 
@@ -74,8 +74,7 @@ public class OrderAppService {
         List<Order> orders = managingService.getConfirmExpired();
         for (Order order : orders) {
             managingService.closeOrder(order);
-            OrderClosedEvent orderEvent = new OrderClosedEvent(order);
-            orderEventPublisher.publish(orderEvent);
+            orderEventPublisher.publish(new OrderEvent(EventConstants.EventOperator.CLOSE,order));
         }
     }
 
@@ -91,6 +90,7 @@ public class OrderAppService {
         List<Order> orders = managingService.getPayExpired();
         for (Order order : orders) {
             managingService.cancelOrder(order);
+            orderEventPublisher.publish(new OrderEvent(EventConstants.EventOperator.CANCEL,order));
         }
     }
 }

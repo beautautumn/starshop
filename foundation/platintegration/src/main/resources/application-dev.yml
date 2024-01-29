@@ -1,0 +1,52 @@
+server:
+  port: 7099
+  servlet:
+    context-path: /
+    encoding:
+      force-response: true
+  tomcat:
+    uri-encoding: utf-8
+
+spring:
+  application:
+    name: platform-integration-services
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/starshop_test?useSSL=false&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true
+    username: root
+    password: root
+  jpa:
+    open_in_view: false
+    show_sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+    default-property-inclusion: non_null
+    deserialization:
+      FAIL_ON_UNKNOWN_PROPERTIES: false
+      USE_BIG_DECIMAL_FOR_FLOATS: true
+  kafka:
+    bootstrap-servers: 106.52.170.200:19092
+    consumer:
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+
+eureka:
+  #客户端
+  client:
+    #注册中心地址
+    service-url:
+      defaultZone: http://localhost:7771/eureka/
+  # 修改Eureka上的默认描述信息
+  instance:
+    instance-id: platintegration-biz-center
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+

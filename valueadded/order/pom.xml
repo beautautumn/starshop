@@ -20,6 +20,7 @@
         <curator-framework.version>5.1.0</curator-framework.version>
         <curator-recipes.version>5.1.0</curator-recipes.version>
         <zookeeper.version>3.6.0</zookeeper.version>
+        <spring-kafka.version>2.8.0</spring-kafka.version>
     </properties>
 
     <dependencies>
@@ -139,6 +140,13 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-feign</artifactId>
             <version>${feign.version}</version>
+        </dependency>
+
+        <!-- kafka 依赖 -->
+        <dependency>
+            <groupId>org.springframework.kafka</groupId>
+            <artifactId>spring-kafka</artifactId>
+            <version>${spring-kafka.version}</version>
         </dependency>
     </dependencies>
 

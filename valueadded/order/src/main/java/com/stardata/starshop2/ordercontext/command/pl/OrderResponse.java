@@ -3,6 +3,7 @@ package com.stardata.starshop2.ordercontext.command.pl;
 import com.stardata.starshop2.ordercontext.command.domain.order.Order;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +14,7 @@ import java.util.List;
  * @date 2022/4/29 13:57
  */
 @Data
-public class OrderResponse {
+public class OrderResponse implements Serializable {
     @Data
     public static class Item{
         private Long productId;
@@ -25,6 +26,8 @@ public class OrderResponse {
         public Long amountFen(){return amountFen;}
     }
 
+    private Long id;
+    private String orderNumber;
     private long totalAmountFen;
     private List<Item> items = new ArrayList<>();
 

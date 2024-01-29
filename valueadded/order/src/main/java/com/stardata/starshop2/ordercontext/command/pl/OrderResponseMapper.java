@@ -3,6 +3,7 @@ package com.stardata.starshop2.ordercontext.command.pl;
 import com.stardata.starshop2.ordercontext.command.domain.order.Order;
 import com.stardata.starshop2.sharedcontext.pl.MapStructBaseMapper;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 /**
@@ -15,5 +16,6 @@ import org.mapstruct.factory.Mappers;
 public interface OrderResponseMapper extends MapStructBaseMapper {
     OrderResponseMapper INSTANCE = Mappers.getMapper(OrderResponseMapper.class);
 
+    @Mapping(expression="java(order.getId().value())", target="id")
     OrderResponse convert(Order order);
 }

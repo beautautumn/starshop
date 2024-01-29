@@ -8,6 +8,7 @@ import com.stardata.starshop2.ordercontext.command.south.port.*;
 import com.stardata.starshop2.sharedcontext.domain.BizParameter;
 import com.stardata.starshop2.sharedcontext.domain.LongIdentity;
 import com.stardata.starshop2.sharedcontext.domain.SessionUser;
+import com.stardata.starshop2.sharedcontext.exception.ApplicationValidationException;
 import com.stardata.starshop2.sharedcontext.south.port.BizParameterRepository;
 import lombok.AllArgsConstructor;
 import org.jetbrains.annotations.NotNull;
@@ -59,8 +60,11 @@ public class OrderManagingService {
         return result;
     }
 
-    public Order makeOrderEffectively(PayResult payResult) {
-        Order order = orderRepository.findByOutTradeNo(payResult.getOutTradeNo());
+    public Order makeOrderEffectively(@NotNull PayResult payResult) {
+        Order order = orderRepository.findByOrderNumber(payResult.getOutTradeNo());
+        if (order == null) {
+            throw new ApplicationValidationException(String.format("Can't find order by trade no: [%s].", payResult.getOutTradeNo()));
+        }
         order.makeEffective(payResult);
         orderRepository.update(order);
         return order;

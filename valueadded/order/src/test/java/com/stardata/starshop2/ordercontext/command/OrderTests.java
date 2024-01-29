@@ -41,7 +41,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * @date 2022/6/28 13:11
  */
 @SpringBootTest
-public class OrderTests {
+class OrderTests {
 
     @Resource(name="${adapter.orderSettlementClient}")
     OrderSettlementClient settlementClient;
@@ -474,7 +474,7 @@ public class OrderTests {
 
         //when: 根据订单外部编号, 调用订单资源库进行订单重建
         String orderNumber = order.getOrderNumber();
-        Order loadedOrder = orderRepository.findByOutTradeNo(orderNumber);
+        Order loadedOrder = orderRepository.findByOrderNumber(orderNumber);
 
         //then: 检查预支付是否成功
         assertNotNull(loadedOrder);

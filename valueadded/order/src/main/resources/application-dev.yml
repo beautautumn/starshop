@@ -29,6 +29,11 @@ spring:
     deserialization:
       FAIL_ON_UNKNOWN_PROPERTIES: false
       USE_BIG_DECIMAL_FOR_FLOATS: true
+  kafka:
+    bootstrap-servers: 106.52.170.200:19092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
 wx:
   pay:
     appId: someappid #换成你自己的appid
