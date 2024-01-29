@@ -5,6 +5,7 @@ import lombok.Getter;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
@@ -20,7 +21,7 @@ import java.time.LocalDateTime;
         @AttributeOverride(name = "userId.id", column = @Column(name = "user_id", nullable = false)),
 })
 
-public class OrderOperLog {
+public class OrderOperLog implements Serializable {
     @EmbeddedId
     LongIdentity id;
 
