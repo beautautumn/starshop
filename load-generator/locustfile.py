@@ -34,7 +34,7 @@ class ShopstarTestingUser(HttpUser):
                 product_id = randint(1,5)
                 product_count = randint(1, 30)
                 items.append({"productId":product_id, "count":product_count})
-            with self.client.post(f"/v2/shops/1/orders/byUserId?userId={user_id}", json={"items": items}, name="/placeOrder") as response:
+            with self.client.post(f"/v2/shops/1/orders_simulator?userId={user_id}", json={"items": items}, name="/placeOrder") as response:
                 result = response.json()
                 order_id = result.get("id")
                 if(not order_id is None):
@@ -42,9 +42,9 @@ class ShopstarTestingUser(HttpUser):
                     if (i > 2):
                         order_number = result.get("orderNumber")
                         cash_fee = result.get("totalAmountFen")
-                        with self.client.put(f"/v2/shops/1/orders/{order_id}/wxpay_simulator?orderNumber={order_number}&cashFee={cash_fee}", name="/simulateWxPayOrder") as response1:
+                        with self.client.put(f"/v2/shops/1/orders_simulator/{order_id}/wxpay_simulator?orderNumber={order_number}&cashFee={cash_fee}", name="/simulateWxPayOrder") as response1:
                             time.sleep(3)
-                            self.client.put(f"/v2/shops/1/orders/{order_id}/confirmation_simulator?userId={user_id}", name="/simulateConfirmOrder")
+                            self.client.put(f"/v2/shops/1/orders_simulator/{order_id}/confirmation_simulator", name="/simulateConfirmOrder")
             time.sleep(1)
 
     def on_start(self):

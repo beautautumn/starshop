@@ -15,7 +15,7 @@ spring:
         - id: gateway-order-command
           uri: http://localhost:7081
           predicates:
-            - Path=/v2/shops/{shopId}/orders/**,/v2/shops/{shopId}/shoppingcarts/**,/v2/wxpaynotify
+            - Path=/v2/shops/{shopId}/orders/**,/v2/shops/{shopId}/shoppingcarts/**,/v2/wxpaynotify,/v2/shops/{shopId}/orders_simulator/**,/simulator_rate,/static/**
         - id: gateway-product-command
           uri: http://localhost:7082
           predicates:

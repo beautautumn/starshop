@@ -1,4 +1,4 @@
-package com.stardata.starshop2.ordercontext.command.north.job;
+package com.stardata.starshop2.simulator.job;
 
 import com.stardata.starshop2.ordercontext.command.north.local.OrderAppService;
 import lombok.Getter;
@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
 @Getter
 @Setter
 @Slf4j
-public class CancelOrderJob extends QuartzJobBean {
+public class ConfirmOrderJob extends QuartzJobBean {
   @Autowired
   private OrderAppService appService;
   private String key;
@@ -27,7 +27,10 @@ public class CancelOrderJob extends QuartzJobBean {
   @Override
   protected void executeInternal(@NotNull JobExecutionContext jobExecutionContext) {
 
-    log.trace("<== CancelOrPayOrderJob executeInternal..."+System.currentTimeMillis());
-    appService.autoCancel();
+    log.trace("<== CloseOrderJob executeInternal..."+System.currentTimeMillis());
+    appService.autoConfirm();
+
   }
+
+
 }

@@ -151,7 +151,6 @@
     </dependencies>
 
     <dependencyManagement>
-        <!--springBoot的核心依赖，也是继承，可插拔机制，只会加载配置的依赖-->
         <dependencies>
             <dependency>
                 <groupId>org.springframework.cloud</groupId>

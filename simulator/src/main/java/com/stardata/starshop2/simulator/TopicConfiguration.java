@@ -1,4 +1,4 @@
-package com.stardata.starshop2.ordercontext.command;
+package com.stardata.starshop2.simulator;
 
 import com.stardata.starshop2.sharedcontext.pl.EventConstants;
 import org.apache.kafka.clients.admin.NewTopic;

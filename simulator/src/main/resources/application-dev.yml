@@ -1,5 +1,5 @@
 server:
-  port: 7088
+  port: 7081
   servlet:
     context-path: /
     encoding:
@@ -9,7 +9,7 @@ server:
 
 spring:
   application:
-    name: platform-integration-services
+    name: order-simulator-services
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -31,10 +31,17 @@ spring:
       USE_BIG_DECIMAL_FOR_FLOATS: true
   kafka:
     bootstrap-servers: 106.52.170.200:19092
-    consumer:
-      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+logging:
+  level:
+    root: warn
+    org.springframework.web: info
+    cn.binarywang.wx.miniapp: debug
+    com.stardata.starshop2: trace
+  pattern:
+    console: '%p%m%n'
 eureka:
   #客户端
   client:
@@ -43,10 +50,21 @@ eureka:
       defaultZone: http://localhost:7771/eureka/
   # 修改Eureka上的默认描述信息
   instance:
-    instance-id: platintegration-biz-center
+    instance-id: order-simulator-center
 management:
   endpoints:
     web:
       exposure:
         include: "*"
-
+wx:
+  pay:
+    appId: someappid #换成你自己的appid
+    mchId: 1224234 #换成你自己的微信支付mchId
+    mchKey: somekey #换成你自己的微信支付mchKey
+    #subAppId: #服务商模式下的子商户公众账号ID
+    #subMchId: #服务商模式下的子商户号
+    keyPath: classpath:apiclient_cert.p12
+adapter:
+  shoppingCartSettlementClient: shoppingCartSettlementClientSpringCloudAdapter
+  orderSettlementClient: orderSettlementClientSpringCloudAdapter
+  fillCustomerIdClient: fillCustomerIdClientSpringCloudAdapter

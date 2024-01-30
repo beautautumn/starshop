@@ -1,0 +1,8 @@
+### simulate wxpay
+PUT http://localhost/v2/shops/1/orders_simulator/1751964943814017024/wxpay_simulator?userId=1&orderNumber=P202401290000000000000000011880&cashFee=35990
+
+### set key
+PUT http://localhost/v2/shops/1/orders_simulator/simulator_rate?key=settle_products_timeout&value=0.1
+
+### get key
+GET http://localhost/v2/shops/1/orders_simulator/simulator_rate?key=settle_products_timeout

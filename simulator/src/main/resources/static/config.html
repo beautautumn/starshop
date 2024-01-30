@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>设置模拟参数</title>
+    <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js" ></script>
+    <script>
+
+    function saveValues() {
+        var value = $("#timeout_seconds").val();
+        $.ajax({url:"/simulator_rate?key=timeout_seconds&value="+value,type:"PUT",success:function(result){
+            var value = $("#settle_products_timeout").val();
+            $.ajax({url:"/simulator_rate?key=settle_products_timeout&value="+value,type:"PUT",success:function(result){
+                var value = $("#customer_id_exception").val();
+                $.ajax({url:"/simulator_rate?key=customer_id_exception&value="+value,type:"PUT",success:function(result){
+                    var value = $("#order_save_timeout").val();
+                    $.ajax({url:"/simulator_rate?key=order_save_timeout&value="+value,type:"PUT",success:function(result){
+                        var value = $("#order_save_exception").val();
+                        $.ajax({url:"/simulator_rate?key=order_save_exception&value="+value,type:"PUT",success:function(result){
+                            alert("保存成功！");
+                            refreshValues();
+                        }});
+                    }});
+                }});
+            }});
+        }});
+    }
+
+    function refreshValues() {
+        $.get("/simulator_rate?key=timeout_seconds",function(data,status){
+            var seconds = parseInt(data);
+            if (isNaN(seconds)) seconds = 25;
+            $("#timeout_seconds").val(seconds);
+        });
+        $.get("/simulator_rate?key=settle_products_timeout",function(data,status){
+            var value = parseFloat(data);
+            if (isNaN(value)) value = 0.0;
+            $("#settle_products_timeout").val(value);
+        });
+        $.get("/simulator_rate?key=customer_id_exception",function(data,status){
+            var value = parseFloat(data);
+            if (isNaN(value)) value = 0.0;
+            $("#customer_id_exception").val(value);
+        });
+        $.get("/simulator_rate?key=order_save_timeout",function(data,status){
+            var value = parseFloat(data);
+            if (isNaN(value)) value = 0.0;
+            $("#order_save_timeout").val(value);
+        });
+        $.get("/simulator_rate?key=order_save_exception",function(data,status){
+            var value = parseFloat(data);
+            if (isNaN(value)) value = 0.0;
+            $("#order_save_exception").val(value);
+        });
+    }
+    </script>
+</head>
+
+<body onload="refreshValues()">
+        <label for="timeout_seconds">模拟超时秒数：</label>
+        <input id="timeout_seconds" value="25"></input> <br/>
+        <hr/>
+
+        <label for="settle_products_timeout">模拟产品价格结算超时概率：</label>
+        <input id="settle_products_timeout" value="0.0"></input> <br/>
+
+        <label for="customer_id_exception">模拟客户ID整数异常概率：</label>
+        <input id="customer_id_exception" value="0.0"></input> <br/>
+
+        <label for="order_save_timeout">模拟订单数据库超时概率：</label>
+        <input id="order_save_timeout" value="0.0"></input> <br/>
+
+        <label for="order_save_exception">模拟订单数据库异常概率：</label>
+        <input id="order_save_exception" value="0.0"></input> <br/>
+
+        <button onclick="saveValues()">保存</button>
+</body>
+</html>

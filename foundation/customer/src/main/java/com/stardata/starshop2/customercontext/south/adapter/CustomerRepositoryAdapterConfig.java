@@ -21,7 +21,7 @@ public class CustomerRepositoryAdapterConfig {
     private EntityManager entityManager;
 
     @Bean
-    GenericRepository<Customer, LongIdentity> createOrderRepository() {
+    GenericRepository<Customer, LongIdentity> createCustomerRepository() {
         return new GenericRepository<>(Customer.class, entityManager);
     }
 
