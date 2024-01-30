@@ -57,6 +57,7 @@
 
     <modules>
         <module>core</module>
+        <module>api</module>
 
         <module>foundation/auth</module>
         <module>foundation/chain</module>
@@ -73,7 +74,8 @@
         <module>cqrs/order</module>
         <module>cqrs/product</module>
         <module>edge</module>
-        <module>api</module>
+
+        <module>simulatorOrder</module>
     </modules>
 
     <dependencies>
@@ -177,11 +179,6 @@
                             <goal>repackage</goal>
                         </goals>
                     </execution>
-<!--                    <execution>-->
-<!--                        <goals>-->
-<!--                            <goal>build-info</goal>-->
-<!--                        </goals>-->
-<!--                    </execution>-->
                 </executions>
                 <configuration>
                     <excludes>
