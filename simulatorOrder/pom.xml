@@ -93,7 +93,6 @@
                 <version>${spring-boot.version}</version>
                 <configuration>
                     <mainClass>com.stardata.starshop2.simulator.SimulatorOrderApplication</mainClass>
-                    <skip>true</skip>
                 </configuration>
                 <executions>
                     <execution>

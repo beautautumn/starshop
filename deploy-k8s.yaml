@@ -16,21 +16,21 @@ spec:
     spec:
       containers:
         - name: eurekaserver
-          image: beautautumn/starshop-eureka:0.0.1
+          image: ccr.ccs.tencentyun.com/default-ns/starshop-eureka:0.0.7
           ports:
             - containerPort: 7771
         - name: gateway
-          image: beautautumn/starshop-gateway:0.0.5
+          image: ccr.ccs.tencentyun.com/default-ns/starshop-gateway:0.0.7
           env:
             - name: JAVA_TOOL_OPTIONS
-              value: "-javaagent:/otel-agent.jar -Dotel.resource.attributes=service.name=starshop_gateway -Dotel.exporter.otlp.endpoint=http://smartobserv-collector.smartobserv-dev:4317"
+              value: "-javaagent:/otel-agent.jar -Dotel.jmx.target.system=tomcat -Dotel.resource.attributes=service.name=starshop_gateway -Dotel.exporter.otlp.endpoint=http://smartobserv-collector.smartobserv-dev:4317"
           ports:
             - containerPort: 80
         - name: authapp
-          image: beautautumn/starshop-auth:0.0.5
+          image: ccr.ccs.tencentyun.com/default-ns/starshop-auth:0.0.7
           env:
             - name: JAVA_TOOL_OPTIONS
-              value: "-javaagent:/otel-agent.jar -Dotel.resource.attributes=service.name=starshop_authapp -Dotel.exporter.otlp.endpoint=http://smartobserv-collector.smartobserv-dev:4317"
+              value: "-javaagent:/otel-agent.jar -Dotel.jmx.target.system=tomcat -Dotel.resource.attributes=service.name=starshop_authapp -Dotel.exporter.otlp.endpoint=http://smartobserv-collector.smartobserv-dev:4317 --spring.main.allow-bean-definition-overriding=true"
             - name: MYSQL_SERVER
               value: smartobserv-mysql.smartobserv-dev
             - name: MYSQL_PORT
@@ -41,11 +41,11 @@ spec:
               value: password
           ports:
             - containerPort: 8080
-        - name: orderapp
-          image: beautautumn/starshop-order:0.0.5
+        - name: simu-orderapp
+          image: ccr.ccs.tencentyun.com/default-ns/starshop-simuorder:0.0.7
           env:
             - name: JAVA_TOOL_OPTIONS
-              value: "-javaagent:/otel-agent.jar -Dotel.resource.attributes=service.name=starshop_orderapp -Dotel.exporter.otlp.endpoint=http://smartobserv-collector.smartobserv-dev:4317"
+              value: "-javaagent:/otel-agent.jar -Dotel.jmx.target.system=tomcat -Dotel.resource.attributes=service.name=starshop_simuorder -Dotel.exporter.otlp.endpoint=http://smartobserv-collector.smartobserv-dev:4317 --spring.main.allow-bean-definition-overriding=true"
             - name: MYSQL_SERVER
               value: smartobserv-mysql.smartobserv-dev
             - name: MYSQL_PORT
@@ -54,13 +54,15 @@ spec:
               value: root
             - name: MYSQL_PASSWORD
               value: password
+            - name: BOOTSTRAP_SERVER
+              value: 106.52.170.200:19092
           ports:
             - containerPort: 7081
         - name: productapp
-          image: beautautumn/starshop-product:0.0.5
+          image: cr.ccs.tencentyun.com/default-ns/starshop-product:0.0.7
           env:
             - name: JAVA_TOOL_OPTIONS
-              value: "-javaagent:/otel-agent.jar -Dotel.resource.attributes=service.name=starshop_productapp -Dotel.exporter.otlp.endpoint=http://smartobserv-collector.smartobserv-dev:4317"
+              value: "-javaagent:/otel-agent.jar -Dotel.jmx.target.system=tomcat -Dotel.resource.attributes=service.name=starshop_productapp -Dotel.exporter.otlp.endpoint=http://smartobserv-collector.smartobserv-dev:4317 --spring.main.allow-bean-definition-overriding=true"
             - name: MYSQL_SERVER
               value: smartobserv-mysql.smartobserv-dev
             - name: MYSQL_PORT
@@ -72,10 +74,10 @@ spec:
           ports:
             - containerPort: 7082
         - name: customerapp
-          image: beautautumn/starshop-customer:0.0.5
+          image: ccr.ccs.tencentyun.com/default-ns/starshop-customer:0.0.7
           env:
             - name: JAVA_TOOL_OPTIONS
-              value: "-javaagent:/otel-agent.jar -Dotel.resource.attributes=service.name=starshop_customerapp -Dotel.exporter.otlp.endpoint=http://smartobserv-collector.smartobserv-dev:4317"
+              value: "-javaagent:/otel-agent.jar -Dotel.jmx.target.system=tomcat -Dotel.resource.attributes=service.name=starshop_customerapp -Dotel.exporter.otlp.endpoint=http://smartobserv-collector.smartobserv-dev:4317 --spring.main.allow-bean-definition-overriding=true"
             - name: MYSQL_SERVER
               value: smartobserv-mysql.smartobserv-dev
             - name: MYSQL_PORT
@@ -95,7 +97,7 @@ spec:
           ports:
             - containerPort: 7083
         - name: load-generator
-          image: ccr.ccs.tencentyun.com/default-ns/starshop-load:0.0.2
+          image: ccr.ccs.tencentyun.com/default-ns/starshop-load-generator:0.0.6
           ports:
             - containerPort: 7089
 
