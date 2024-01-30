@@ -96,6 +96,23 @@ spec:
               value: ''
           ports:
             - containerPort: 7083
+        - name: platform-integration-app
+          image: ccr.ccs.tencentyun.com/default-ns/starshop-platint:0.0.7
+          env:
+            - name: JAVA_TOOL_OPTIONS
+              value: "-javaagent:/otel-agent.jar -Dotel.jmx.target.system=tomcat -Dotel.resource.attributes=service.name=starshop_platform-integration -Dotel.exporter.otlp.endpoint=http://smartobserv-collector.smartobserv-dev:4317 --spring.main.allow-bean-definition-overriding=true"
+            - name: MYSQL_SERVER
+              value: smartobserv-mysql.smartobserv-dev
+            - name: MYSQL_PORT
+              value: '3306'
+            - name: MYSQL_USER
+              value: root
+            - name: MYSQL_PASSWORD
+              value: password
+            - name: BOOTSTRAP_SERVER
+              value: 106.52.170.200:19092
+          ports:
+            - containerPort: 7081
         - name: load-generator
           image: ccr.ccs.tencentyun.com/default-ns/starshop-load-generator:0.0.6
           ports:

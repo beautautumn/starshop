@@ -1,4 +1,4 @@
-package com.stardata.starshop2.simulator.job;
+package com.stardata.starshop2.ordercontext.command.north.job;
 
 import com.stardata.starshop2.sharedcontext.north.AutowiredJobFactory;
 import lombok.AllArgsConstructor;
