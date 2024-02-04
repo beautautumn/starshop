@@ -16,6 +16,8 @@ public class EventConstants {
 
     public static class EventOperator {
         private EventOperator(){}
+
+        public static final String PLACE = "PlaceOrder";
         public static final String CLOSE = "CloseOrder";
         public static final String PAY = "PayOrder";
         public static final String CANCEL = "CancelOrder";

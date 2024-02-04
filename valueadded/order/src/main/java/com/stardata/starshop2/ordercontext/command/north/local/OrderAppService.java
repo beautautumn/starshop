@@ -34,6 +34,7 @@ public class OrderAppService {
     public OrderResponse create(SessionUser loginUser, Long shopId, OrderSubmitRequest request) {
         Order order = request.toOrder(LongIdentity.from(shopId), loginUser.getId());
         managingService.submitOrder(loginUser, order);
+        orderEventPublisher.publish(new OrderEvent(EventConstants.EventOperator.PLACE,order));
         return OrderResponse.from(order);
     }
 

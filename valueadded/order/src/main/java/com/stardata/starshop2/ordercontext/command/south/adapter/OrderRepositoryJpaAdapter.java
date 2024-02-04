@@ -58,7 +58,7 @@ public class OrderRepositoryJpaAdapter  implements OrderRepository {
                 build.equal(root.get("status"), OrderStatus.PAID),
                 build.lessThanOrEqualTo(root.get("payTime"), maxPayTime));
 
-        return repository.findBy(specification);
+        return repository.findBy(specification,1, 1000);
     }
 
     @Override
@@ -68,6 +68,6 @@ public class OrderRepositoryJpaAdapter  implements OrderRepository {
                 build.equal(root.get("status"), OrderStatus.TO_PAY),
                 build.lessThanOrEqualTo(root.get("createTime"), maxCreateTime));
 
-        return repository.findBy(specification);
+        return repository.findBy(specification, 1, 1000);
     }
 }

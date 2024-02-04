@@ -62,6 +62,24 @@ public class GenericRepository<E extends AggregateRoot, ID extends Identity> {
         return entityManager.createQuery(query).getResultList();
     }
 
+    public List<E> findAll(int pageNumber, int pageSize)  {
+        requireEntityManagerNotNull();
+
+        pageNumber = pageNumber - 1;
+        if (pageNumber < 0) {
+            pageNumber = 0;
+        }
+        if (pageSize < 1) {
+            pageSize = 100;
+        }
+        CriteriaQuery<E> query = entityManager.getCriteriaBuilder().createQuery(entityClass);
+        query.select(query.from(entityClass));
+        return entityManager.createQuery(query)
+                .setFirstResult(pageNumber * pageSize)
+                .setMaxResults(pageSize)
+                .getResultList();
+    }
+
     public List<E> findBy(Specification<E> specification) {
         requireEntityManagerNotNull();
         if (specification == null) {
@@ -77,6 +95,33 @@ public class GenericRepository<E extends AggregateRoot, ID extends Identity> {
 
         TypedQuery<E> typedQuery = entityManager.createQuery(criteriaQuery);
         return typedQuery.getResultList();
+    }
+
+    public List<E> findBy(Specification<E> specification, int pageNumber, int pageSize) {
+        requireEntityManagerNotNull();
+        if (specification == null) {
+            return findAll();
+        }
+
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<E> criteriaQuery = criteriaBuilder.createQuery(entityClass);
+        Root<E> root = criteriaQuery.from(entityClass);
+
+        pageNumber = pageNumber - 1;
+        if (pageNumber < 0) {
+            pageNumber = 0;
+        }
+        if (pageSize < 1) {
+            pageSize = 100;
+        }
+
+        Predicate predicate = specification.toPredicate(root, criteriaQuery, criteriaBuilder);
+        criteriaQuery.where(new Predicate[]{predicate});
+
+        return entityManager.createQuery(criteriaQuery)
+                .setFirstResult(pageNumber * pageSize)
+                .setMaxResults(pageSize)
+                .getResultList();
     }
 
     public void saveOrUpdate(E entity) {

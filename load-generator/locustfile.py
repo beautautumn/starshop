@@ -35,6 +35,7 @@ class ShopstarTestingUser(HttpUser):
                 product_count = randint(1, 30)
                 items.append({"productId":product_id, "count":product_count})
             with self.client.post(f"/v2/shops/1/orders_simulator?userId={user_id}", json={"items": items}, name="/placeOrder") as response:
+                print(response.text)
                 result = response.json()
                 order_id = result.get("id")
                 if(not order_id is None):
