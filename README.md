@@ -37,5 +37,5 @@ Codes of those bounded-contexts' inquire model. It includes inquire model for ch
 
 ## Blog articles
 
-In order to better understand the code here, I suggest you read the blog series following. I will update the code here with the update of those articles. <br/>
+In order to understand the code better, I suggest you read the blog series following. I will update the code here with the update of those articles. <br/>
 [《DDD实战：从需求到代码实现生鲜电商系统》](https://www.infoq.cn/u/beautautumn)
