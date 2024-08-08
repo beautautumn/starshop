@@ -10,6 +10,8 @@ server:
 spring:
   application:
     name: order-simulator-services
+  main:
+    allow-bean-definition-overriding: true
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
     driver-class-name: com.mysql.cj.jdbc.Driver
